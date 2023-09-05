@@ -16,26 +16,28 @@
 //     })
 // }
 
-function recaptchaCallback(){
-    console.log('recaptcha-response',grecaptcha.getResponse())
+function recaptchaCallback() {
+    return grecaptcha && grecaptcha.getResponse().length > 0
 }
 
-function recaptchaExpiredCallback(){
+function recaptchaExpiredCallback() {
     console.log('recaptcha is expired')
 }
 
-function isCaptchaChecked(){
+function isCaptchaChecked() {
     return grecaptcha && grecaptcha.getResponse().length !== 0
 }
 
-function submit(){
-    console.log('submit is clicked')
+function submit() {
+    if(isCaptchaChecked()){
+        window.open('pilih-menu.html')
+    }else{
+        console.log('please check the checkbox')
+    }
 }
 
-const btnSubmit = document.getElementById('submit')
-
-if(isCaptchaChecked() && btnSubmit){
-    btnSubmit.style.cursor = 'pointer'
-}else if(btnSubmit){
-    btnSubmit.style.cursor = 'not-allowed'
+if (recaptchaCallback()) {
+    document.getElementById('submit').style.cursor = 'pointer'
+} else {
+    document.getElementById('submit').style.cursor = 'not-allowed'
 }
