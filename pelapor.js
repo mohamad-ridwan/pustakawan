@@ -126,9 +126,9 @@ function submit() {
             header,
             submitForm()
         )}`)
-    } else {
-        errForm.checkbox = 'please check the checkbox'
-        putErrInput('errCaptcha', 'Harus di isi')
+    } else if(!isCaptchaChecked()) {
+        errForm.checkbox = 'Mohon ceklis di cekbox'
+        putErrInput('errCaptcha', 'Mohon ceklis di cekbox')
     }
 }
 
