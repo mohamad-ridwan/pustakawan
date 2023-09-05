@@ -10,6 +10,10 @@ const onloadCallback = ()=>{
         'sitekey' : sitekey,
         'callback': verifyCallback()
     })
+    grecaptcha.render('recaptcha-pustakawan', {
+        'sitekey' : sitekey,
+        'callback': verifyCallback()
+    })
 }
 
 // document.getElementById('formPengajuan').addEventListener('submit', (e)=>{
