@@ -18,9 +18,9 @@ function checkReadySubmit() {
 function recaptchaCallback() {
     const check = grecaptcha && grecaptcha.getResponse().length > 0
     if (check) {
-        document.getElementById('btnSubmitForm').style.cursor = 'pointer'
         putErrInput('errCaptcha', '')
         delete errForm.checkbox
+        checkReadySubmit()
     }
 }
 
