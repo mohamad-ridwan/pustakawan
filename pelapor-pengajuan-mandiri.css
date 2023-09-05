@@ -1,0 +1,37 @@
+.wrap-form-pengajuan{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 80px 0 40px 0;
+}
+.wrap-form-pengajuan .container-pengajuan{
+    display: flex;
+    width: 460px;
+    margin: 0 auto;
+}
+.wrap-form-pengajuan .container-pengajuan .form-pengajuan{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.wrap-form-pengajuan .title{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.wrap-form-pengajuan .title h5{
+    text-align: center;
+    margin-bottom: 20px;
+}
+.title span{
+    width: 100%;
+}
+
+@media screen and (max-width: 505px) {
+    .wrap-form-pengajuan .container-pengajuan {
+      width: 100%;
+    }
+  }
