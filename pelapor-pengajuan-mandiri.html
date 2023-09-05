@@ -19,22 +19,31 @@
         <div class="container-pengajuan">
             <div class="form-pengajuan" id="formPengajuan">
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Nama</label>
-                    <input type="nama" class="form-control" placeholder="Masukkan Nama" id="nama" onchange="changeInput('nama')">
+                    <label for="nama" class="form-label">Nama</label>
+                    <input type="nama" name="nama" class="form-control" placeholder="Masukkan Nama" id="nama"
+                        onchange="changeInput('nama')">
+                    <span id="errNama" style="color: #ff0000; font-size: small;"></span>
                 </div>
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Email</label>
-                    <input type="email" class="form-control" placeholder="Masukkan Email" id="email" onchange="changeInput('email')">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control" placeholder="Masukkan Email" id="email"
+                        onchange="changeInput('email')">
+                    <span id="errEmail" style="color: #ff0000; font-size: small;"></span>
                 </div>
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Telp</label>
-                    <input type="tel" class="form-control"
-                        placeholder="Masukkan Nomor Telpon" id="telepon" onchange="changeInput('telepon')">
+                    <label for="telepon" class="form-label">Telp</label>
+                    <input type="tel" name="telepon" class="form-control" placeholder="Masukkan Nomor Telpon"
+                        id="telepon" onchange="changeInput('telepon')">
+                    <span id="errTelepon" style="color: #ff0000; font-size: small;"></span>
                 </div>
                 <!-- <div class="recaptcha-pustakawan"></div> -->
-                <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpiredCallback" data-sitekey="6LeAY_4nAAAAAG4mEOA8_sXdkoXMSHb7MKLoqcgh"></div>
+                <div class="g-recaptcha" data-callback="recaptchaCallback"
+                    data-expired-callback="recaptchaExpiredCallback"
+                    data-sitekey="6LeAY_4nAAAAAG4mEOA8_sXdkoXMSHb7MKLoqcgh"></div>
+                <span id="errCaptcha" style="color: #ff0000; font-size: small;"></span>
                 <div class="btn-submit" style="margin-top: 1rem;">
-                    <button id="btnSubmitForm" type="button" class="btn btn-success" style="margin-right: 0.2rem;" onclick="submit()">Submit</button>
+                    <button id="btnSubmitForm" type="button" class="btn btn-success" style="margin-right: 0.2rem;"
+                        onclick="submit()">Submit</button>
                     <!-- <button type="button" class="btn btn-secondary">Cancel</button> -->
                 </div>
             </div>
