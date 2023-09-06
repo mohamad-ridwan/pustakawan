@@ -122,6 +122,10 @@ function submitForm() {
 
 function submit() {
     if (validateForm() && isCaptchaChecked()) {
+        localStorage.setItem('akses-client-p', `${createJWTToken(
+            header,
+            submitForm()
+        )}`)
         window.open(`pilih-menu.html?akses=${createJWTToken(
             header,
             submitForm()
