@@ -3,7 +3,7 @@ const header = {
     "typ": "JWT"
 };
 
-const base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
+// const base64regex = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{4}|[A-Za-z0-9+\/]{3}=|[A-Za-z0-9+\/]{2}={2})$/gm
 
 const secrets = "john@99";
 
@@ -24,13 +24,13 @@ const parseTokenUrl = async (token) => {
 function decodeFromTokenUrl() {
     const urlParams = new URLSearchParams(window.location.search)
     const token = urlParams.get('akses')
-    if (!token || !base64regex.test(token)) {
+    if (!token) {
         redirectToPelapor()
         return
     }
     // payload from token url
     let newToken = {}
-    const getToken = window.atob(token.split('.')[1])
+    const getToken = token?.includes('.') ? window.atob(token.split('.')[1]) : window.atob(token)
     parseTokenUrl(getToken)
         .then(res => {
             newToken.payload = res
@@ -48,11 +48,11 @@ function decodeFromTokenLocalStg() {
     // local storage
     let payloadFromTokenStg = {}
     const aksesClientP = localStorage.getItem('akses-client-p')
-    if (!aksesClientP || !base64regex.test(aksesClientP)) {
+    if (!aksesClientP) {
         redirectToPelapor()
         return
     }
-    const getTokenLocalStg = window.atob(aksesClientP.split('.')[1])
+    const getTokenLocalStg = aksesClientP?.includes('.') ? window.atob(aksesClientP.split('.')[1]) : window.atob(aksesClientP)
     parseTokenUrl(getTokenLocalStg)
         .then(res => {
             payloadFromTokenStg.payload = res
@@ -72,7 +72,7 @@ function decodeFromTokenLocalStg() {
     return signatureLocalStgToStr
 }
 
-function jwtTokenVerify() {
+function jwtTokenVerify() {    
     const isValid = decodeFromTokenUrl() == decodeFromTokenLocalStg()
     if (isValid) {
         return true

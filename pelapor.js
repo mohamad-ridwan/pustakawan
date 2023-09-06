@@ -126,7 +126,7 @@ function submit() {
             header,
             submitForm()
         )}`)
-        window.open(`pilih-menu.html?akses=${createJWTToken(
+        window.location.replace(`pilih-menu.html?akses=${createJWTToken(
             header,
             submitForm()
         )}`)
