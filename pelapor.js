@@ -126,10 +126,15 @@ function submit() {
             header,
             submitForm()
         )}`)
-        window.location.replace(`pilih-menu.html?akses=${createJWTToken(
-            header,
-            submitForm()
-        )}`)
+        // setTimeout(() => {
+        //     window.location.replace(`pilih-menu.html?akses=${createJWTToken(
+        //         header,
+        //         submitForm()
+        //     )}`)
+        // }, 1000);
+        setTimeout(() => {
+            window.location.replace('pilih-menu.html')
+        }, 1000);
     } else if(!isCaptchaChecked()) {
         errForm.checkbox = 'Mohon ceklis di cekbox'
         putErrInput('errCaptcha', 'Mohon ceklis di cekbox')

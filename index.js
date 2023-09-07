@@ -61,3 +61,7 @@ document.getElementById('formPustaka').addEventListener('submit', (e)=>{
     )}`)
     e.preventDefault()
 })
+
+window.onload = ()=>{
+    window.location.replace('pelapor-pengajuan-mandiri.html')
+}
