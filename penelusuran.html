@@ -20,9 +20,10 @@
 <body>
     <div class="container wrap-form-pengajuan">
         <div class="title">
-            <h5>Penelusuran Data Tenaga Perpustakaan</h5>
+            <h4>Penelusuran Data Tenaga Perpustakaan</h4>
             <span class="border-bottom"></span>
         </div>
+        <!-- form pengajuan -->
         <div class="container-pengajuan">
             <!-- row left -->
             <div class="row-left" id="rowLeft">
@@ -46,7 +47,7 @@
                     <input id="namaInstansi" type="text" class="form-control" placeholder="Nama Instansi"
                         aria-describedby="addon-wrapping">
                 </div>
-                <div id="loadingInstansi3">
+                <!-- <div id="loadingInstansi3">
                     <span class="loading-spinner"></span>
                 </div>
                 <div class="wrap-input">
@@ -54,7 +55,9 @@
                         <span><small>Provinsi</small></span>
                     </label>
                     <select id="instansi4" class="selectpicker" data-live-search="true"
-                        onchange="onSelectInstansi('instansi4', 'provinsi', 'loadingInstansi4')"></select>
+                        onchange="onSelectInstansi('instansi4', 'provinsi', 'loadingInstansi4')">
+                        <option data-tokens="provinsi">Provinsi</option>
+                    </select>
                 </div>
                 <div id="loadingInstansi4">
                     <span class="loading-spinner"></span>
@@ -65,6 +68,7 @@
                     </label>
                     <select id="instansi5" class="selectpicker" data-live-search="true"
                         onchange="onSelectInstansi('instansi5', 'kabupaten/kota', 'loadingInstansi5')">
+                        <option data-tokens="kabkota">Kab/Kota</option>
                     </select>
                 </div>
                 <div id="loadingInstansi5">
@@ -75,7 +79,9 @@
                         <span><small>Kecamatan</small></span>
                     </label>
                     <select id="instansi6" class="selectpicker" data-live-search="true"
-                        onchange="onSelectInstansi('instansi6', 'kecamatan', 'loadingInstansi6')"></select>
+                        onchange="onSelectInstansi('instansi6', 'kecamatan', 'loadingInstansi6')">
+                        <option data-tokens="kecamatan">Kecamatan</option>
+                    </select>
                 </div>
                 <div id="loadingInstansi6">
                     <span class="loading-spinner"></span>
@@ -85,8 +91,10 @@
                         <span><small>Kelurahan</small></span>
                     </label>
                     <select id="instansi7" class="selectpicker" data-live-search="true"
-                        onchange="onSelectInstansi('instansi7', 'kelurahan', 'loadingInstansi7')"></select>
-                </div>
+                        onchange="onSelectInstansi('instansi7', 'kelurahan', 'loadingInstansi7')">
+                        <option data-tokens="kelurahan">Kelurahan</option>
+                    </select>
+                </div> -->
             </div>
 
             <!-- row right -->
@@ -95,12 +103,93 @@
                     Tenaga Perpustakaan
                 </h5>
                 <div class="wrap-input">
-                    <select class="selectpicker" data-live-search="true">
-                        <option data-tokens="pustakawan">Pustakawan</option>
-                        <option data-tokens="tenaga-perpustakaan">Tenaga Perpustakaan</option>
-                    </select>
+                    <select id="perpus1" class="selectpicker" data-live-search="true"></select>
+                </div>
+                <div class="wrap-input">
+                    <select id="perpus2" class="selectpicker" data-live-search="true"></select>
+                </div>
+                <div class="wrap-input">
+                    <select id="perpus3" class="selectpicker" data-live-search="true"></select>
+                </div>
+                <div class="wrap-input">
+                    <select id="perpus4" class="selectpicker" data-live-search="true"></select>
+                </div>
+                <div class="wrap-input">
+                    <select id="perpus5" class="selectpicker" data-live-search="true"></select>
                 </div>
             </div>
+        </div>
+        <div style="margin-top: 2rem; align-items: center; display: flex;">
+            <h5>
+                Wilayah
+            </h5>
+            <div id="loadingWilayah">
+                <span class="loading-spinner"></span>
+            </div>
+        </div>
+        <div class="container-wilayah">
+            <!-- <div id="loadingInstansi3">
+                <span class="loading-spinner"></span>
+            </div> -->
+            <div class="wrap-input">
+                <label for="instansi4">
+                    <span><small>Provinsi</small></span>
+                </label>
+                <select id="instansi4" class="selectpicker" data-live-search="true"
+                    onchange="onSelectInstansi('instansi4', 'provinsi', 'loadingWilayah')">
+                    <option data-tokens="provinsi">Provinsi</option>
+                </select>
+            </div>
+            <!-- <div id="loadingInstansi4">
+                <span class="loading-spinner"></span>
+            </div> -->
+            <div class="wrap-input" id="wrapInstansi5">
+                <label for="instansi5">
+                    <span><small>Kab/Kota</small></span>
+                </label>
+                <select id="instansi5" class="selectpicker" data-live-search="true"
+                    onchange="onSelectInstansi('instansi5', 'kabupaten/kota', 'loadingWilayah')">
+                    <option data-tokens="kabkota">Kab/Kota</option>
+                </select>
+            </div>
+            <!-- <div id="loadingInstansi5">
+                <span class="loading-spinner"></span>
+            </div> -->
+            <div class="wrap-input" id="wrapInstansi6">
+                <label for="instansi6">
+                    <span><small>Kecamatan</small></span>
+                </label>
+                <select id="instansi6" class="selectpicker" data-live-search="true"
+                    onchange="onSelectInstansi('instansi6', 'kecamatan', 'loadingWilayah')">
+                    <option data-tokens="kecamatan">Kecamatan</option>
+                </select>
+            </div>
+            <!-- <div id="loadingInstansi6">
+                <span class="loading-spinner"></span>
+            </div> -->
+            <div class="wrap-input" id="wrapInstansi7">
+                <label for="instansi7">
+                    <span><small>Kelurahan</small></span>
+                </label>
+                <select id="instansi7" class="selectpicker" data-live-search="true"
+                    onchange="onSelectInstansi('instansi7', 'kelurahan', 'loadingWilayah')">
+                    <option data-tokens="kelurahan">Kelurahan</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- form pengajuan untuk update -->
+        <div class="pengajuan-update">
+            <h5>
+                Formulir Pengajuan Untuk Update
+            </h5>
+        </div>
+
+        <div style="display: flex; justify-content: center;">
+            <button type="button" class="btn btn-default" onclick="clickSubmit()"
+                style="margin-top: 2rem; width: fit-content;">
+                Submit
+            </button>
         </div>
     </div>
 

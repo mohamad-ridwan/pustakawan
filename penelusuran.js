@@ -100,6 +100,155 @@ const instansiData = {
     ]
 }
 
+const perpustakaanData = {
+    perpus1: [
+        {
+            data_tokens: 'pustakawan',
+            value: 'Pustakawan'
+        },
+        {
+            data_tokens: 'tenaga-perpustakaan',
+            value: 'Tenaga Perpustakaan'
+        }
+    ],
+    perpus2: [
+        {
+            data_tokens: 'pangkat',
+            value: 'Pangkat'
+        },
+        {
+            data_tokens: 'pengatur-muda-tk.l-(ll/b)',
+            value: 'Pengatur Muda Tk.l (ll/b)'
+        },
+        {
+            data_tokens: 'pengatur-(ll/c)',
+            value: 'Pengatur (ll/c)'
+        },
+        {
+            data_tokens: 'pengatur-tk.l-(ll/d)',
+            value: 'Pengatur Tk.l (ll/d)'
+        },
+        {
+            data_tokens: 'penata-muda-(lll/a)',
+            value: 'Penata Muda (lll/a)'
+        },
+        {
+            data_tokens: 'penata-muda-tk.l-(lll/b)',
+            value: 'Penata Muda Tk.l (lll/b)'
+        },
+        {
+            data_tokens: 'penata-(lll/c)',
+            value: 'Penata (lll/c)'
+        },
+        {
+            data_tokens: 'penata-tk.l-(lll/d)',
+            value: 'Penata Tk.l (lll/d)'
+        },
+        {
+            data_tokens: 'pembina-(IV/a)',
+            value: 'Pembina (IV/a)'
+        },
+        {
+            data_tokens: 'pembina-tk.l-(IV/b)',
+            value: 'Pembina Tk.l (IV/b)'
+        },
+        {
+            data_tokens: 'pembina-utama-muda-(IV/c)',
+            value: 'Pembina Utama Muda (IV/c)'
+        },
+        {
+            data_tokens: 'pembina-utama-madya-(IV/d)',
+            value: 'Pembina Utama Madya (IV/d)'
+        },
+        {
+            data_tokens: 'pembina-utama-(IV/e)',
+            value: 'Pembina Utama (IV/e)'
+        },
+        {
+            data_tokens: 'pengatur-muda-(ll/a)',
+            value: 'Pengatur Muda (ll/a)'
+        },
+    ],
+    perpus3: [
+        {
+            data_tokens: 'bidang',
+            value: 'Bidang'
+        },
+        {
+            data_tokens: 'non-perpustakaan',
+            value: 'Non Perpustakaan'
+        },
+        {
+            data_tokens: 'perpustakaan',
+            value: 'Perpustakaan'
+        },
+        {
+            data_tokens: 'pustakawan-disetarakan',
+            value: 'Pustakawan Disetarakan'
+        },
+    ],
+    perpus4: [
+        {
+            data_tokens: 'aktif',
+            value: 'AKTIF'
+        },
+        {
+            data_tokens: 'dbs',
+            value: 'DBS'
+        },
+    ],
+    perpus5: [
+        {
+            data_tokens: 'jenis-perpustakaan',
+            value: 'Jenis Perpustakaan'
+        },
+        {
+            data_tokens: 'perpustakaan-nasional-ri-(pnri)',
+            value: 'Perpustakaan Nasional RI (PNRI)'
+        },
+        {
+            data_tokens: 'perpustakaan-umum-(provinsi)-(provinsi)',
+            value: 'Perpustakaan Umum (Provinsi) (Provinsi)'
+        },
+        {
+            data_tokens: 'perpustakaan-umum-(kab/kota)-(kab/kota)',
+            value: 'Perpustakaan Umum (Kab/Kota) (Kab/Kota)'
+        },
+        {
+            data_tokens: 'perpustakaan-khusus-(pk)',
+            value: 'Perpustakaan Khusus (PK)'
+        },
+        {
+            data_tokens: 'perpustakaan-perguruan-tinggi-(ppt)',
+            value: 'Perpustakaan Perguruan Tinggi (PPT)'
+        },
+        {
+            data_tokens: 'perpustakaan-sekolah-(sd)-(ps-sd)',
+            value: 'Perpustakaan Sekolah (SD) (PS SD)'
+        },
+        {
+            data_tokens: 'perpustakaan-sekolah-(sltp)-(ps-sltp)',
+            value: 'Perpustakaan Sekolah (SLTP) (PS SLTP)'
+        },
+        {
+            data_tokens: 'perpustakaan-sekolah-(slta)-(ps-slta)',
+            value: 'Perpustakaan Sekolah (SLTA) (PS SLTA)'
+        },
+        {
+            data_tokens: 'perpustakaan-komunitas-(pkom)',
+            value: 'Perpustakaan Komunitas (PKom)'
+        },
+        {
+            data_tokens: 'perpustakaan-umum-(kelurahan/desa)-(kelurahan/desa)',
+            value: 'Perpustakaan Umum (Kelurahan/Desa) (Kelurahan/Desa)'
+        },
+        {
+            data_tokens: 'perpustakaan-umum-(kecamatan)-(kecamatan)',
+            value: 'Perpustakaan Umum (kecamatan) (kecamatan)'
+        },
+    ]
+}
+
 // API wilayah indonesia
 const provinsiAPI = 'https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json'
 
@@ -139,11 +288,12 @@ function loadCreateSelect(elementId, data) {
 }
 
 function setOptionElement() {
+    // instansi
     loadCreateSelect('instansi1', instansiData.instansi1)
     loadCreateSelect('instansi2', instansiData.instansi2)
     loadCreateSelect('instansi3', instansiData.instansi3)
     // provinsi API
-    const loadingElem = document.getElementById('loadingInstansi3')
+    const loadingElem = document.getElementById('loadingWilayah')
     const loadingElem4 = document.getElementById('loadingInstansi4')
     const loadingElem5 = document.getElementById('loadingInstansi5')
     if (loadingElem) {
@@ -160,7 +310,7 @@ function setOptionElement() {
                 }))
                 loadCreateSelect('instansi4', data)
                 setTimeout(() => {
-                    createMenuDropdown(data, 3)
+                    // createMenuDropdown(data, 8)
                     loadingElem.style.display = 'none'
                 }, 500);
                 return data
@@ -200,6 +350,12 @@ function setOptionElement() {
         .catch(err => {
             console.log('error', err)
         })
+    // tenaga perpustakaan
+    loadCreateSelect('perpus1', perpustakaanData.perpus1)
+    loadCreateSelect('perpus2', perpustakaanData.perpus2)
+    loadCreateSelect('perpus3', perpustakaanData.perpus3)
+    loadCreateSelect('perpus4', perpustakaanData.perpus4)
+    loadCreateSelect('perpus5', perpustakaanData.perpus5)
 }
 
 setOptionElement()
@@ -208,28 +364,34 @@ window.onload = () => {
     setStyleSelect()
 }
 
+let dataWilayah = {}
+
 // get select value
 function onSelectInstansi(selectId, loadDataAPI, loadingId) {
     const elem = document.getElementById(selectId)
     const loadingElem = document.getElementById(loadingId)
     const btnText = document.getElementsByClassName('filter-option')
-    console.log(elem)
-    console.log(selectId)
     if (elem) {
         const indexOption = elem.selectedIndex
-        const optionElem = elem.childNodes[indexOption]
-        const data_tokens = optionElem.getAttribute('data-tokens')
-        console.log(data_tokens)
+        // dataset (tokens) options yang dipilih
+        // const optionElem = elem.childNodes[indexOption]
+        const tokens = elem.children[indexOption].dataset.tokens
+        // const data_tokens = optionElem.getAttribute('data-tokens')
         const value = elem.options[elem.selectedIndex].value
         if (selectId === 'instansi4' && loadDataAPI === 'provinsi') {
             loadDataAPIAfterSelect(
                 'instansi5',
                 loadingElem,
                 'regencies',
-                4,
-                data_tokens,
-                4
+                9,
+                tokens !== 'provinsi' ? tokens : 'no-select',
+                9,
+                {
+                    data_tokens: 'kabkota',
+                    value: 'Kab/Kota'
+                },
             )
+            dataWilayah.provinsi = value
             // removeOptions('instansi5')
             // removeDropdownMenu(4)
             // loadingElem.style.display = 'flex'
@@ -248,24 +410,36 @@ function onSelectInstansi(selectId, loadDataAPI, loadingId) {
             //     .catch(err => {
             //         console.log(err)
             //     })
-        }else if (selectId === 'instansi5' && loadDataAPI === 'kabupaten/kota') {
+        } else if (selectId === 'instansi5' && loadDataAPI === 'kabupaten/kota') {
             loadDataAPIAfterSelect(
                 'instansi6',
                 loadingElem,
                 'districts',
-                5,
-                data_tokens,
-                5
+                10,
+                tokens !== 'kabkota' ? tokens : 'no-select',
+                10,
+                {
+                    data_tokens: 'kecamatan',
+                    value: 'Kecamatan'
+                },
             )
-        }else if (selectId === 'instansi6' && loadDataAPI === 'kecamatan') {
+            dataWilayah.kabkota = value
+        } else if (selectId === 'instansi6' && loadDataAPI === 'kecamatan') {
             loadDataAPIAfterSelect(
                 'instansi7',
                 loadingElem,
                 'villages',
-                6,
-                data_tokens,
-                6
+                11,
+                tokens !== 'kecamatan' ? tokens : 'no-select',
+                11,
+                {
+                    data_tokens: 'kelurahan',
+                    value: 'Kelurahan'
+                },
             )
+            dataWilayah.kecamatan = value
+        } else if (selectId === 'instansi7' && loadDataAPI === 'kelurahan') {
+            dataWilayah.kelurahan = value
         }
     }
 }
@@ -275,27 +449,40 @@ function loadDataAPIAfterSelect(
     loadingElem,
     daerahId,
     indexRemoveDropdownMenu,
-    data_tokens,
+    tokens,
     indexElement,
+    defaultDataOpt
 ) {
     removeOptions(instansiId)
     removeDropdownMenu(indexRemoveDropdownMenu)
-    loadingElem.style.display = 'flex'
-    getKabOrKotaAPI(daerahId, data_tokens)
-        .then(res => {
-            const data = res.map(provinsi => ({
-                data_tokens: provinsi.id,
-                value: provinsi.name
-            }))
-            loadCreateSelect(instansiId, data)
-            setTimeout(() => {
-                createMenuDropdown(data, indexElement)
-                loadingElem.style.display = 'none'
-            }, 500)
-        })
-        .catch(err => {
-            console.log(err)
-        })
+    if (tokens !== 'no-select') {
+        loadingElem.style.display = 'flex'
+        getKabOrKotaAPI(daerahId, tokens)
+            .then(res => {
+                const data = res.map(provinsi => ({
+                    data_tokens: provinsi.id,
+                    value: provinsi.name
+                }))
+                const newData = [
+                    defaultDataOpt,
+                    ...data
+                ]
+                createMenuDropdown(newData, indexElement)
+                setTimeout(() => {
+                    loadCreateSelect(instansiId, newData)
+                    loadingElem.style.display = 'none'
+                }, 500)
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    } else {
+        const defaultOption = [
+            defaultDataOpt
+        ]
+        loadCreateSelect(instansiId, defaultOption)
+        createMenuDropdown(defaultOption, indexElement)
+    }
 }
 
 // remove options
@@ -319,17 +506,19 @@ function removeDropdownMenu(indexElement) {
     }
 }
 
+var indexActiveSearch
+
 // create menu dropdown
 function createMenuDropdown(data, indexElement) {
     const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
     const btnText = document.getElementsByClassName('filter-option')
+
     if (elem && data.length > 0) {
+        const instansi = elem[indexElement]
         data.forEach((item, index) => {
-            const instansi = elem[indexElement]
             // list element
             var li = document.createElement('li')
             li.setAttribute('data-original-index', index)
-            li.setAttribute('class', index === 0 ? 'selected' : '')
             // change btn text
             // if (indexElement === 3 && index === 0) {
             //     btnText[3].innerHTML = item.value
@@ -345,9 +534,9 @@ function createMenuDropdown(data, indexElement) {
             // }
             // tag a element
             var tagA = document.createElement('a')
+            tagA.setAttribute('data-normalized-text', `<span class=&quot;text&quot;>${item.value}</span>`)
             tagA.setAttribute('tabindex', '0')
             tagA.setAttribute('class', '')
-            tagA.setAttribute('data-normalized-text', `<span class=&quot;text&quot;>${item.value}</span>`)
             // children tag a
             // span with text content
             var spanChild = document.createElement('span')
@@ -361,4 +550,8 @@ function createMenuDropdown(data, indexElement) {
             instansi.appendChild(li)
         })
     }
+}
+
+function clickSubmit() {
+    console.log(dataWilayah)
 }
