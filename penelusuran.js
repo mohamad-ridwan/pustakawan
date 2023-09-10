@@ -115,9 +115,9 @@ async function getProvinsiAPI() {
 }
 
 // kab/kota API
-async function getKabOrKotaAPI(provinsiId){
+async function getKabOrKotaAPI(daerahId, provinsiId) {
     try {
-        const fetchData = await fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${provinsiId}.json`)
+        const fetchData = await fetch(`https://www.emsifa.com/api-wilayah-indonesia/api/${daerahId}/${provinsiId}.json`)
         const data = await fetchData.json()
         return data
     } catch (error) {
@@ -144,34 +144,62 @@ function setOptionElement() {
     loadCreateSelect('instansi3', instansiData.instansi3)
     // provinsi API
     const loadingElem = document.getElementById('loadingInstansi3')
-    if(loadingElem){
+    const loadingElem4 = document.getElementById('loadingInstansi4')
+    const loadingElem5 = document.getElementById('loadingInstansi5')
+    if (loadingElem) {
         loadingElem.style.display = 'flex'
+        // loadingElem4.style.display = 'flex'
+        // loadingElem5.style.display = 'flex'
     }
     getProvinsiAPI()
-    .then(res => {
-        if (res?.length > 0) {
-            const data = res.map(provinsi => ({
-                data_tokens: provinsi.id,
-                value: provinsi.name
-            }))
-            loadCreateSelect('instansi4', data)
-            getKabOrKotaAPI(data[0].data_tokens)
-            .then(res=>{
+        .then(res => {
+            if (res?.length > 0) {
                 const data = res.map(provinsi => ({
                     data_tokens: provinsi.id,
                     value: provinsi.name
                 }))
-                loadCreateSelect('instansi5', data)
-            })
-            .catch(err=>{
-                console.log(err)
-            })
-            loadingElem.style.display = 'none'
-        }
-    })
-    .catch(err => {
-        console.log('error', err)
-    })
+                loadCreateSelect('instansi4', data)
+                setTimeout(() => {
+                    createMenuDropdown(data, 3)
+                    loadingElem.style.display = 'none'
+                }, 500);
+                return data
+            }
+            return []
+        })
+        // .then(data => {
+        //     return getKabOrKotaAPI('regencies', data[0].data_tokens)
+        // })
+        // .then(res=>{
+        //     const data = res.map(provinsi => ({
+        //         data_tokens: provinsi.id,
+        //         value: provinsi.name
+        //     }))
+        //     loadCreateSelect('instansi5', data)
+        //     setTimeout(() => {
+        //         createMenuDropdown(data, 4)
+        //         loadingElem4.style.display = 'none'
+        //     }, 500);
+        //     return data
+        // })
+        // .then(data=>{
+        //     return getKabOrKotaAPI('districts', data[0].data_tokens)
+        // })
+        // .then(res=>{
+        //     const data = res.map(provinsi => ({
+        //         data_tokens: provinsi.id,
+        //         value: provinsi.name
+        //     }))
+        //     loadCreateSelect('instansi6', data)
+        //     setTimeout(() => {
+        //         createMenuDropdown(data, 5)
+        //         loadingElem5.style.display = 'none'
+        //     }, 500);
+        //     return data
+        // })
+        .catch(err => {
+            console.log('error', err)
+        })
 }
 
 setOptionElement()
@@ -180,53 +208,157 @@ window.onload = () => {
     setStyleSelect()
 }
 
-const rowLeft = document.getElementById('rowLeft')
-
 // get select value
-function onSelectInstansi(selectId, loadDataAPI, loadingId, onIdxOption){
+function onSelectInstansi(selectId, loadDataAPI, loadingId) {
     const elem = document.getElementById(selectId)
     const loadingElem = document.getElementById(loadingId)
-    if(elem){
+    const btnText = document.getElementsByClassName('filter-option')
+    console.log(elem)
+    console.log(selectId)
+    if (elem) {
         const indexOption = elem.selectedIndex
-        const optionElem = elem.childNodes[onIdxOption ?? indexOption]
+        const optionElem = elem.childNodes[indexOption]
         const data_tokens = optionElem.getAttribute('data-tokens')
+        console.log(data_tokens)
         const value = elem.options[elem.selectedIndex].value
-        if(data_tokens !== 'provinsi' && loadDataAPI === 'kabupaten/kota'){
-            loadingElem.style.display = 'flex'
-            getKabOrKotaAPI(data_tokens)
-            .then(res=>{
-                const data = res.map(provinsi => ({
-                    data_tokens: provinsi.id,
-                    value: provinsi.name
-                }))
-                loadCreateSelect('instansi5', data)
-                loadingElem.style.display = 'none'
-            })
-            .catch(err=>{
-                console.log(err)
-            })
+        if (selectId === 'instansi4' && loadDataAPI === 'provinsi') {
+            loadDataAPIAfterSelect(
+                'instansi5',
+                loadingElem,
+                'regencies',
+                4,
+                data_tokens,
+                4
+            )
+            // removeOptions('instansi5')
+            // removeDropdownMenu(4)
+            // loadingElem.style.display = 'flex'
+            // getKabOrKotaAPI('regencies', data_tokens)
+            //     .then(res => {
+            //         const data = res.map(provinsi => ({
+            //             data_tokens: provinsi.id,
+            //             value: provinsi.name
+            //         }))
+            //         loadCreateSelect('instansi5', data)
+            //         setTimeout(() => {
+            //             createMenuDropdown(data, 4)
+            //             loadingElem.style.display = 'none'
+            //         }, 500)
+            //     })
+            //     .catch(err => {
+            //         console.log(err)
+            //     })
+        }else if (selectId === 'instansi5' && loadDataAPI === 'kabupaten/kota') {
+            loadDataAPIAfterSelect(
+                'instansi6',
+                loadingElem,
+                'districts',
+                5,
+                data_tokens,
+                5
+            )
+        }else if (selectId === 'instansi6' && loadDataAPI === 'kecamatan') {
+            loadDataAPIAfterSelect(
+                'instansi7',
+                loadingElem,
+                'villages',
+                6,
+                data_tokens,
+                6
+            )
         }
     }
 }
 
-// function createInstansi5HTML(){
-//     var div = document.createElement('div')
-//     div.setAttribute('class', 'wrap-input')
-//     div.setAttribute('id', 'wrapInstansi5')
-//     var select = document.createElement('select')
-//     select.setAttribute('id', 'instansi5')
-//     select.setAttribute('class', 'selectpicker')
-//     select.setAttribute('data-live-search', 'true')
-//     select.setAttribute('onchange', `onSelectInstansi('instansi5')`)
-//     div.appendChild(select)
+function loadDataAPIAfterSelect(
+    instansiId,
+    loadingElem,
+    daerahId,
+    indexRemoveDropdownMenu,
+    data_tokens,
+    indexElement,
+) {
+    removeOptions(instansiId)
+    removeDropdownMenu(indexRemoveDropdownMenu)
+    loadingElem.style.display = 'flex'
+    getKabOrKotaAPI(daerahId, data_tokens)
+        .then(res => {
+            const data = res.map(provinsi => ({
+                data_tokens: provinsi.id,
+                value: provinsi.name
+            }))
+            loadCreateSelect(instansiId, data)
+            setTimeout(() => {
+                createMenuDropdown(data, indexElement)
+                loadingElem.style.display = 'none'
+            }, 500)
+        })
+        .catch(err => {
+            console.log(err)
+        })
+}
 
-//     rowLeft.appendChild(div)
-// }
+// remove options
+function removeOptions(elementId) {
+    var select = document.getElementById(elementId)
+    var children = select.lastElementChild
+    while (children) {
+        select.removeChild(children)
+        children = select.lastElementChild
+    }
+}
+
+// remove dropdown menu
+function removeDropdownMenu(indexElement) {
+    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
+    var currentElem = elem[indexElement]
+    var children = currentElem.lastElementChild
+    while (children) {
+        currentElem.removeChild(children)
+        children = currentElem.lastElementChild
+    }
+}
 
 // create menu dropdown
-function createMenuDropdown(){
-    const elem = document.getElementsByClassName('wrapp-menu')
-    if(elem){
-        elem[6]
+function createMenuDropdown(data, indexElement) {
+    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
+    const btnText = document.getElementsByClassName('filter-option')
+    if (elem && data.length > 0) {
+        data.forEach((item, index) => {
+            const instansi = elem[indexElement]
+            // list element
+            var li = document.createElement('li')
+            li.setAttribute('data-original-index', index)
+            li.setAttribute('class', index === 0 ? 'selected' : '')
+            // change btn text
+            // if (indexElement === 3 && index === 0) {
+            //     btnText[3].innerHTML = item.value
+            // }
+            // if (indexElement === 4 && index === 0) {
+            //     btnText[4].innerHTML = item.value
+            // }
+            // if (indexElement === 5 && index === 0) {
+            //     btnText[5].innerHTML = item.value
+            // }
+            // if (indexElement === 6 && index === 0) {
+            //     btnText[6].innerHTML = item.value
+            // }
+            // tag a element
+            var tagA = document.createElement('a')
+            tagA.setAttribute('tabindex', '0')
+            tagA.setAttribute('class', '')
+            tagA.setAttribute('data-normalized-text', `<span class=&quot;text&quot;>${item.value}</span>`)
+            // children tag a
+            // span with text content
+            var spanChild = document.createElement('span')
+            spanChild.setAttribute('class', 'text')
+            spanChild.innerHTML = item.value
+            var spanChild2 = document.createElement('span')
+            spanChild2.setAttribute('class', 'glyphicon glyphicon-ok check-mark')
+            tagA.appendChild(spanChild)
+            tagA.appendChild(spanChild2)
+            li.appendChild(tagA)
+            instansi.appendChild(li)
+        })
     }
 }

@@ -61,6 +61,16 @@
     margin-top: 0.5rem;
 }
 
+#loadingInstansi5 {
+    display: none;
+    margin-top: 0.5rem;
+}
+
+#loadingInstansi6 {
+    display: none;
+    margin-top: 0.5rem;
+}
+
 @media screen and (max-width: 505px) {
     .wrap-form-pengajuan .container-pengajuan {
         flex-direction: column;
