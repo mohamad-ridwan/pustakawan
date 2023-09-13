@@ -457,6 +457,7 @@ function removeDropdownMenu(indexElement) {
 let currentDataMenu
 let indexElementDropdown
 
+var btnDropdown = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
 var searchElem = document.getElementsByClassName('input-block-level form-control')
 var wrapBtnGroup = document.getElementsByClassName('btn-group bootstrap-select')
 
@@ -473,6 +474,9 @@ function createMenuDropdown(data, indexElement) {
         searchElem = document.getElementsByClassName('input-block-level form-control')
         searchElem = searchElem[indexElement]
         searchElem.setAttribute('onkeydown', 'clickSearch()')
+        btnDropdown = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
+        btnDropdown = btnDropdown[indexElement]
+        btnDropdown.setAttribute('onclick', `clickBtnDropdown(${indexElement})`)
 
         data.forEach((item, index) => {
             // list element
@@ -503,8 +507,6 @@ function clickSearch() {
     loadSearchDataDropdown(indexElementDropdown, searchElem.value, searchElem)
 }
 
-let filterData = []
-
 function loadSearchDataDropdown(
     indexElement,
     inputValue,
@@ -526,14 +528,6 @@ function loadSearchDataDropdown(
                 textItem.toLowerCase().includes(inputValue.toLowerCase()) ||
                 textItem.includes(inputValue)
             if (checkItem) {
-                // filterData.push({ item: childList[index], text: childList[index].textContent })
-                // if (filterData.length > 0) {
-                //     const newFilter = filterData.filter((v, i, s) =>
-                //         i === s.findIndex((t) => (
-                //             t.text == v.text
-                //         ))
-                //     )
-                // }
                 childList[index].setAttribute('class', '')
             }
             if (inputValue.length === 0) {
@@ -542,6 +536,13 @@ function loadSearchDataDropdown(
             }
         })
     }
+}
+
+function clickBtnDropdown(indexElement) {
+    indexElementDropdown = indexElement
+    searchElem = document.getElementsByClassName('input-block-level form-control')
+    searchElem = searchElem[indexElement]
+    searchElem.setAttribute('onkeydown', 'clickSearch()')
 }
 
 function clickSubmit() {
