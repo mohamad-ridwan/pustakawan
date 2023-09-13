@@ -308,10 +308,9 @@ function setOptionElement() {
                 setTimeout(() => {
                     // createMenuDropdown(data, 8)
                     loadingElem.style.display = 'none'
-                }, 500);
+                }, 0);
                 return data
             }
-            return []
         })
         .catch(err => {
             console.log('error', err)
@@ -324,7 +323,9 @@ function setOptionElement() {
     loadCreateSelect('perpus5', perpustakaanData.perpus5)
 }
 
-setOptionElement()
+setTimeout(() => {
+    setOptionElement()
+}, 0);
 
 window.onload = () => {
     setStyleSelect()
@@ -522,11 +523,11 @@ function loadSearchDataDropdown(
         const instansi = elem[indexElement]
         const childList = instansi.children
         currentDataMenu.forEach((_, index) => {
-            const textItem = childList[index].innerText
+            const textItem = childList[index]?.innerText
             childList[index].setAttribute('class', 'hide')
             const checkItem =
-                textItem.toLowerCase().includes(inputValue.toLowerCase()) ||
-                textItem.includes(inputValue)
+                textItem?.toLowerCase()?.includes(inputValue.toLowerCase()) ||
+                textItem?.includes(inputValue)
             if (checkItem) {
                 childList[index].setAttribute('class', '')
             }
@@ -543,6 +544,7 @@ function clickBtnDropdown(indexElement) {
     searchElem = document.getElementsByClassName('input-block-level form-control')
     searchElem = searchElem[indexElement]
     searchElem.setAttribute('onkeydown', 'clickSearch()')
+    clickSearch()
 }
 
 function clickSubmit() {
