@@ -294,12 +294,8 @@ function setOptionElement() {
     loadCreateSelect('instansi3', instansiData.instansi3)
     // provinsi API
     const loadingElem = document.getElementById('loadingWilayah')
-    const loadingElem4 = document.getElementById('loadingInstansi4')
-    const loadingElem5 = document.getElementById('loadingInstansi5')
     if (loadingElem) {
         loadingElem.style.display = 'flex'
-        // loadingElem4.style.display = 'flex'
-        // loadingElem5.style.display = 'flex'
     }
     getProvinsiAPI()
         .then(res => {
@@ -317,36 +313,6 @@ function setOptionElement() {
             }
             return []
         })
-        // .then(data => {
-        //     return getKabOrKotaAPI('regencies', data[0].data_tokens)
-        // })
-        // .then(res=>{
-        //     const data = res.map(provinsi => ({
-        //         data_tokens: provinsi.id,
-        //         value: provinsi.name
-        //     }))
-        //     loadCreateSelect('instansi5', data)
-        //     setTimeout(() => {
-        //         createMenuDropdown(data, 4)
-        //         loadingElem4.style.display = 'none'
-        //     }, 500);
-        //     return data
-        // })
-        // .then(data=>{
-        //     return getKabOrKotaAPI('districts', data[0].data_tokens)
-        // })
-        // .then(res=>{
-        //     const data = res.map(provinsi => ({
-        //         data_tokens: provinsi.id,
-        //         value: provinsi.name
-        //     }))
-        //     loadCreateSelect('instansi6', data)
-        //     setTimeout(() => {
-        //         createMenuDropdown(data, 5)
-        //         loadingElem5.style.display = 'none'
-        //     }, 500);
-        //     return data
-        // })
         .catch(err => {
             console.log('error', err)
         })
@@ -374,7 +340,6 @@ function onSelectInstansi(selectId, loadDataAPI, loadingId) {
     if (elem) {
         const indexOption = elem.selectedIndex
         // dataset (tokens) options yang dipilih
-        // const optionElem = elem.childNodes[indexOption]
         const tokens = elem.children[indexOption].dataset.tokens
         // const data_tokens = optionElem.getAttribute('data-tokens')
         const value = elem.options[elem.selectedIndex].value
@@ -392,24 +357,6 @@ function onSelectInstansi(selectId, loadDataAPI, loadingId) {
                 },
             )
             dataWilayah.provinsi = value
-            // removeOptions('instansi5')
-            // removeDropdownMenu(4)
-            // loadingElem.style.display = 'flex'
-            // getKabOrKotaAPI('regencies', data_tokens)
-            //     .then(res => {
-            //         const data = res.map(provinsi => ({
-            //             data_tokens: provinsi.id,
-            //             value: provinsi.name
-            //         }))
-            //         loadCreateSelect('instansi5', data)
-            //         setTimeout(() => {
-            //             createMenuDropdown(data, 4)
-            //             loadingElem.style.display = 'none'
-            //         }, 500)
-            //     })
-            //     .catch(err => {
-            //         console.log(err)
-            //     })
         } else if (selectId === 'instansi5' && loadDataAPI === 'kabupaten/kota') {
             loadDataAPIAfterSelect(
                 'instansi6',
@@ -506,32 +453,32 @@ function removeDropdownMenu(indexElement) {
     }
 }
 
-var indexActiveSearch
+// untuk load data search menu dropdown
+let currentDataMenu
+let indexElementDropdown
+
+var searchElem = document.getElementsByClassName('input-block-level form-control')
+var wrapBtnGroup = document.getElementsByClassName('btn-group bootstrap-select')
 
 // create menu dropdown
 function createMenuDropdown(data, indexElement) {
     const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
-    const btnText = document.getElementsByClassName('filter-option')
 
     if (elem && data.length > 0) {
+        currentDataMenu = data
+        indexElementDropdown = indexElement
         const instansi = elem[indexElement]
+        wrapBtnGroup = document.getElementsByClassName('btn-group bootstrap-select')
+        wrapBtnGroup = wrapBtnGroup[indexElement]
+        searchElem = document.getElementsByClassName('input-block-level form-control')
+        searchElem = searchElem[indexElement]
+        searchElem.setAttribute('onkeydown', 'clickSearch()')
+
         data.forEach((item, index) => {
             // list element
             var li = document.createElement('li')
             li.setAttribute('data-original-index', index)
-            // change btn text
-            // if (indexElement === 3 && index === 0) {
-            //     btnText[3].innerHTML = item.value
-            // }
-            // if (indexElement === 4 && index === 0) {
-            //     btnText[4].innerHTML = item.value
-            // }
-            // if (indexElement === 5 && index === 0) {
-            //     btnText[5].innerHTML = item.value
-            // }
-            // if (indexElement === 6 && index === 0) {
-            //     btnText[6].innerHTML = item.value
-            // }
+            li.setAttribute('class', index === 0 ? 'selected active' : '')
             // tag a element
             var tagA = document.createElement('a')
             tagA.setAttribute('data-normalized-text', `<span class=&quot;text&quot;>${item.value}</span>`)
@@ -552,6 +499,62 @@ function createMenuDropdown(data, indexElement) {
     }
 }
 
+function clickSearch() {
+    loadSearchDataDropdown(indexElementDropdown, searchElem.value, searchElem)
+}
+
+let filterData = []
+
+function loadSearchDataDropdown(
+    indexElement,
+    inputValue,
+    event
+) {
+    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
+    event.addEventListener('keyup', (e) => {
+        if (e?.code === 'Enter') {
+            console.log('sukses')
+        }
+    })
+    if (currentDataMenu?.length > 0) {
+        const instansi = elem[indexElement]
+        const childList = instansi.children
+        currentDataMenu.forEach((_, index) => {
+            const textItem = childList[index].innerText
+            childList[index].setAttribute('class', 'hide')
+            const checkItem =
+                textItem.toLowerCase().includes(inputValue.toLowerCase()) ||
+                textItem.includes(inputValue)
+            if (checkItem) {
+                // filterData.push({ item: childList[index], text: childList[index].textContent })
+                // if (filterData.length > 0) {
+                //     const newFilter = filterData.filter((v, i, s) =>
+                //         i === s.findIndex((t) => (
+                //             t.text == v.text
+                //         ))
+                //     )
+                // }
+                childList[index].setAttribute('class', '')
+            }
+            if (inputValue.length === 0) {
+                childList[0].setAttribute('class', 'selected active')
+                childList[index].removeAttribute('class')
+            }
+        })
+    }
+}
+
 function clickSubmit() {
-    console.log(dataWilayah)
+    const {
+        provinsi,
+        kabkota,
+        kecamatan,
+        kelurahan
+    } = dataWilayah
+    const result = document.getElementById('result')
+    var wrapList = document.createElement('ul')
+    var list = document.createElement('li')
+    list.textContent = `provinsi:${provinsi}, kabkota:${kabkota}, kecamatan:${kecamatan}, kelurahan:${kelurahan}`
+    wrapList.appendChild(list)
+    result.appendChild(wrapList)
 }

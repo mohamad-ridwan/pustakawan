@@ -68,19 +68,10 @@
     animation: spin 800ms linear infinite;
 }
 
-#loadingInstansi4 {
-    display: none;
-    margin-top: 0.5rem;
-}
-
-#loadingInstansi5 {
-    display: none;
-    margin-top: 0.5rem;
-}
-
-#loadingInstansi6 {
-    display: none;
-    margin-top: 0.5rem;
+.pengajuan-update{
+    display: flex;
+    flex-direction: column;
+    margin-top: 3rem;
 }
 
 @media screen and (max-width: 505px) {
