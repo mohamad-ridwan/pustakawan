@@ -305,10 +305,18 @@ function setOptionElement() {
                     value: provinsi.name
                 }))
                 loadCreateSelect('instansi4', data)
+                removeDropdownMenu(8)
+                const newData = [
+                    {
+                        data_tokens: 'provinsi',
+                        value: 'Provinsi'
+                    },
+                    ...data
+                ]
                 setTimeout(() => {
-                    // createMenuDropdown(data, 8)
+                    createMenuDropdown(newData, 8)
                     loadingElem.style.display = 'none'
-                }, 0);
+                }, 500);
                 return data
             }
         })
@@ -323,9 +331,8 @@ function setOptionElement() {
     loadCreateSelect('perpus5', perpustakaanData.perpus5)
 }
 
-setTimeout(() => {
-    setOptionElement()
-}, 0);
+// load dan membuat menu select options
+setOptionElement()
 
 window.onload = () => {
     setStyleSelect()
@@ -415,8 +422,8 @@ function loadDataAPIAfterSelect(
                     defaultDataOpt,
                     ...data
                 ]
-                createMenuDropdown(newData, indexElement)
                 setTimeout(() => {
+                    createMenuDropdown(newData, indexElement)
                     loadCreateSelect(instansiId, newData)
                     loadingElem.style.display = 'none'
                 }, 500)
@@ -428,8 +435,10 @@ function loadDataAPIAfterSelect(
         const defaultOption = [
             defaultDataOpt
         ]
-        loadCreateSelect(instansiId, defaultOption)
-        createMenuDropdown(defaultOption, indexElement)
+        setTimeout(() => {
+            loadCreateSelect(instansiId, defaultOption)
+            createMenuDropdown(defaultOption, indexElement)
+        }, 500);
     }
 }
 
@@ -446,12 +455,14 @@ function removeOptions(elementId) {
 // remove dropdown menu
 function removeDropdownMenu(indexElement) {
     const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
-    var currentElem = elem[indexElement]
-    var children = currentElem.lastElementChild
-    while (children) {
-        currentElem.removeChild(children)
-        children = currentElem.lastElementChild
-    }
+    setTimeout(() => {
+        var currentElem = elem[indexElement]
+        var children = currentElem.lastElementChild
+        while (children) {
+            currentElem.removeChild(children)
+            children = currentElem.lastElementChild
+        }
+    }, 500);
 }
 
 // untuk load data search menu dropdown
