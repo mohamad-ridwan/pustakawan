@@ -63,5 +63,5 @@ document.getElementById('formPustaka').addEventListener('submit', (e)=>{
 })
 
 window.onload = ()=>{
-    window.location.replace('pelapor-pengajuan-mandiri.html')
+    window.location.replace('/pages/pelapor-pengajuan-mandiri/pelapor-pengajuan-mandiri.html')
 }

@@ -133,7 +133,7 @@ function submit() {
         //     )}`)
         // }, 1000);
         setTimeout(() => {
-            window.location.replace('pilih-menu.html')
+            window.location.replace('/pages/pilih-menu/pilih-menu.html')
         }, 1000);
     } else if(!isCaptchaChecked()) {
         errForm.checkbox = 'Mohon ceklis di cekbox'
