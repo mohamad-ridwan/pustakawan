@@ -651,7 +651,12 @@ function clickBtnDropdown(indexElement, daerah) {
         searchElem = searchElem[indexElement]
         searchElem.setAttribute('onkeydown', 'clickSearch()')
     }, 0)
+    const loadingElem = document.getElementById('loadingWilayah')
     if (daerah === 'provinsi') {
+        if (loadingElem) {
+            loadingElem.style.display = 'flex'
+        }
+
         getProvinsiAPI()
             .then(res => {
                 const data = res.map(provinsi => ({
@@ -667,6 +672,7 @@ function clickBtnDropdown(indexElement, daerah) {
                 ]
                 currentDataMenu = newData
                 clickSearch()
+                loadingElem.style.display = 'none'
             })
             .catch(err => console.log(err))
     } else if (daerah === 'kabkota' && tokensWilayah.provinsi) {
@@ -688,6 +694,11 @@ function clickBtnDropdown(indexElement, daerah) {
 }
 
 function resetCurrentData(wilayahId, tokens, defaultDataOpt) {
+    const loadingElem = document.getElementById('loadingWilayah')
+    if (loadingElem) {
+        loadingElem.style.display = 'flex'
+    }
+
     getKabOrKotaAPI(wilayahId, tokens)
         .then(res => {
             const data = res.map(provinsi => ({
@@ -700,6 +711,7 @@ function resetCurrentData(wilayahId, tokens, defaultDataOpt) {
             ]
             currentDataMenu = newData
             clickSearch()
+            loadingElem.style.display = 'none'
         })
         .catch(err => console.log(err))
 }
