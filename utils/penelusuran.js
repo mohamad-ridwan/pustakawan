@@ -8,245 +8,453 @@ function setStyleSelect() {
 }
 
 const instansiData = {
-    instansi1: [
-        {
-            data_tokens: 'pemerintah',
-            value: 'Pemerintah'
-        },
-        {
-            data_tokens: 'swasta',
-            value: 'Swasta'
-        },
-    ],
-    instansi2: [
-        {
-            data_tokens: 'jabatan',
-            value: 'Jabatan'
-        },
-        {
-            data_tokens: 'pustakawan-terampil-asisten-perpustakaan-terampil',
-            value: 'Pustakawan Terampil / Asisten Perpustakaan'
-        },
-        {
-            data_tokens: 'pustakawan-mahir-asisten-perpustakaan-mahir',
-            value: 'Pustakawan Mahir / Asisten Perpustakaan Mahir'
-        },
-        {
-            data_tokens: 'pustakawan-penyelia-asisten-perpustakaan-penyelia',
-            value: 'Pustakawan Penyelia / Asisten Perpustakaan Penyelia'
-        },
-        {
-            data_tokens: 'pustakawan-ahli-pertama',
-            value: 'Pustakawan Ahli Pertama'
-        },
-        {
-            data_tokens: 'pustakawan-ahli-muda',
-            value: 'Pustakawan Ahli Muda'
-        },
-        {
-            data_tokens: 'pustakawan-ahli-utama',
-            value: 'Pustakawan Ahli Utama'
-        },
-        {
-            data_tokens: 'pustakawan-tingkat-terampil',
-            value: 'Pustakawan Tingkat Terampil'
-        },
-        {
-            data_tokens: 'pustakawan-tingkat-ahli',
-            value: 'Pustakawan Tingkat Ahli'
-        },
-    ],
-    instansi3: [
-        {
-            data_tokens: 'pendidikan',
-            value: 'Pendidikan'
-        },
-        {
-            data_tokens: 'sma-smk-ma',
-            value: 'SMA/SMK/MA'
-        },
-        {
-            data_tokens: 'd1',
-            value: 'D1'
-        },
-        {
-            data_tokens: 'd2',
-            value: 'D2'
-        },
-        {
-            data_tokens: 'd3',
-            value: 'D3'
-        },
-        {
-            data_tokens: 'd4',
-            value: 'D4'
-        },
-        {
-            data_tokens: 'smp-mts',
-            value: 'SMP/MTs'
-        },
-        {
-            data_tokens: 's1',
-            value: 'S1'
-        },
-        {
-            data_tokens: 's2',
-            value: 'S2'
-        },
-        {
-            data_tokens: 's3',
-            value: 'S3'
-        },
-    ]
+    instansi1: {
+        id: 'instansi1',
+        data: [
+            {
+                data_tokens: 'pemerintah',
+                value: 'Pemerintah'
+            },
+            {
+                data_tokens: 'swasta',
+                value: 'Swasta'
+            },
+        ]
+    },
+    instansi2: {
+        id: 'instansi2',
+        data: [
+            {
+                data_tokens: 'jabatan',
+                value: 'Jabatan'
+            },
+            {
+                data_tokens: 'pustakawan-terampil-asisten-perpustakaan-terampil',
+                value: 'Pustakawan Terampil / Asisten Perpustakaan'
+            },
+            {
+                data_tokens: 'pustakawan-mahir-asisten-perpustakaan-mahir',
+                value: 'Pustakawan Mahir / Asisten Perpustakaan Mahir'
+            },
+            {
+                data_tokens: 'pustakawan-penyelia-asisten-perpustakaan-penyelia',
+                value: 'Pustakawan Penyelia / Asisten Perpustakaan Penyelia'
+            },
+            {
+                data_tokens: 'pustakawan-ahli-pertama',
+                value: 'Pustakawan Ahli Pertama'
+            },
+            {
+                data_tokens: 'pustakawan-ahli-muda',
+                value: 'Pustakawan Ahli Muda'
+            },
+            {
+                data_tokens: 'pustakawan-ahli-utama',
+                value: 'Pustakawan Ahli Utama'
+            },
+            {
+                data_tokens: 'pustakawan-tingkat-terampil',
+                value: 'Pustakawan Tingkat Terampil'
+            },
+            {
+                data_tokens: 'pustakawan-tingkat-ahli',
+                value: 'Pustakawan Tingkat Ahli'
+            },
+        ]
+    },
+    instansi3: {
+        id: 'instansi3',
+        data: [
+            {
+                data_tokens: 'pendidikan',
+                value: 'Pendidikan'
+            },
+            {
+                data_tokens: 'sma-smk-ma',
+                value: 'SMA/SMK/MA'
+            },
+            {
+                data_tokens: 'd1',
+                value: 'D1'
+            },
+            {
+                data_tokens: 'd2',
+                value: 'D2'
+            },
+            {
+                data_tokens: 'd3',
+                value: 'D3'
+            },
+            {
+                data_tokens: 'd4',
+                value: 'D4'
+            },
+            {
+                data_tokens: 'smp-mts',
+                value: 'SMP/MTs'
+            },
+            {
+                data_tokens: 's1',
+                value: 'S1'
+            },
+            {
+                data_tokens: 's2',
+                value: 'S2'
+            },
+            {
+                data_tokens: 's3',
+                value: 'S3'
+            },
+        ]
+    }
 }
 
 const perpustakaanData = {
-    perpus1: [
-        {
-            data_tokens: 'pustakawan',
-            value: 'Pustakawan'
-        },
-        {
-            data_tokens: 'tenaga-perpustakaan',
-            value: 'Tenaga Perpustakaan'
-        }
-    ],
-    perpus2: [
-        {
-            data_tokens: 'pangkat',
-            value: 'Pangkat'
-        },
-        {
-            data_tokens: 'pengatur-muda-tk.l-(ll/b)',
-            value: 'Pengatur Muda Tk.l (ll/b)'
-        },
-        {
-            data_tokens: 'pengatur-(ll/c)',
-            value: 'Pengatur (ll/c)'
-        },
-        {
-            data_tokens: 'pengatur-tk.l-(ll/d)',
-            value: 'Pengatur Tk.l (ll/d)'
-        },
-        {
-            data_tokens: 'penata-muda-(lll/a)',
-            value: 'Penata Muda (lll/a)'
-        },
-        {
-            data_tokens: 'penata-muda-tk.l-(lll/b)',
-            value: 'Penata Muda Tk.l (lll/b)'
-        },
-        {
-            data_tokens: 'penata-(lll/c)',
-            value: 'Penata (lll/c)'
-        },
-        {
-            data_tokens: 'penata-tk.l-(lll/d)',
-            value: 'Penata Tk.l (lll/d)'
-        },
-        {
-            data_tokens: 'pembina-(IV/a)',
-            value: 'Pembina (IV/a)'
-        },
-        {
-            data_tokens: 'pembina-tk.l-(IV/b)',
-            value: 'Pembina Tk.l (IV/b)'
-        },
-        {
-            data_tokens: 'pembina-utama-muda-(IV/c)',
-            value: 'Pembina Utama Muda (IV/c)'
-        },
-        {
-            data_tokens: 'pembina-utama-madya-(IV/d)',
-            value: 'Pembina Utama Madya (IV/d)'
-        },
-        {
-            data_tokens: 'pembina-utama-(IV/e)',
-            value: 'Pembina Utama (IV/e)'
-        },
-        {
-            data_tokens: 'pengatur-muda-(ll/a)',
-            value: 'Pengatur Muda (ll/a)'
-        },
-    ],
-    perpus3: [
-        {
-            data_tokens: 'bidang',
-            value: 'Bidang'
-        },
-        {
-            data_tokens: 'non-perpustakaan',
-            value: 'Non Perpustakaan'
-        },
-        {
-            data_tokens: 'perpustakaan',
-            value: 'Perpustakaan'
-        },
-        {
-            data_tokens: 'pustakawan-disetarakan',
-            value: 'Pustakawan Disetarakan'
-        },
-    ],
-    perpus4: [
-        {
-            data_tokens: 'aktif',
-            value: 'AKTIF'
-        },
-        {
-            data_tokens: 'dbs',
-            value: 'DBS'
-        },
-    ],
-    perpus5: [
-        {
-            data_tokens: 'jenis-perpustakaan',
-            value: 'Jenis Perpustakaan'
-        },
-        {
-            data_tokens: 'perpustakaan-nasional-ri-(pnri)',
-            value: 'Perpustakaan Nasional RI (PNRI)'
-        },
-        {
-            data_tokens: 'perpustakaan-umum-(provinsi)-(provinsi)',
-            value: 'Perpustakaan Umum (Provinsi) (Provinsi)'
-        },
-        {
-            data_tokens: 'perpustakaan-umum-(kab/kota)-(kab/kota)',
-            value: 'Perpustakaan Umum (Kab/Kota) (Kab/Kota)'
-        },
-        {
-            data_tokens: 'perpustakaan-khusus-(pk)',
-            value: 'Perpustakaan Khusus (PK)'
-        },
-        {
-            data_tokens: 'perpustakaan-perguruan-tinggi-(ppt)',
-            value: 'Perpustakaan Perguruan Tinggi (PPT)'
-        },
-        {
-            data_tokens: 'perpustakaan-sekolah-(sd)-(ps-sd)',
-            value: 'Perpustakaan Sekolah (SD) (PS SD)'
-        },
-        {
-            data_tokens: 'perpustakaan-sekolah-(sltp)-(ps-sltp)',
-            value: 'Perpustakaan Sekolah (SLTP) (PS SLTP)'
-        },
-        {
-            data_tokens: 'perpustakaan-sekolah-(slta)-(ps-slta)',
-            value: 'Perpustakaan Sekolah (SLTA) (PS SLTA)'
-        },
-        {
-            data_tokens: 'perpustakaan-komunitas-(pkom)',
-            value: 'Perpustakaan Komunitas (PKom)'
-        },
-        {
-            data_tokens: 'perpustakaan-umum-(kelurahan/desa)-(kelurahan/desa)',
-            value: 'Perpustakaan Umum (Kelurahan/Desa) (Kelurahan/Desa)'
-        },
-        {
-            data_tokens: 'perpustakaan-umum-(kecamatan)-(kecamatan)',
-            value: 'Perpustakaan Umum (kecamatan) (kecamatan)'
-        },
-    ]
+    perpus1: {
+        id: 'perpus1',
+        data: [
+            {
+                data_tokens: 'pustakawan',
+                value: 'Pustakawan'
+            },
+            {
+                data_tokens: 'tenaga-perpustakaan',
+                value: 'Tenaga Perpustakaan'
+            }
+        ]
+    },
+    perpus2: {
+        id: 'perpus2',
+        data: [
+            {
+                data_tokens: 'pangkat',
+                value: 'Pangkat'
+            },
+            {
+                data_tokens: 'pengatur-muda-tk.l-(ll/b)',
+                value: 'Pengatur Muda Tk.l (ll/b)'
+            },
+            {
+                data_tokens: 'pengatur-(ll/c)',
+                value: 'Pengatur (ll/c)'
+            },
+            {
+                data_tokens: 'pengatur-tk.l-(ll/d)',
+                value: 'Pengatur Tk.l (ll/d)'
+            },
+            {
+                data_tokens: 'penata-muda-(lll/a)',
+                value: 'Penata Muda (lll/a)'
+            },
+            {
+                data_tokens: 'penata-muda-tk.l-(lll/b)',
+                value: 'Penata Muda Tk.l (lll/b)'
+            },
+            {
+                data_tokens: 'penata-(lll/c)',
+                value: 'Penata (lll/c)'
+            },
+            {
+                data_tokens: 'penata-tk.l-(lll/d)',
+                value: 'Penata Tk.l (lll/d)'
+            },
+            {
+                data_tokens: 'pembina-(IV/a)',
+                value: 'Pembina (IV/a)'
+            },
+            {
+                data_tokens: 'pembina-tk.l-(IV/b)',
+                value: 'Pembina Tk.l (IV/b)'
+            },
+            {
+                data_tokens: 'pembina-utama-muda-(IV/c)',
+                value: 'Pembina Utama Muda (IV/c)'
+            },
+            {
+                data_tokens: 'pembina-utama-madya-(IV/d)',
+                value: 'Pembina Utama Madya (IV/d)'
+            },
+            {
+                data_tokens: 'pembina-utama-(IV/e)',
+                value: 'Pembina Utama (IV/e)'
+            },
+            {
+                data_tokens: 'pengatur-muda-(ll/a)',
+                value: 'Pengatur Muda (ll/a)'
+            },
+        ]
+    },
+    perpus3: {
+        id: 'perpus3',
+        data: [
+            {
+                data_tokens: 'bidang',
+                value: 'Bidang'
+            },
+            {
+                data_tokens: 'non-perpustakaan',
+                value: 'Non Perpustakaan'
+            },
+            {
+                data_tokens: 'perpustakaan',
+                value: 'Perpustakaan'
+            },
+            {
+                data_tokens: 'pustakawan-disetarakan',
+                value: 'Pustakawan Disetarakan'
+            },
+        ]
+    },
+    perpus4: {
+        id: 'perpus4',
+        data: [
+            {
+                data_tokens: 'aktif',
+                value: 'AKTIF'
+            },
+            {
+                data_tokens: 'dbs',
+                value: 'DBS'
+            },
+        ]
+    },
+    perpus5: {
+        id: 'perpus5',
+        data: [
+            {
+                data_tokens: 'jenis-perpustakaan',
+                value: 'Jenis Perpustakaan'
+            },
+            {
+                data_tokens: 'perpustakaan-nasional-ri-(pnri)',
+                value: 'Perpustakaan Nasional RI (PNRI)'
+            },
+            {
+                data_tokens: 'perpustakaan-umum-(provinsi)-(provinsi)',
+                value: 'Perpustakaan Umum (Provinsi) (Provinsi)'
+            },
+            {
+                data_tokens: 'perpustakaan-umum-(kab/kota)-(kab/kota)',
+                value: 'Perpustakaan Umum (Kab/Kota) (Kab/Kota)'
+            },
+            {
+                data_tokens: 'perpustakaan-khusus-(pk)',
+                value: 'Perpustakaan Khusus (PK)'
+            },
+            {
+                data_tokens: 'perpustakaan-perguruan-tinggi-(ppt)',
+                value: 'Perpustakaan Perguruan Tinggi (PPT)'
+            },
+            {
+                data_tokens: 'perpustakaan-sekolah-(sd)-(ps-sd)',
+                value: 'Perpustakaan Sekolah (SD) (PS SD)'
+            },
+            {
+                data_tokens: 'perpustakaan-sekolah-(sltp)-(ps-sltp)',
+                value: 'Perpustakaan Sekolah (SLTP) (PS SLTP)'
+            },
+            {
+                data_tokens: 'perpustakaan-sekolah-(slta)-(ps-slta)',
+                value: 'Perpustakaan Sekolah (SLTA) (PS SLTA)'
+            },
+            {
+                data_tokens: 'perpustakaan-komunitas-(pkom)',
+                value: 'Perpustakaan Komunitas (PKom)'
+            },
+            {
+                data_tokens: 'perpustakaan-umum-(kelurahan/desa)-(kelurahan/desa)',
+                value: 'Perpustakaan Umum (Kelurahan/Desa) (Kelurahan/Desa)'
+            },
+            {
+                data_tokens: 'perpustakaan-umum-(kecamatan)-(kecamatan)',
+                value: 'Perpustakaan Umum (kecamatan) (kecamatan)'
+            },
+        ]
+    }
+}
+
+const pengajuanUpdateData = {
+    pilihUpdate1: {
+        id: 'pilihUpdate1',
+        data: [
+            {
+                data_tokens: 'pangkat',
+                value: 'Pangkat'
+            },
+            {
+                data_tokens: 'pengatur-muda-tk.l-(ll/b)',
+                value: 'Pengatur Muda Tk.l (ll/b)'
+            },
+            {
+                data_tokens: 'pengatur-(ll/c)',
+                value: 'Pengatur (ll/c)'
+            },
+            {
+                data_tokens: 'pengatur-tk.l-(ll/d)',
+                value: 'Pengatur Tk.l (ll/d)'
+            },
+            {
+                data_tokens: 'penata-muda-(lll/a)',
+                value: 'Penata Muda (lll/a)'
+            },
+            {
+                data_tokens: 'penata-muda-tk.l-(lll/b)',
+                value: 'Penata Muda Tk.l (lll/b)'
+            },
+            {
+                data_tokens: 'penata-(lll/c)',
+                value: 'Penata (lll/c)'
+            },
+            {
+                data_tokens: 'penata-tk.l-(lll/d)',
+                value: 'Penata Tk.l (lll/d)'
+            },
+            {
+                data_tokens: 'pembina-(IV/a)',
+                value: 'Pembina (IV/a)'
+            },
+            {
+                data_tokens: 'pembina-tk.l-(IV/b)',
+                value: 'Pembina Tk.l (IV/b)'
+            },
+            {
+                data_tokens: 'pembina-utama-muda-(IV/c)',
+                value: 'Pembina Utama Muda (IV/c)'
+            },
+            {
+                data_tokens: 'pembina-utama-madya-(IV/d)',
+                value: 'Pembina Utama Madya (IV/d)'
+            },
+            {
+                data_tokens: 'pembina-utama-(IV/e)',
+                value: 'Pembina Utama (IV/e)'
+            },
+            {
+                data_tokens: 'pengatur-muda-(ll/a)',
+                value: 'Pengatur Muda (ll/a)'
+            },
+        ]
+    },
+    pilihUpdate2: {
+        id: 'pilihUpdate2',
+        data: [
+            {
+                data_tokens: 'jabatan',
+                value: 'Jabatan'
+            },
+            {
+                data_tokens: 'pustakawan-terampil-asisten-perpustakaan-terampil',
+                value: 'Pustakawan Terampil / Asisten Perpustakaan'
+            },
+            {
+                data_tokens: 'pustakawan-mahir-asisten-perpustakaan-mahir',
+                value: 'Pustakawan Mahir / Asisten Perpustakaan Mahir'
+            },
+            {
+                data_tokens: 'pustakawan-penyelia-asisten-perpustakaan-penyelia',
+                value: 'Pustakawan Penyelia / Asisten Perpustakaan Penyelia'
+            },
+            {
+                data_tokens: 'pustakawan-ahli-pertama',
+                value: 'Pustakawan Ahli Pertama'
+            },
+            {
+                data_tokens: 'pustakawan-ahli-muda',
+                value: 'Pustakawan Ahli Muda'
+            },
+            {
+                data_tokens: 'pustakawan-ahli-utama',
+                value: 'Pustakawan Ahli Utama'
+            },
+            {
+                data_tokens: 'pustakawan-tingkat-terampil',
+                value: 'Pustakawan Tingkat Terampil'
+            },
+            {
+                data_tokens: 'pustakawan-tingkat-ahli',
+                value: 'Pustakawan Tingkat Ahli'
+            },
+        ]
+    },
+    pilihUpdate3: {
+        id: 'pilihUpdate3',
+        data: [
+            {
+                data_tokens: 'bidang',
+                value: 'Bidang'
+            },
+            {
+                data_tokens: 'non-perpustakaan',
+                value: 'Non Perpustakaan'
+            },
+            {
+                data_tokens: 'perpustakaan',
+                value: 'Perpustakaan'
+            },
+            {
+                data_tokens: 'pustakawan-disetarakan',
+                value: 'Pustakawan Disetarakan'
+            },
+        ]
+    },
+    pilihUpdate4: {
+        id: 'pilihUpdate4',
+        data: [
+            {
+                data_tokens: 'pendidikan',
+                value: 'Pendidikan'
+            },
+            {
+                data_tokens: 'sma-smk-ma',
+                value: 'SMA/SMK/MA'
+            },
+            {
+                data_tokens: 'd1',
+                value: 'D1'
+            },
+            {
+                data_tokens: 'd2',
+                value: 'D2'
+            },
+            {
+                data_tokens: 'd3',
+                value: 'D3'
+            },
+            {
+                data_tokens: 'd4',
+                value: 'D4'
+            },
+            {
+                data_tokens: 'smp-mts',
+                value: 'SMP/MTs'
+            },
+            {
+                data_tokens: 's1',
+                value: 'S1'
+            },
+            {
+                data_tokens: 's2',
+                value: 'S2'
+            },
+            {
+                data_tokens: 's3',
+                value: 'S3'
+            },
+        ]
+    },
+    pilihUpdate5: {
+        id: 'pilihUpdate5',
+        data: [
+            {
+                data_tokens: 'aktif',
+                value: 'AKTIF'
+            },
+            {
+                data_tokens: 'dbs',
+                value: 'DBS'
+            },
+        ]
+    }
 }
 
 // API wilayah indonesia
@@ -289,9 +497,7 @@ function loadCreateSelect(elementId, data) {
 
 function setOptionElement() {
     // instansi
-    loadCreateSelect('instansi1', instansiData.instansi1)
-    loadCreateSelect('instansi2', instansiData.instansi2)
-    loadCreateSelect('instansi3', instansiData.instansi3)
+    Object.entries(instansiData).forEach((item, index) => loadCreateSelect(item[1].id, item[1].data))
     // provinsi API
     const loadingElem = document.getElementById('loadingWilayah')
     if (loadingElem) {
@@ -324,11 +530,9 @@ function setOptionElement() {
             console.log('error', err)
         })
     // tenaga perpustakaan
-    loadCreateSelect('perpus1', perpustakaanData.perpus1)
-    loadCreateSelect('perpus2', perpustakaanData.perpus2)
-    loadCreateSelect('perpus3', perpustakaanData.perpus3)
-    loadCreateSelect('perpus4', perpustakaanData.perpus4)
-    loadCreateSelect('perpus5', perpustakaanData.perpus5)
+    Object.entries(perpustakaanData).forEach((item, index) => loadCreateSelect(item[1].id, item[1].data))
+    // pengajuan untuk update
+    Object.entries(pengajuanUpdateData).forEach((item, index) => loadCreateSelect(item[1].id, item[1].data))
 }
 
 // load dan membuat menu select options
@@ -338,11 +542,51 @@ window.onload = () => {
     setStyleSelect()
 }
 
+let dataInputInstansi = {
+    pemerintah: 'Pemerintah',
+    nipNama: '',
+    jabatan: '',
+    pendidikan: '',
+    namaInstansi: ''
+}
+
+function onSelectInstansi(selectId, nameInput) {
+    const elem = document.getElementById(selectId)
+    if (elem) {
+        const indexOption = elem.selectedIndex
+        // dataset (tokens) options yang dipilih
+        const tokens = elem.children[indexOption].dataset.tokens
+        const value = elem.options[elem.selectedIndex].value
+        dataInputInstansi[nameInput] = value
+    }
+}
+
+let dataInputTenagaPerpus = {
+    pustakawan: 'Pustakawan',
+    pangkat: '',
+    bidang: '',
+    aktif: 'AKTIF',
+    jenisPerpustakaan: ''
+}
+
+function onSelectTenagaPerpus(selectId, nameInput) {
+    const elem = document.getElementById(selectId)
+    if (elem) {
+        const indexOption = elem.selectedIndex
+        // dataset (tokens) options yang dipilih
+        const tokens = elem.children[indexOption].dataset.tokens
+        const value = elem.options[elem.selectedIndex].value
+        dataInputTenagaPerpus[nameInput] = value
+    }
+}
+
 let dataWilayah = {
     provinsi: '',
     kabkota: '',
     kecamatan: '',
-    kelurahan: ''
+    kelurahan: '',
+    rt: '',
+    rw: ''
 }
 
 let tokensWilayah = {
@@ -352,8 +596,8 @@ let tokensWilayah = {
     kelurahan: null
 }
 
-// get select value
-function onSelectInstansi(selectId, loadDataAPI, loadingId) {
+// get select value from wilayah
+function onSelectWilayah(selectId, loadDataAPI, loadingId) {
     const elem = document.getElementById(selectId)
     const loadingElem = document.getElementById(loadingId)
     const btnText = document.getElementsByClassName('filter-option')
@@ -608,14 +852,15 @@ function setManualNameBtn(indexElem, text, nameInput) {
     }
 }
 
-function clickSearch() {
-    loadSearchDataDropdown(indexElementDropdown, searchElem.value, searchElem)
+function clickSearch(daerah) {
+    loadSearchDataDropdown(indexElementDropdown, searchElem.value, searchElem, daerah)
 }
 
 function loadSearchDataDropdown(
     indexElement,
     inputValue,
-    event
+    event,
+    daerah
 ) {
     const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
     // event.addEventListener('keyup', (e) => {
@@ -628,7 +873,7 @@ function loadSearchDataDropdown(
         const childList = instansi.children
         currentDataMenu.forEach((_, index) => {
             const textItem = childList[index]?.innerText
-            if (inputValue.length > 0) {
+            if (childList[index] && inputValue.length > 0) {
                 childList[index].setAttribute('class', 'hide')
                 const checkItem =
                     textItem?.toLowerCase()?.includes(inputValue.toLowerCase()) ||
@@ -636,9 +881,19 @@ function loadSearchDataDropdown(
                 if (checkItem) {
                     childList[index].setAttribute('class', '')
                 }
-            } else {
-                childList[0].setAttribute('class', 'selected active')
+            } else if (childList[index]) {
                 childList[index].removeAttribute('class')
+                if (!dataWilayah[daerah]) {
+                    childList[0].setAttribute('class', 'selected active')
+                }
+                if (daerah && dataWilayah[daerah].length > 0) {
+                    const checkItem =
+                        textItem?.toLowerCase() == dataWilayah[daerah].toLowerCase() ||
+                        textItem == dataWilayah[daerah]
+                    if (checkItem) {
+                        childList[index].setAttribute('class', 'selected active')
+                    }
+                }
             }
         })
     }
@@ -649,7 +904,7 @@ function clickBtnDropdown(indexElement, daerah) {
     searchElem = document.getElementsByClassName('input-block-level form-control')
     setTimeout(() => {
         searchElem = searchElem[indexElement]
-        searchElem.setAttribute('onkeydown', 'clickSearch()')
+        searchElem.setAttribute('onkeydown', `clickSearch('${daerah}')`)
     }, 0)
     const loadingElem = document.getElementById('loadingWilayah')
     if (daerah === 'provinsi') {
@@ -671,29 +926,35 @@ function clickBtnDropdown(indexElement, daerah) {
                     ...data
                 ]
                 currentDataMenu = newData
-                clickSearch()
+                clickSearch(daerah)
                 loadingElem.style.display = 'none'
             })
             .catch(err => console.log(err))
-    } else if (daerah === 'kabkota' && tokensWilayah.provinsi) {
-        resetCurrentData('regencies', tokensWilayah.provinsi, {
-            data_tokens: 'kabkota',
-            value: 'Kab/Kota'
-        })
+    } else if (daerah === 'kabkota') {
+        if (tokensWilayah.provinsi) {
+            resetCurrentData('regencies', tokensWilayah.provinsi, {
+                data_tokens: 'kabkota',
+                value: 'Kab/Kota'
+            }, daerah)
+        } else {
+            setTimeout(() => {
+                loadSearchDataDropdown(indexElementDropdown, searchElem.value, searchElem, daerah)
+            }, 0)
+        }
     } else if (daerah === 'kecamatan' && tokensWilayah.kabkota) {
         resetCurrentData('districts', tokensWilayah.kabkota, {
             data_tokens: 'kecamatan',
             value: 'Kecamatan'
-        })
+        }, daerah)
     } else if (daerah === 'kelurahan' && tokensWilayah.kecamatan) {
         resetCurrentData('villages', tokensWilayah.kecamatan, {
             data_tokens: 'kelurahan',
             value: 'Kelurahan'
-        })
+        }, daerah)
     }
 }
 
-function resetCurrentData(wilayahId, tokens, defaultDataOpt) {
+function resetCurrentData(wilayahId, tokens, defaultDataOpt, daerah) {
     const loadingElem = document.getElementById('loadingWilayah')
     if (loadingElem) {
         loadingElem.style.display = 'flex'
@@ -710,13 +971,63 @@ function resetCurrentData(wilayahId, tokens, defaultDataOpt) {
                 ...data
             ]
             currentDataMenu = newData
-            clickSearch()
+            clickSearch(daerah)
             loadingElem.style.display = 'none'
         })
         .catch(err => console.log(err))
 }
 
+let dataInputUpdate = {
+    nipNama: '',
+    pangkat: '',
+    tamatPangkat: '',
+    jabatan: '',
+    tamatJabatan: '',
+    bidang: '',
+    pendidikan: '',
+    statusJabatan: '',
+    namaInstansi: ''
+}
+
+// change input text
+function changeInputTxt(elemId, nameInput, formName) {
+    const elem = document.getElementById(elemId)
+    if (formName === 'INSTANSI') {
+        dataInputInstansi[nameInput] = elem.value
+    } else if (formName === 'WILAYAH') {
+        dataWilayah[nameInput] = elem.value
+    } else if (formName === 'PENGAJUAN-UPDATE') {
+        dataInputUpdate[nameInput] = elem.value
+    }
+}
+
+function onSelectPengajuanUpdt(selectId, nameInput) {
+    const elem = document.getElementById(selectId)
+    if (elem) {
+        const indexOption = elem.selectedIndex
+        // dataset (tokens) options yang dipilih
+        const tokens = elem.children[indexOption].dataset.tokens
+        const value = elem.options[elem.selectedIndex].value
+        dataInputUpdate[nameInput] = value
+    }
+}
+
+$(function () {
+    $("#tamatPangkatDP").datepicker({
+        autoclose: true,
+        todayHighlight: true
+    }).datepicker('update', new Date());
+});
+$(function () {
+    $("#tamatJabatanDP").datepicker({
+        autoclose: true,
+        todayHighlight: true
+    }).datepicker('update', new Date());
+});
+
 function clickSubmit() {
+    dataInputUpdate.tamatPangkat = document.getElementById('tamatPangkat').value
+    dataInputUpdate.tamatJabatan = document.getElementById('tamatJabatan').value
     const {
         provinsi,
         kabkota,
@@ -729,4 +1040,91 @@ function clickSubmit() {
     list.textContent = `provinsi:${provinsi}, kabkota:${kabkota}, kecamatan:${kecamatan}, kelurahan:${kelurahan}`
     wrapList.appendChild(list)
     result.appendChild(wrapList)
+    validateForm()
+    // console.log('instansi', dataInputInstansi)
+    // console.log('tenaga perpus', dataInputTenagaPerpus)
+    // console.log('wilayah', dataWilayah)
+    // console.log('pengajuan update', dataInputUpdate)
+}
+
+function validateForm() {
+    // validate instansi
+    validateFormInstansi()
+}
+
+const errText = 'Mohon di isi!'
+
+function validateFormInstansi() {
+    let errInstansi = {}
+    errInstansi = {}
+    const {
+        pemerintah,
+        nipNama,
+        jabatan,
+        pendidikan,
+        namaInstansi
+    } = dataInputInstansi
+    if (!pemerintah.trim()) {
+        errInstansi.errInstansi1 = errText
+    }
+    if (!nipNama.trim()) {
+        errInstansi.errInstansi2 = errText
+    }
+    if (!jabatan.trim()) {
+        errInstansi.errInstansi3 = errText
+    }
+    if (!pendidikan.trim()) {
+        errInstansi.errInstansi4 = errText
+    }
+    if (!namaInstansi.trim()) {
+        errInstansi.errInstansi5 = errText
+    }
+    resetErr(5, 'errInstansi')
+    if (Object.keys(errInstansi).length > 0) {
+        setErrForm(errInstansi)
+        return
+    }
+    return 'success'
+}
+
+function validateFormTenagaPerpus() {
+    let errTenagaPerpus = {}
+    errTenagaPerpus = {}
+    const {
+        pustakawan,
+        pangkat,
+        bidang,
+        aktif,
+        jenisPerpustakaan
+    } = dataInputTenagaPerpus
+    if (!pustakawan.trim()) {
+        errTenagaPerpus.errPerpus1 = errText
+    }
+    if (!pangkat.trim()) {
+        errTenagaPerpus.errPerpus2 = errText
+    }
+    if (!bidang.trim()) {
+        errTenagaPerpus.errPerpus3 = errText
+    }
+    if (!aktif.trim()) {
+        errTenagaPerpus.errPerpus4 = errText
+    }
+    if (!jenisPerpustakaan.trim()) {
+        errTenagaPerpus.errPerpus5 = errText
+    }
+    resetErr(5, 'errPerpus')
+}
+
+function resetErr(length, elemId) {
+    for (let i = 0; i < length; i++) {
+        let elem = document.getElementById(`${elemId}${i + 1}`)
+        if (elem) elem.innerText = ''
+    }
+}
+
+function setErrForm(data) {
+    Object.entries(data).forEach(err => {
+        let elem = document.getElementById(err[0])
+        if (elem) elem.innerText = err[1]
+    })
 }

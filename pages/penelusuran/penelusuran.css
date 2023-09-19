@@ -41,13 +41,13 @@
     margin-top: 1.5rem;
 }
 
-.container-wilayah{
+.form-grup{
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
-.container-wilayah .wrap-input{
+.form-grup .wrap-input{
     width: 49%;
 }
 
@@ -74,6 +74,17 @@
     margin-top: 3rem;
 }
 
+.wrap-err{
+    display: flex;
+    height: 0.8rem;
+}
+
+.wrap-err .err-text{
+    color: #ff0000;
+    text-align: start;
+    font-size: 1.2rem;
+}
+
 @media screen and (max-width: 505px) {
     .wrap-form-pengajuan .container-pengajuan {
         flex-direction: column;
@@ -87,7 +98,7 @@
         width: 100%;
     }
 
-    .container-wilayah .wrap-input{
+    .form-grup .wrap-input{
         width: 100%;
     }
 }
