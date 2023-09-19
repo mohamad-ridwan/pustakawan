@@ -542,7 +542,7 @@ window.onload = () => {
     setStyleSelect()
 }
 
-let dataInputInstansi = {
+const dataInputInstansi = {
     pemerintah: 'Pemerintah',
     nipNama: '',
     jabatan: '',
@@ -561,7 +561,7 @@ function onSelectInstansi(selectId, nameInput) {
     }
 }
 
-let dataInputTenagaPerpus = {
+const dataInputTenagaPerpus = {
     pustakawan: 'Pustakawan',
     pangkat: '',
     bidang: '',
@@ -580,7 +580,7 @@ function onSelectTenagaPerpus(selectId, nameInput) {
     }
 }
 
-let dataWilayah = {
+const dataWilayah = {
     provinsi: '',
     kabkota: '',
     kecamatan: '',
@@ -589,7 +589,7 @@ let dataWilayah = {
     rw: ''
 }
 
-let tokensWilayah = {
+const tokensWilayah = {
     provinsi: null,
     kabkota: null,
     kecamatan: null,
@@ -977,7 +977,7 @@ function resetCurrentData(wilayahId, tokens, defaultDataOpt, daerah) {
         .catch(err => console.log(err))
 }
 
-let dataInputUpdate = {
+const dataInputUpdate = {
     nipNama: '',
     pangkat: '',
     tamatPangkat: '',
@@ -989,6 +989,12 @@ let dataInputUpdate = {
     namaInstansi: ''
 }
 
+const dataPengirim = {
+    nama: '',
+    email: '',
+    telp: ''
+}
+
 // change input text
 function changeInputTxt(elemId, nameInput, formName) {
     const elem = document.getElementById(elemId)
@@ -998,6 +1004,8 @@ function changeInputTxt(elemId, nameInput, formName) {
         dataWilayah[nameInput] = elem.value
     } else if (formName === 'PENGAJUAN-UPDATE') {
         dataInputUpdate[nameInput] = elem.value
+    }else if(formName === 'DATA-PENGIRIM'){
+        dataPengirim[nameInput] = elem.value
     }
 }
 
@@ -1041,10 +1049,11 @@ function clickSubmit() {
     wrapList.appendChild(list)
     result.appendChild(wrapList)
     validateForm()
-    // console.log('instansi', dataInputInstansi)
-    // console.log('tenaga perpus', dataInputTenagaPerpus)
-    // console.log('wilayah', dataWilayah)
-    // console.log('pengajuan update', dataInputUpdate)
+    console.log('instansi', dataInputInstansi)
+    console.log('tenaga perpus', dataInputTenagaPerpus)
+    console.log('wilayah', dataWilayah)
+    console.log('pengajuan update', dataInputUpdate)
+    console.log('data-pengirim', dataPengirim)
 }
 
 function validateForm() {

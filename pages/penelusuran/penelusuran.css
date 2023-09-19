@@ -41,6 +41,10 @@
     margin-top: 1.5rem;
 }
 
+.input-pengirim{
+    margin-top: 1.5rem;
+}
+
 .form-grup{
     display: flex;
     flex-wrap: wrap;
@@ -49,6 +53,10 @@
 
 .form-grup .wrap-input{
     width: 49%;
+}
+
+.form-grup .input-pengirim{
+    width: calc(96%/3);
 }
 
 #loadingWilayah {
@@ -99,6 +107,10 @@
     }
 
     .form-grup .wrap-input{
+        width: 100%;
+    }
+
+    .form-grup .input-pengirim{
         width: 100%;
     }
 }
