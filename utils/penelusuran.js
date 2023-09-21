@@ -1167,7 +1167,7 @@ function sendDataToMail() {
         u_status_jabatan: statusJabatan,
         u_nama_instansi: u_namaInstansi
     }
-    const dataPengirim = {
+    const newDataPengirim = {
         client_name: nama,
         client_email: email,
         client_phone: telp
@@ -1178,7 +1178,7 @@ function sendDataToMail() {
         ...dataTenagaPerpus,
         ...wilayah,
         ...dataUpdate,
-        ...dataPengirim
+        ...newDataPengirim
     }
     return data
 }
