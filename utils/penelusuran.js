@@ -1,3 +1,12 @@
+// regex
+const mailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+const phoneRegex = /[^0-9.]/g
+
+// email services
+const serviceID = 'service_n6ulit7'
+const templateID = 'template_ji9i1zk'
+const publicKey = 'fvB99jFfi8z5-c4X-'
+
 function setStyleSelect() {
     const elem = document.getElementsByClassName('bootstrap-select')
     if (elem) {
@@ -550,34 +559,12 @@ const dataInputInstansi = {
     namaInstansi: ''
 }
 
-function onSelectInstansi(selectId, nameInput) {
-    const elem = document.getElementById(selectId)
-    if (elem) {
-        const indexOption = elem.selectedIndex
-        // dataset (tokens) options yang dipilih
-        const tokens = elem.children[indexOption].dataset.tokens
-        const value = elem.options[elem.selectedIndex].value
-        dataInputInstansi[nameInput] = value
-    }
-}
-
 const dataInputTenagaPerpus = {
     pustakawan: 'Pustakawan',
     pangkat: '',
     bidang: '',
     aktif: 'AKTIF',
     jenisPerpustakaan: ''
-}
-
-function onSelectTenagaPerpus(selectId, nameInput) {
-    const elem = document.getElementById(selectId)
-    if (elem) {
-        const indexOption = elem.selectedIndex
-        // dataset (tokens) options yang dipilih
-        const tokens = elem.children[indexOption].dataset.tokens
-        const value = elem.options[elem.selectedIndex].value
-        dataInputTenagaPerpus[nameInput] = value
-    }
 }
 
 const dataWilayah = {
@@ -784,7 +771,7 @@ function removeDropdownMenu(indexElement) {
     const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
     setTimeout(() => {
         var currentElem = elem[indexElement]
-        var children = currentElem.lastElementChild
+        var children = currentElem?.lastElementChild
         while (children) {
             currentElem.removeChild(children)
             children = currentElem.lastElementChild
@@ -812,10 +799,10 @@ function createMenuDropdown(data, indexElement, daerah) {
         wrapBtnGroup = wrapBtnGroup[indexElement]
         searchElem = document.getElementsByClassName('input-block-level form-control')
         searchElem = searchElem[indexElement]
-        searchElem.setAttribute('onkeydown', 'clickSearch()')
+        searchElem?.setAttribute('onkeydown', 'clickSearch()')
         btnDropdown = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
         btnDropdown = btnDropdown[indexElement]
-        btnDropdown.setAttribute('onclick', `clickBtnDropdown(${indexElement}, '${daerah}')`)
+        btnDropdown?.setAttribute('onclick', `clickBtnDropdown(${indexElement}, '${daerah}')`)
 
         data.forEach((item, index) => {
             // list element
@@ -837,7 +824,7 @@ function createMenuDropdown(data, indexElement, daerah) {
             tagA.appendChild(spanChild)
             tagA.appendChild(spanChild2)
             li.appendChild(tagA)
-            instansi.appendChild(li)
+            instansi?.appendChild(li)
         })
     }
 }
@@ -985,7 +972,7 @@ const dataInputUpdate = {
     tamatJabatan: '',
     bidang: '',
     pendidikan: '',
-    statusJabatan: '',
+    statusJabatan: 'AKTIF',
     namaInstansi: ''
 }
 
@@ -1004,19 +991,25 @@ function changeInputTxt(elemId, nameInput, formName) {
         dataWilayah[nameInput] = elem.value
     } else if (formName === 'PENGAJUAN-UPDATE') {
         dataInputUpdate[nameInput] = elem.value
-    }else if(formName === 'DATA-PENGIRIM'){
+    } else if (formName === 'DATA-PENGIRIM') {
         dataPengirim[nameInput] = elem.value
     }
 }
 
-function onSelectPengajuanUpdt(selectId, nameInput) {
+function onSelectGroup(selectId, nameInput, actionType) {
     const elem = document.getElementById(selectId)
     if (elem) {
         const indexOption = elem.selectedIndex
         // dataset (tokens) options yang dipilih
         const tokens = elem.children[indexOption].dataset.tokens
         const value = elem.options[elem.selectedIndex].value
-        dataInputUpdate[nameInput] = value
+        if (actionType == 'INSTANSI') {
+            dataInputInstansi[nameInput] = value
+        } else if (actionType == 'TENAGA-PERPUS') {
+            dataInputTenagaPerpus[nameInput] = value
+        } else if (actionType == 'PENGAJUAN-UPDATE') {
+            dataInputUpdate[nameInput] = value
+        }
     }
 }
 
@@ -1033,6 +1026,21 @@ $(function () {
     }).datepicker('update', new Date());
 });
 
+function isCaptchaChecked() {
+    return grecaptcha && grecaptcha.getResponse().length !== 0
+}
+
+function validateCaptcha() {
+    const elem = document.getElementById('errCaptcha')
+    if (!isCaptchaChecked() && elem) {
+        elem.innerText = 'Mohon ceklis cekbox'
+        return
+    } else {
+        elem.innerText = ''
+        return 'sukses'
+    }
+}
+
 function clickSubmit() {
     dataInputUpdate.tamatPangkat = document.getElementById('tamatPangkat').value
     dataInputUpdate.tamatJabatan = document.getElementById('tamatJabatan').value
@@ -1047,22 +1055,153 @@ function clickSubmit() {
     var list = document.createElement('li')
     list.textContent = `provinsi:${provinsi}, kabkota:${kabkota}, kecamatan:${kecamatan}, kelurahan:${kelurahan}`
     wrapList.appendChild(list)
-    result.appendChild(wrapList)
+    let resultCaptcha
+    if (!validateCaptcha()) {
+        resultCaptcha
+    } else {
+        resultCaptcha = true
+    }
     validateForm()
-    console.log('instansi', dataInputInstansi)
-    console.log('tenaga perpus', dataInputTenagaPerpus)
-    console.log('wilayah', dataWilayah)
-    console.log('pengajuan update', dataInputUpdate)
-    console.log('data-pengirim', dataPengirim)
+        .then(res => {
+            let value
+            res.forEach(item => {
+                if (item == undefined) {
+                    value = 'failed'
+                }
+            })
+            return value
+        })
+        .then(res => {
+            if (res !== 'failed' && resultCaptcha) {
+                result.appendChild(wrapList)
+                sendToEmail()
+                console.log('instansi', dataInputInstansi)
+                console.log('tenaga perpus', dataInputTenagaPerpus)
+                console.log('wilayah', dataWilayah)
+                console.log('pengajuan update', dataInputUpdate)
+                console.log('data-pengirim', dataPengirim)
+            }
+        })
 }
 
-function validateForm() {
-    // validate instansi
-    validateFormInstansi()
+async function validateForm() {
+    return await Promise.all([
+        validateFormInstansi(),
+        validateFormTenagaPerpus(),
+        validateFormWilayah(),
+        validatePengajuanUpdt(),
+        validateDataPengirim()
+    ])
+}
+
+// data untuk kirim ke email
+function sendDataToMail() {
+    const { nama, email, telp } = dataPengirim
+    const {
+        pemerintah,
+        nipNama,
+        jabatan,
+        pendidikan,
+        namaInstansi
+    } = dataInputInstansi
+    const {
+        pustakawan,
+        pangkat,
+        bidang,
+        aktif,
+        jenisPerpustakaan
+    } = dataInputTenagaPerpus
+    const {
+        provinsi,
+        kabkota,
+        kecamatan,
+        kelurahan,
+        rt,
+        rw
+    } = dataWilayah
+    const {
+        nipNama: u_nipNama,
+        pangkat: u_pangkat,
+        tamatPangkat,
+        jabatan: u_jabatan,
+        tamatJabatan,
+        bidang: u_bidang,
+        pendidikan: u_pendidikan,
+        statusJabatan,
+        namaInstansi: u_namaInstansi
+    } = dataInputUpdate
+    const frontData = {
+        from_name: nama,
+        from_email: email
+    }
+    const dataInstansi = {
+        pemerintah,
+        nip_nama: nipNama,
+        jabatan,
+        pendidikan,
+        nama_instansi: namaInstansi
+    }
+    const dataTenagaPerpus = {
+        pustakawan,
+        pangkat,
+        bidang,
+        status_jabatan: aktif,
+        jenis_perpustakaan: jenisPerpustakaan
+    }
+    const wilayah = {
+        provinsi,
+        kabkota,
+        kecamatan,
+        kelurahan,
+        rt,
+        rw
+    }
+    const dataUpdate = {
+        u_nama: u_nipNama,
+        u_pangkat: u_pangkat,
+        u_tamat_pangkat: tamatPangkat,
+        u_jabatan,
+        u_tamat_jabatan: tamatJabatan,
+        u_bidang,
+        u_pendidikan,
+        u_status_jabatan: statusJabatan,
+        u_nama_instansi: u_namaInstansi
+    }
+    const dataPengirim = {
+        client_name: nama,
+        client_email: email,
+        client_phone: telp
+    }
+    const data = {
+        ...frontData,
+        ...dataInstansi,
+        ...dataTenagaPerpus,
+        ...wilayah,
+        ...dataUpdate,
+        ...dataPengirim
+    }
+    return data
+}
+
+// kirim ke email
+function sendToEmail(){
+    emailjs.send(
+        serviceID,
+        templateID,
+        sendDataToMail(),
+        publicKey
+    )
+    .then(res=>{
+        alert('Data Anda telah terkirim\nData ini akan kami proses')
+        setTimeout(() => {
+            window.location.reload()
+        }, 0)
+    }, (err)=>console.log('emailjs-error', err))
 }
 
 const errText = 'Mohon di isi!'
 
+// validate instansi
 function validateFormInstansi() {
     let errInstansi = {}
     errInstansi = {}
@@ -1079,10 +1218,10 @@ function validateFormInstansi() {
     if (!nipNama.trim()) {
         errInstansi.errInstansi2 = errText
     }
-    if (!jabatan.trim()) {
+    if (!jabatan || jabatan == 'Jabatan') {
         errInstansi.errInstansi3 = errText
     }
-    if (!pendidikan.trim()) {
+    if (!pendidikan || pendidikan == 'Pendidikan') {
         errInstansi.errInstansi4 = errText
     }
     if (!namaInstansi.trim()) {
@@ -1096,6 +1235,7 @@ function validateFormInstansi() {
     return 'success'
 }
 
+// validate tenaga perpus
 function validateFormTenagaPerpus() {
     let errTenagaPerpus = {}
     errTenagaPerpus = {}
@@ -1109,19 +1249,142 @@ function validateFormTenagaPerpus() {
     if (!pustakawan.trim()) {
         errTenagaPerpus.errPerpus1 = errText
     }
-    if (!pangkat.trim()) {
+    if (!pangkat || pangkat == 'Pangkat') {
         errTenagaPerpus.errPerpus2 = errText
     }
-    if (!bidang.trim()) {
+    if (!bidang || bidang == 'Bidang') {
         errTenagaPerpus.errPerpus3 = errText
     }
     if (!aktif.trim()) {
         errTenagaPerpus.errPerpus4 = errText
     }
-    if (!jenisPerpustakaan.trim()) {
+    if (!jenisPerpustakaan || jenisPerpustakaan == 'Jenis Perpustakaan') {
         errTenagaPerpus.errPerpus5 = errText
     }
     resetErr(5, 'errPerpus')
+    if (Object.keys(errTenagaPerpus).length > 0) {
+        setErrForm(errTenagaPerpus)
+        return
+    }
+    return 'success'
+}
+
+// validate wilayah
+function validateFormWilayah() {
+    let errWilayah = {}
+    errWilayah = {}
+    const {
+        provinsi,
+        kabkota,
+        kecamatan,
+        kelurahan,
+        rt,
+        rw
+    } = dataWilayah
+    if (!provinsi || provinsi == 'Provinsi') {
+        errWilayah.errWilayah1 = errText
+    }
+    if (!kabkota || kabkota == 'Kab/Kota') {
+        errWilayah.errWilayah2 = errText
+    }
+    if (!kecamatan || kecamatan == 'Kecamatan') {
+        errWilayah.errWilayah3 = errText
+    }
+    if (!kelurahan || kelurahan == 'Kelurahan') {
+        errWilayah.errWilayah4 = errText
+    }
+    if (!rt.trim()) {
+        errWilayah.errWilayah5 = errText
+    }
+    if (!rw.trim()) {
+        errWilayah.errWilayah6 = errText
+    }
+    resetErr(6, 'errWilayah')
+    if (Object.keys(errWilayah).length > 0) {
+        setErrForm(errWilayah)
+        return
+    }
+    return 'success'
+}
+
+// validate pengajuan update
+function validatePengajuanUpdt() {
+    let err = {}
+    err = {}
+    const {
+        nipNama,
+        pangkat,
+        tamatPangkat,
+        jabatan,
+        tamatJabatan,
+        bidang,
+        pendidikan,
+        statusJabatan,
+        namaInstansi
+    } = dataInputUpdate
+    if (!nipNama.trim()) {
+        err.errUpdate1 = errText
+    }
+    if (!pangkat.trim()) {
+        err.errUpdate2 = errText
+    }
+    if (!tamatPangkat.trim()) {
+        err.errUpdate3 = errText
+    }
+    if (!jabatan || jabatan == 'Jabatan') {
+        err.errUpdate4 = errText
+    }
+    if (!tamatJabatan.trim()) {
+        err.errUpdate5 = errText
+    }
+    if (!bidang || bidang == 'Bidang') {
+        err.errUpdate6 = errText
+    }
+    if (!pendidikan || pendidikan == 'Pendidikan') {
+        err.errUpdate7 = errText
+    }
+    if (!statusJabatan.trim()) {
+        err.errUpdate8 = errText
+    }
+    if (!namaInstansi.trim()) {
+        err.errUpdate9 = errText
+    }
+    resetErr(9, 'errUpdate')
+    if (Object.keys(err).length > 0) {
+        setErrForm(err)
+        return
+    }
+    return 'success'
+}
+
+// validate data pengirm
+function validateDataPengirim() {
+    let err = {}
+    err = {}
+    const {
+        nama,
+        email,
+        telp
+    } = dataPengirim
+    if (!nama.trim()) {
+        err.errDataP1 = errText
+    }
+    if (!email.trim()) {
+        err.errDataP2 = errText
+    } else if (!mailRegex.test(email)) {
+        err.errDataP2 = 'Alamat email tidak valid!'
+    }
+    if (!telp.trim()) {
+        err.errDataP3 = errText
+    } else if (phoneRegex.test(telp)) {
+        err.errDataP3 = 'Nomor telpon tidak valid!'
+    }
+    resetErr(3, 'errDataP')
+    if (Object.keys(err).length > 0) {
+        setErrForm(err)
+        return
+    }
+    return 'success'
 }
 
 function resetErr(length, elemId) {
