@@ -799,7 +799,7 @@ function createMenuDropdown(data, indexElement, daerah) {
         wrapBtnGroup = wrapBtnGroup[indexElement]
         searchElem = document.getElementsByClassName('input-block-level form-control')
         searchElem = searchElem[indexElement]
-        searchElem?.setAttribute('onkeydown', 'clickSearch()')
+        searchElem?.setAttribute('onkeyup', `clickSearch('${daerah}')`)
         btnDropdown = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
         btnDropdown = btnDropdown[indexElement]
         btnDropdown?.setAttribute('onclick', `clickBtnDropdown(${indexElement}, '${daerah}')`)
@@ -855,6 +855,38 @@ function loadSearchDataDropdown(
     //         console.log('sukses')
     //     }
     // })
+    // event.addEventListener('change', (e)=>{
+    //     if (currentDataMenu?.length > 0) {
+    //         const instansi = elem[indexElement]
+    //         const childList = instansi.children
+    //         currentDataMenu.forEach((_, index) => {
+    //             const textItem = childList[index]?.innerText
+    //             if (childList[index] && e.target.value.length > 0) {
+    //                 childList[index].setAttribute('class', 'hide')
+    //                 const checkItem =
+    //                     textItem?.toLowerCase()?.includes(e.target.value.toLowerCase()) ||
+    //                     textItem?.includes(e.target.value)
+    //                 if (checkItem) {
+    //                     childList[index].setAttribute('class', '')
+    //                 }
+    //             } else if (childList[index]) {
+    //                 childList[index].removeAttribute('class')
+    //                 if (!dataWilayah[daerah]) {
+    //                     childList[0].setAttribute('class', 'selected active')
+    //                 }
+    //                 if (daerah && dataWilayah[daerah].length > 0) {
+    //                     const checkItem =
+    //                         textItem?.toLowerCase() == dataWilayah[daerah].toLowerCase() ||
+    //                         textItem == dataWilayah[daerah]
+    //                     if (checkItem) {
+    //                         childList[index].setAttribute('class', 'selected active')
+    //                     }
+    //                 }
+    //             }
+    //         })
+    //     }
+    // })
+
     if (currentDataMenu?.length > 0) {
         const instansi = elem[indexElement]
         const childList = instansi.children
@@ -863,8 +895,8 @@ function loadSearchDataDropdown(
             if (childList[index] && inputValue.length > 0) {
                 childList[index].setAttribute('class', 'hide')
                 const checkItem =
-                    textItem?.toLowerCase()?.includes(inputValue.toLowerCase()) ||
-                    textItem?.includes(inputValue)
+                    textItem?.toLowerCase()?.indexOf(inputValue.toLowerCase()) > -1 ||
+                    textItem?.indexOf(inputValue) > -1
                 if (checkItem) {
                     childList[index].setAttribute('class', '')
                 }
@@ -891,7 +923,8 @@ function clickBtnDropdown(indexElement, daerah) {
     searchElem = document.getElementsByClassName('input-block-level form-control')
     setTimeout(() => {
         searchElem = searchElem[indexElement]
-        searchElem.setAttribute('onkeydown', `clickSearch('${daerah}')`)
+        searchElem.removeAttribute('onkeyup')
+        searchElem.setAttribute('onkeyup', `clickSearch('${daerah}')`)
     }, 0)
     const loadingElem = document.getElementById('loadingWilayah')
     if (daerah === 'provinsi') {
@@ -1167,19 +1200,19 @@ function sendDataToMail() {
 }
 
 // kirim ke email
-function sendToEmail(){
+function sendToEmail() {
     emailjs.send(
         serviceID,
         templateID,
         sendDataToMail(),
         publicKey
     )
-    .then(res=>{
-        alert('Data Anda telah terkirim\nData ini akan kami proses')
-        setTimeout(() => {
-            window.location.reload()
-        }, 0)
-    }, (err)=>console.log('emailjs-error', err))
+        .then(res => {
+            alert('Data Anda telah terkirim\nData ini akan kami proses')
+            setTimeout(() => {
+                window.location.reload()
+            }, 0)
+        }, (err) => console.log('emailjs-error', err))
 }
 
 const errText = 'Mohon di isi!'
