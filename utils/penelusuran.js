@@ -4,7 +4,7 @@ const phoneRegex = /[^0-9.]/g
 
 // email services
 const serviceID = 'service_n6ulit7'
-const templateID = 'template_ji9i1zk'
+const templateID = 'template_6lys3f7'
 const publicKey = 'fvB99jFfi8z5-c4X-'
 
 function setStyleSelect() {
@@ -1044,17 +1044,6 @@ function validateCaptcha() {
 function clickSubmit() {
     dataInputUpdate.tamatPangkat = document.getElementById('tamatPangkat').value
     dataInputUpdate.tamatJabatan = document.getElementById('tamatJabatan').value
-    const {
-        provinsi,
-        kabkota,
-        kecamatan,
-        kelurahan
-    } = dataWilayah
-    const result = document.getElementById('result')
-    var wrapList = document.createElement('ul')
-    var list = document.createElement('li')
-    list.textContent = `provinsi:${provinsi}, kabkota:${kabkota}, kecamatan:${kecamatan}, kelurahan:${kelurahan}`
-    wrapList.appendChild(list)
     let resultCaptcha
     if (!validateCaptcha()) {
         resultCaptcha
@@ -1073,13 +1062,7 @@ function clickSubmit() {
         })
         .then(res => {
             if (res !== 'failed' && resultCaptcha) {
-                result.appendChild(wrapList)
                 sendToEmail()
-                console.log('instansi', dataInputInstansi)
-                console.log('tenaga perpus', dataInputTenagaPerpus)
-                console.log('wilayah', dataWilayah)
-                console.log('pengajuan update', dataInputUpdate)
-                console.log('data-pengirim', dataPengirim)
             }
         })
 }
