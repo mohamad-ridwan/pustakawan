@@ -34,14 +34,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">PERPUSTAKAAN NASIONAL</a>
+                <a class="navbar-brand" href="/pages/pilih-menu/pilih-menu.html">PERPUSTAKAAN NASIONAL</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="/pages/pilih-menu/pilih-menu.html">Beranda</a></li>
-                    <li><a href="#">Link</a></li>
+                    <!-- <li><a href="#">Link</a></li> -->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span
                                 class="caret"></span></a>
@@ -56,7 +56,7 @@
                         </ul>
                     </li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <!-- <ul class="nav navbar-nav navbar-right">
                     <li><a href="#">Link</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <span
@@ -69,7 +69,7 @@
                             <li><a href="#">Separated link</a></li>
                         </ul>
                     </li>
-                </ul>
+                </ul> -->
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
@@ -170,7 +170,7 @@
             <h5>
                 Wilayah (Pilih dari daerah yang terbesar dulu)
             </h5>
-            <div id="loadingWilayah">
+            <div id="loadingWilayah" class="loading-grup">
                 <span class="loading-spinner"></span>
             </div>
         </div>
@@ -368,6 +368,12 @@
         <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpiredCallback"
             data-sitekey="6LeAY_4nAAAAAG4mEOA8_sXdkoXMSHb7MKLoqcgh"></div>
         <span id="errCaptcha" style="color: #ff0000; font-size: small;"></span>
+
+        <div class="container-loading-submit" style="display: flex; justify-content: flex-end;">
+            <div id="loadingSubmit" class="loading-grup">
+                <span class="loading-spinner"></span>
+            </div>
+        </div>
 
         <div style="display: flex; justify-content: center;">
             <button type="button" class="btn btn-default" onclick="clickSubmit()"

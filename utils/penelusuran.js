@@ -799,7 +799,7 @@ function createMenuDropdown(data, indexElement, daerah) {
         wrapBtnGroup = wrapBtnGroup[indexElement]
         searchElem = document.getElementsByClassName('input-block-level form-control')
         searchElem = searchElem[indexElement]
-        searchElem?.setAttribute('onkeypress', `clickSearch('${daerah}')`)
+        searchElem?.setAttribute('onkeydown', `clickSearch('${daerah}')`)
         btnDropdown = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
         btnDropdown = btnDropdown[indexElement]
         btnDropdown?.setAttribute('onclick', `clickBtnDropdown(${indexElement}, '${daerah}')`)
@@ -855,67 +855,55 @@ function loadSearchDataDropdown(
     //         console.log('sukses')
     //     }
     // })
-    // event.addEventListener('change', (e)=>{
-    //     if (currentDataMenu?.length > 0) {
-    //         const instansi = elem[indexElement]
-    //         const childList = instansi.children
-    //         currentDataMenu.forEach((_, index) => {
-    //             const textItem = childList[index]?.innerText
-    //             if (childList[index] && e.target.value.length > 0) {
-    //                 childList[index].setAttribute('class', 'hide')
-    //                 const checkItem =
-    //                     textItem?.toLowerCase()?.includes(e.target.value.toLowerCase()) ||
-    //                     textItem?.includes(e.target.value)
-    //                 if (checkItem) {
-    //                     childList[index].setAttribute('class', '')
-    //                 }
-    //             } else if (childList[index]) {
-    //                 childList[index].removeAttribute('class')
-    //                 if (!dataWilayah[daerah]) {
-    //                     childList[0].setAttribute('class', 'selected active')
-    //                 }
-    //                 if (daerah && dataWilayah[daerah].length > 0) {
-    //                     const checkItem =
-    //                         textItem?.toLowerCase() == dataWilayah[daerah].toLowerCase() ||
-    //                         textItem == dataWilayah[daerah]
-    //                     if (checkItem) {
-    //                         childList[index].setAttribute('class', 'selected active')
-    //                     }
-    //                 }
-    //             }
-    //         })
-    //     }
-    // })
 
-    if (currentDataMenu?.length > 0) {
-        const instansi = elem[indexElement]
-        const childList = instansi.children
-        currentDataMenu.forEach((_, index) => {
-            const textItem = childList[index]?.innerText
-            if (childList[index] && inputValue.length > 0) {
-                childList[index].setAttribute('class', 'hide')
+    if (isTextSelected(event) && currentDataMenu?.length > 0) {
+        aturSelection(elem, indexElement, '', daerah)
+    } else if (currentDataMenu?.length > 0) {
+        aturSelection(elem, indexElement, inputValue, daerah)
+    }
+}
+
+function isTextSelected(input) {
+    if (input.selectionStart !== undefined) {
+        return input.selectionStart === 0 && input.selectionEnd === input.value.length
+    } else {
+        return false
+    }
+}
+
+function aturSelection(
+    elem,
+    indexElement,
+    inputValue,
+    daerah
+) {
+    const instansi = elem[indexElement]
+    const childList = instansi.children
+    currentDataMenu.forEach((_, index) => {
+        const textItem = childList[index]?.innerText
+        if (childList[index] && inputValue.length > 0) {
+            childList[index].setAttribute('class', 'hide')
+            const checkItem =
+                textItem.toLowerCase().indexOf(inputValue.toLowerCase()) > -1 ||
+                textItem.indexOf(inputValue) > -1
+            if (checkItem) {
+                childList[index].setAttribute('class', '')
+            }
+        } else if (childList[index]) {
+            childList[index].removeAttribute('class')
+            if (!dataWilayah[daerah]) {
+                childList[0].setAttribute('class', 'selected active')
+            }
+            if (daerah && dataWilayah[daerah].length > 0) {
                 const checkItem =
-                    textItem?.toLowerCase()?.indexOf(inputValue.toLowerCase()) > -1 ||
-                    textItem?.indexOf(inputValue) > -1
+                    textItem?.toLowerCase() == dataWilayah[daerah].toLowerCase() ||
+                    textItem == dataWilayah[daerah]
                 if (checkItem) {
-                    childList[index].setAttribute('class', '')
-                }
-            } else if (childList[index]) {
-                childList[index].removeAttribute('class')
-                if (!dataWilayah[daerah]) {
-                    childList[0].setAttribute('class', 'selected active')
-                }
-                if (daerah && dataWilayah[daerah].length > 0) {
-                    const checkItem =
-                        textItem?.toLowerCase() == dataWilayah[daerah].toLowerCase() ||
-                        textItem == dataWilayah[daerah]
-                    if (checkItem) {
-                        childList[index].setAttribute('class', 'selected active')
-                    }
+                    childList[index].setAttribute('class', 'selected active')
                 }
             }
-        })
-    }
+        }
+    })
 }
 
 function clickBtnDropdown(indexElement, daerah) {
@@ -923,8 +911,8 @@ function clickBtnDropdown(indexElement, daerah) {
     searchElem = document.getElementsByClassName('input-block-level form-control')
     setTimeout(() => {
         searchElem = searchElem[indexElement]
-        searchElem.removeAttribute('onkeypress')
-        searchElem.setAttribute('onkeypress', `clickSearch('${daerah}')`)
+        searchElem.removeAttribute('onkeydown')
+        searchElem.setAttribute('onkeydown', `clickSearch('${daerah}')`)
     }, 0)
     const loadingElem = document.getElementById('loadingWilayah')
     if (daerah === 'provinsi') {
@@ -1074,30 +1062,36 @@ function validateCaptcha() {
     }
 }
 
+const loadingSubmit = document.getElementById('loadingSubmit')
+loadingSubmit.style.display = 'none'
+
 function clickSubmit() {
-    dataInputUpdate.tamatPangkat = document.getElementById('tamatPangkat').value
-    dataInputUpdate.tamatJabatan = document.getElementById('tamatJabatan').value
-    let resultCaptcha
-    if (!validateCaptcha()) {
-        resultCaptcha
-    } else {
-        resultCaptcha = true
-    }
-    validateForm()
-        .then(res => {
-            let value
-            res.forEach(item => {
-                if (item == undefined) {
-                    value = 'failed'
+    if (loadingSubmit.style.display === 'none') {
+        dataInputUpdate.tamatPangkat = document.getElementById('tamatPangkat').value
+        dataInputUpdate.tamatJabatan = document.getElementById('tamatJabatan').value
+        let resultCaptcha
+        if (!validateCaptcha()) {
+            resultCaptcha
+        } else {
+            resultCaptcha = true
+        }
+        validateForm()
+            .then(res => {
+                let value
+                res.forEach(item => {
+                    if (item == undefined) {
+                        value = 'failed'
+                    }
+                })
+                return value
+            })
+            .then(res => {
+                if (res !== 'failed' && resultCaptcha) {
+                    loadingSubmit.style.display = 'flex'
+                    sendToEmail()
                 }
             })
-            return value
-        })
-        .then(res => {
-            if (res !== 'failed' && resultCaptcha) {
-                sendToEmail()
-            }
-        })
+    }
 }
 
 async function validateForm() {
