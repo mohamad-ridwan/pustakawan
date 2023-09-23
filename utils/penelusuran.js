@@ -799,7 +799,7 @@ function createMenuDropdown(data, indexElement, daerah) {
         wrapBtnGroup = wrapBtnGroup[indexElement]
         searchElem = document.getElementsByClassName('input-block-level form-control')
         searchElem = searchElem[indexElement]
-        searchElem?.setAttribute('onkeyup', `clickSearch('${daerah}')`)
+        searchElem?.setAttribute('onkeypress', `clickSearch('${daerah}')`)
         btnDropdown = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
         btnDropdown = btnDropdown[indexElement]
         btnDropdown?.setAttribute('onclick', `clickBtnDropdown(${indexElement}, '${daerah}')`)
@@ -923,8 +923,8 @@ function clickBtnDropdown(indexElement, daerah) {
     searchElem = document.getElementsByClassName('input-block-level form-control')
     setTimeout(() => {
         searchElem = searchElem[indexElement]
-        searchElem.removeAttribute('onkeyup')
-        searchElem.setAttribute('onkeyup', `clickSearch('${daerah}')`)
+        searchElem.removeAttribute('onkeypress')
+        searchElem.setAttribute('onkeypress', `clickSearch('${daerah}')`)
     }, 0)
     const loadingElem = document.getElementById('loadingWilayah')
     if (daerah === 'provinsi') {
