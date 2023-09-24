@@ -91,8 +91,13 @@
         <div class="row" style="margin-top: 15px;">
             <div style="width: 180px; margin-left: 20px;">
                 <div class="thumbnail" style="position: relative; cursor: pointer;" onclick="openFileImg()">
-                    <img id="clientImg" src="/images/noimg.png" alt="..."
+                    <div style="width: 100%; height: 180px; display: flex; justify-content: center; align-items: center;">
+                        <img id="clientImg" src="/images/noimg.png" alt="..."
                         style="width: 180px; height: 180px; object-fit: cover;">
+                        <div id="loader" style="display: none; position: absolute; height: 180px; width: 180px; justify-content: center; align-items: center; background-color: rgba(0,0,0,0.7);">
+                            <span class="loader"></span>
+                        </div>
+                    </div>
                     <div
                         style="position: absolute; right: -18px; bottom: -7px; height: 50px; width: 50px; display: flex; justify-content: center; align-items: center; background-color: #fff; border-radius: 500px; box-shadow: 0 2px 5px -1px rgba(0,0,0,0.4); cursor: pointer;">
                         <i class="fa-solid fa-image" style="font-size: 26px;"></i>

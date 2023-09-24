@@ -1,5 +1,9 @@
+let loadingClientImg
+
 function openFileImg() {
-    document.getElementById('fileClientImg').click()
+    if (!loadingClientImg) {
+        document.getElementById('fileClientImg').click()
+    }
 }
 
 let imgData = {
@@ -26,20 +30,26 @@ function validateImgExt(file) {
         getTypeFile.toLowerCase() === 'png' ||
         getTypeFile.toLowerCase() === 'webp'
     ) {
+        onLoadingClientImg('flex', true)
         createImgToWebp(file[0])
             .then(res => {
-                compressClientImg(res.file)
-                    .then(resCompressed => {
-                        imgData.files = resCompressed
-                    })
-                    .catch(err => console.log(err))
                 imgData.imgURL = res.webpImage
                 changeLocalClientImg(res.webpImage)
+                onLoadingClientImg('none', false)
+                return compressClientImg(res.file)
+
             })
+            .then(resCompressed => imgData.files = resCompressed)
             .catch(err => console.log(err))
     } else {
         alert('File Harus berupa .jpg/.jpeg/.png/.webp')
     }
+}
+
+// on loading client img
+function onLoadingClientImg(display, isLoading) {
+    document.getElementById('loader').style.display = display
+    loadingClientImg = isLoading
 }
 
 // convert img file to .webp

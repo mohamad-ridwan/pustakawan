@@ -38,6 +38,7 @@
     height: 120px;
     background-color: #fff;
 }
+
 /* end navbar */
 
 .wrap-form-fungsional {
@@ -61,7 +62,7 @@ p {
     background-color: #dee2e6;
 }
 
-.border-batas{
+.border-batas {
     display: flex;
     height: 1px;
     width: 100%;
@@ -69,33 +70,55 @@ p {
     margin: 10px 0;
 }
 
+.loader {
+    width: 35px;
+    height: 35px;
+    border: 5px solid #fff;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    z-index: 9;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 /* form */
-.wrap-input-fg{
+.wrap-input-fg {
     display: flex;
     align-items: center;
 }
 
-.wrap-input-fg .title-input{
+.wrap-input-fg .title-input {
     width: 150px;
     min-width: 150px;
     margin-top: -10px;
 }
 
-.wrap-input-fg .title-input label span{
+.wrap-input-fg .title-input label span {
     font-size: 12px;
     color: rgba(0, 0, 0, 0.87);
 }
 
-.err-input{
+.err-input {
     display: flex;
     height: 2rem;
 }
 
-.txt-err{
+.txt-err {
     color: #ff0000;
 }
 
-.wrap-input-fg .right .input-grup{
+.wrap-input-fg .right .input-grup {
     width: 100%;
 }
 
@@ -104,12 +127,15 @@ input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
 input[type="number"] {
     -moz-appearance: textfield;
 }
+
 /* end form */
 
 @media screen and (max-width: 768px) {
+
     /* navbar */
     .banner-top {
         display: none;
@@ -123,11 +149,12 @@ input[type="number"] {
         display: flex;
         width: 100%;
     }
+
     /* end navbar */
 }
 
 @media screen and (max-width: 368px) {
-    .wrap-input-fg{
+    .wrap-input-fg {
         flex-wrap: wrap;
     }
 }
