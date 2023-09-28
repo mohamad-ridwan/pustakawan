@@ -91,10 +91,12 @@
         <div class="row" style="margin-top: 15px;">
             <div style="width: 180px; margin-left: 20px;">
                 <div class="thumbnail" style="position: relative; cursor: pointer;" onclick="openFileImg()">
-                    <div style="width: 100%; height: 180px; display: flex; justify-content: center; align-items: center;">
+                    <div
+                        style="width: 100%; height: 180px; display: flex; justify-content: center; align-items: center;">
                         <img id="clientImg" src="/images/noimg.png" alt="..."
-                        style="width: 180px; height: 180px; object-fit: cover;">
-                        <div id="loader" style="display: none; position: absolute; height: 180px; width: 180px; justify-content: center; align-items: center; background-color: rgba(0,0,0,0.7);">
+                            style="width: 180px; height: 180px; object-fit: cover;">
+                        <div id="loader"
+                            style="display: none; position: absolute; height: 180px; width: 180px; justify-content: center; align-items: center; background-color: rgba(0,0,0,0.7);">
                             <span class="loader"></span>
                         </div>
                     </div>
@@ -297,13 +299,24 @@
                 </div>
             </div>
         </div>
-
         <div class="wrap-input-fg">
             <div class="title-input">
                 <label for="instansi"><span>Instansi</span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="instansi" class="selectpicker form-control" data-live-search="true"></select>
+                <div id="secOptInstansi">
+                    <select id="instansi" class="selectpicker form-control" data-live-search="true"
+                        onchange="onSelectionFromAPI('instansi', 'instansi')"></select>
+                </div>
+                <input type="text" id="textInstansi" class="form-control" style="display: none;"
+                    placeholder="Ketik nama instansi">
+                <div style="display: flex; align-items: center; margin-top: 1rem;">
+                    <input id="checkboxInstansi" type="checkbox" name="instansiTdKDitemukan"
+                        style="margin-top: 0; margin-right: 5px; cursor: pointer; height: 1.5rem; width: 1.5rem;"
+                        onchange="checkBoxInstansi('checkboxInstansi')">
+                    <label for="instansiTdKDitemukan" style="margin: 0; font-weight: normal;">Instansi tidak
+                        ditemukan</label>
+                </div>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom15"></small></span>
                 </div>
@@ -322,6 +335,203 @@
             </div>
         </div>
         <!-- end form -->
+
+        <div class="border-batas"></div>
+        <!-- DIKLAT -->
+        <div style="display: flex; flex-direction: column; margin-top: 3rem;">
+            <h4 style="margin: 0 auto 3rem auto; text-align: center;"><strong>DIKLAT TEKNIS
+                    KEPUSTAKAWAN</strong></h4>
+            <span style="text-align: start; font-size: 12.5px;"><strong>Tulis nama diklat, tahun, dan jumlah jam
+                    pelatihan</strong></span>
+            <h5 style="text-align: start;"><strong>Contoh:</strong></h5>
+            <ul>
+                <li>Nama Diklat : Digital Library Management</li>
+                <li>Tahun Diklat : 2016</li>
+                <li>Jumlah jam pelatihan : 16 Jamlat / 2 Hari</li>
+            </ul>
+            <div style="display: flex; justify-content: flex-end;"><button id="clickAddDiklat" type="button"
+                    class="btn btn-default btn-success" data-target="#addDiklat" data-toggle="modal"
+                    style="align-items: center;" onclick="clickAddDiklat()">Tambahkan Diklat <i class="fa-solid fa-plus"
+                        style="margin-left: 0.6rem;"></i></button></div>
+            <!-- list data diklat -->
+            <div style="display: flex; flex-wrap: wrap; margin-top: 2rem;" id="wrapListDiklat">
+                <!-- <div class="card-diklat add-card-group">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>
+                            1.
+                        </span>
+                        <div>
+                            <i class="fa-solid fa-pencil"
+                                style="color: #428bca; cursor: pointer; margin-right: 1rem;"></i>
+                            <i class="fa-solid fa-trash" style="color: #ff0000; cursor: pointer;"></i>
+                        </div>
+                    </div>
+                    <div style="display: flex; flex-direction: column;">
+                        <div style="margin: 3px 0;">
+                            <h5 style="text-align: start; margin: 0;"><strong>Nama Diklat</strong></h5>
+                            <span style="font-size: 13px;">Digital Library Management</span>
+                        </div>
+                        <div style="margin: 3px 0;">
+                            <h5 style="text-align: start; margin: 0;"><strong>Tahun</strong></h5>
+                            <span style="font-size: 13px;">2016</span>
+                        </div>
+                        <div style="margin: 3px 0;">
+                            <h5 style="text-align: start; margin: 0;"><strong>Jumlah jam pelatihan</strong></h5>
+                            <span style="font-size: 13px;">16 Jamlat / 2 Hari</span>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <!-- modal add diklat -->
+        <div class="modal fade" id="addDiklat">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 id="titleAddDiklat" class="modal-title">Tambah Diklat</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div style="display: flex; flex-direction: column;">
+                            <label for="namaDiklat"><small>Nama Diklat</small></label>
+                            <input type="text" class="form-control" id="namaDiklat"
+                                onchange="changeInputAdd('namaDiklat', 'namaDiklat', 'DIKLAT')">
+                            <span style="height: 1.5rem;"><small id="errNmDiklat"
+                                    style="color: #ff0000;"></small></span>
+                        </div>
+                        <div style="display: flex; flex-direction: column;">
+                            <label for="tahunDiklat"><small>Tahun</small></label>
+                            <input type="text" class="form-control" id="tahunDiklat"
+                                onchange="changeInputAdd('tahunDiklat', 'tahunDiklat', 'DIKLAT')">
+                            <span style="height: 1.5rem;"><small id="errThDiklat"
+                                    style="color: #ff0000;"></small></span>
+                        </div>
+                        <div style="display: flex; flex-direction: column;">
+                            <label for="jumlahJamPelatihan"><small>Jumlah jam pelatihan</small></label>
+                            <input type="text" class="form-control" id="jumlahJamPelatihan"
+                                onchange="changeInputAdd('jumlahJamPelatihan', 'jumlahJamPelatihan', 'DIKLAT')">
+                            <span style="height: 1.5rem;"><small id="errJmDiklat"
+                                    style="color: #ff0000;"></small></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" href="#addDiklat" data-dismiss="modal">Batal</a>
+                        <a id="btnSubmitDiklat" class="btn btn-primary" href="#addDiklat" data-dismiss="modal"
+                            onclick="prosesTambahDiklat()">Tambah</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="border-batas"></div>
+
+        <!-- KARYA TULIS -->
+        <div style="display: flex; flex-direction: column; margin-top: 3rem;">
+            <h4 style="margin: 0 auto 3rem auto; text-align: center;"><strong style="text-transform: uppercase;">Judul
+                    Karya Tulis Ilmiah (KTI) dibidang PUSDOKINFO yang pernah diterbitkan (tuliskan)</strong></h4>
+            <span style="text-align: start; font-size: 12.5px;"><strong>Tuliskan judul Karya Tulis Ilmiah (KTI) dan
+                    tahun terbit</strong></span>
+            <h5 style="text-align: start;"><strong>Contoh:</strong></h5>
+            <ul>
+                <li>Judul Buku : Pendongeng Handal</li>
+                <li>Tahun Terbit : 2016</li>
+            </ul>
+            <div style="display: flex; justify-content: flex-end;"><button id="clickAddKarya" type="button"
+                    class="btn btn-default btn-success" data-target="#addKarya" data-toggle="modal"
+                    style="align-items: center;" onclick="clickAddKarya()">Tambahkan Karya Tulis Ilmiah<i
+                        class="fa-solid fa-plus" style="margin-left: 0.6rem;"></i></button></div>
+            <!-- List data Karya Ilmiah -->
+            <div style="display: flex; flex-wrap: wrap; margin-top: 2rem;" id="listAddKarya"></div>
+        </div>
+        <!-- modal add karya tulis ilmiah -->
+        <div class="modal fade" id="addKarya">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 id="titleAddKarya" class="modal-title">Tambah Karya Tulis Ilmiah (KTI)</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div style="display: flex; flex-direction: column;">
+                            <label for="judulBuku"><small>Judul Buku</small></label>
+                            <input type="text" class="form-control" id="judulBuku"
+                                onchange="changeInputAdd('judulBuku', 'judulBuku', 'KARYA-TULIS-ILMIAH')">
+                            <span style="height: 1.5rem;"><small id="errNmDiklat"
+                                    style="color: #ff0000;"></small></span>
+                        </div>
+                        <div style="display: flex; flex-direction: column;">
+                            <label for="tahunTerbit"><small>Tahun Terbit</small></label>
+                            <input type="text" class="form-control" id="tahunTerbit"
+                                onchange="changeInputAdd('tahunTerbit', 'tahunTerbit', 'KARYA-TULIS-ILMIAH')">
+                            <span style="height: 1.5rem;"><small id="errThDiklat"
+                                    style="color: #ff0000;"></small></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" href="#addKarya" data-dismiss="modal">Batal</a>
+                        <a id="btnSubmitKarya" class="btn btn-primary" href="#addKarya" data-dismiss="modal"
+                            onclick="prosesTambahKarya()">Tambah</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-batas"></div>
+        <!-- ORGANISASI -->
+        <div style="display: flex; flex-direction: column; margin-top: 3rem;">
+            <h4 style="margin: 0 auto 3rem auto; text-align: center;"><strong
+                    style="text-transform: uppercase;">Organisasi Profesi Yang Diikuti</strong></h4>
+            <span style="text-align: start; font-size: 12.5px;"><strong>Tulisakan Nama Organisasi dan jabatan (pengurus
+                    atau anggota)</strong></span>
+            <h5 style="text-align: start;"><strong>Contoh:</strong></h5>
+            <ul>
+                <li>Nama Organisasi : Gerakan Pemasyarakatan Minat Baca (GPMB)</li>
+                <li>Jabatan (pengurus atau anggota) : Pengurus</li>
+            </ul>
+            <div style="display: flex; justify-content: flex-end;"><button id="clickAddOrganisasi" type="button"
+                    class="btn btn-default btn-success" data-target="#addOrganisasi" data-toggle="modal"
+                    style="align-items: center;" onclick="clickAddOrganisasi()">Tambahkan Organisasi<i
+                        class="fa-solid fa-plus" style="margin-left: 0.6rem;"></i></button></div>
+            <!-- List data Organisasi -->
+            <div style="display: flex; flex-wrap: wrap; margin-top: 2rem;" id="listAddOrganisasi"></div>
+        </div>
+        <!-- modal add Organisasi -->
+        <div class="modal fade" id="addOrganisasi">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 id="titleAddOrganisasi" class="modal-title">Tambah Organisasi</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div style="display: flex; flex-direction: column;">
+                            <label for="namaOrganisasi"><small>Nama Organisasi</small></label>
+                            <input type="text" class="form-control" id="namaOrganisasi"
+                                onchange="changeInputAdd('namaOrganisasi', 'namaOrganisasi', 'ORGANISASI')">
+                            <span style="height: 1.5rem;"><small id="errNmDiklat"
+                                    style="color: #ff0000;"></small></span>
+                        </div>
+                        <div style="display: flex; flex-direction: column;">
+                            <label for="jabatanOrganisasi"><small>Jabatan</small></label>
+                            <input type="text" class="form-control" id="jabatanOrganisasi"
+                                onchange="changeInputAdd('jabatanOrganisasi', 'jabatanOrganisasi', 'ORGANISASI')">
+                            <span style="height: 1.5rem;"><small id="errThDiklat"
+                                    style="color: #ff0000;"></small></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" href="#addOrganisasi" data-dismiss="modal">Batal</a>
+                        <a id="btnSubmitOrganisasi" class="btn btn-primary" href="#addOrganisasi" data-dismiss="modal"
+                            onclick="prosesTambahOrganisasi()">Tambah</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="secGlobalLoading" style="display: flex; position: fixed; bottom: 2rem; right: 2rem; z-index: 1;">
+        <div id="globalLoading" class="loading-grup">
+            <span class="loading-spinner"></span>
+        </div>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>

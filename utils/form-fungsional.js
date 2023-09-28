@@ -1,3 +1,271 @@
+const globalLoading = document.getElementById('secGlobalLoading')
+
+// fetch data instansi sekolah/mahasiswa
+async function getSekolah() {
+    try {
+        const getData = await fetch('https://api-sekolah-indonesia.vercel.app/sekolah?page=1&perPage=100')
+        const data = await getData.json(res => res)
+        return data
+    } catch (err) {
+        return err
+    }
+}
+
+function spinnerGlobalLoading(display) {
+    globalLoading.style.display = display
+}
+
+getSekolah()
+    .then(res => {
+        if(res?.dataSekolah?.length > 0){
+            const data = res.dataSekolah.map((item) => ({
+                data_tokens: item.id,
+                value: item.sekolah
+            }))
+            loadCreateSelect('instansi', data)
+            removeDropdownMenu(6)
+            const newData = [
+                {
+                    data_tokens: 'silahkan-pilih',
+                    value: 'Silahkan Pilih'
+                },
+                ...data
+            ]
+            setTimeout(() => {
+                createMenuDropdown(newData, 6, 'instansi')
+                spinnerGlobalLoading('none')
+            }, 500);
+        }
+    })
+    .catch(err => {
+        console.log('error data sekolah', err)
+    })
+
+const dataInputNamaKolom = {
+    nip: '',
+    namaLengkap: '',
+    tempatLahir: '',
+    tanggalLahir: '',
+    jenisKelamin: 'Laki-laki',
+    nomorHP: '',
+    email: '',
+    pendidikanTerakhir: 'Silahkan Pilih',
+    jurusanBidangPendidikan: 'Silahkan Pilih',
+    pangkat: 'Silahkan Pilih',
+    tamatPangkat: '',
+    jabatanFungsional: 'Silahkan Pilih',
+    tamatJabatan: '',
+    statusJabatan: 'Silahkan Pilih',
+    instansi: 'Silahkan Pilih',
+    diklatFungsionalPustakawan: 'Tidak Pernah'
+}
+
+function loadCreateSelect(elementId, data) {
+    const instansi = document.getElementById(elementId)
+    if (instansi) {
+        data.forEach(item => {
+            let node = document.createElement('option')
+            node.setAttribute('data-tokens', item.data_tokens)
+            const textNode = document.createTextNode(item.value)
+            node.appendChild(textNode)
+            instansi.appendChild(node)
+        })
+    }
+}
+
+// remove dropdown menu
+function removeDropdownMenu(indexElement) {
+    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
+    setTimeout(() => {
+        var currentElem = elem[indexElement]
+        var children = currentElem?.lastElementChild
+        while (children) {
+            currentElem.removeChild(children)
+            children = currentElem.lastElementChild
+        }
+    }, 500);
+}
+
+// untuk load data search menu dropdown
+let currentDataMenu
+let indexElementDropdown
+
+var btnDropdown = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
+var searchElem = document.getElementsByClassName('input-block-level form-control')
+var wrapBtnGroup = document.getElementsByClassName('btn-group bootstrap-select')
+
+// create menu dropdown
+function createMenuDropdown(data, indexElement, type) {
+    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
+
+    if (elem && data.length > 0) {
+        currentDataMenu = data
+        indexElementDropdown = indexElement
+        const instansi = elem[indexElement]
+        wrapBtnGroup = document.getElementsByClassName('btn-group bootstrap-select')
+        wrapBtnGroup = wrapBtnGroup[indexElement]
+        searchElem = document.getElementsByClassName('input-block-level form-control')
+        searchElem = searchElem[indexElement]
+        // searchElem?.setAttribute('onkeydown', `clickSearch('${daerah}')`)
+        searchElem?.setAttribute('onkeydown', `searchInputOpt('${type}')`)
+        btnDropdown = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
+        btnDropdown = btnDropdown[indexElement]
+        btnDropdown?.setAttribute('onclick', `clickBtnDropdown(${indexElement}, '${type}')`)
+
+        data.forEach((item, index) => {
+            // list element
+            var li = document.createElement('li')
+            li.setAttribute('data-original-index', index)
+            li.setAttribute('class', index === 0 ? 'selected active' : '')
+            // tag a element
+            var tagA = document.createElement('a')
+            tagA.setAttribute('data-normalized-text', `<span class=&quot;text&quot;>${item.value}</span>`)
+            tagA.setAttribute('tabindex', '0')
+            tagA.setAttribute('class', '')
+            // children tag a
+            // span with text content
+            var spanChild = document.createElement('span')
+            spanChild.setAttribute('class', 'text')
+            spanChild.innerHTML = item.value
+            var spanChild2 = document.createElement('span')
+            spanChild2.setAttribute('class', 'glyphicon glyphicon-ok check-mark')
+            tagA.appendChild(spanChild)
+            tagA.appendChild(spanChild2)
+            li.appendChild(tagA)
+            instansi?.appendChild(li)
+        })
+    }
+}
+
+function searchInputOpt(type) {
+    loadSearchDataDropdown(indexElementDropdown, searchElem.value, searchElem, type)
+}
+
+function loadSearchDataDropdown(
+    indexElement,
+    inputValue,
+    event,
+    type
+) {
+    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
+    // event.addEventListener('keyup', (e) => {
+    //     if (e?.code === 'Enter') {
+    //         console.log('sukses')
+    //     }
+    // })
+
+    if (isTextSelected(event) && currentDataMenu?.length > 0) {
+        aturSelection(elem, indexElement, '', type)
+    } else if (currentDataMenu?.length > 0) {
+        aturSelection(elem, indexElement, inputValue, type)
+    }
+}
+
+function isTextSelected(input) {
+    if (input.selectionStart !== undefined) {
+        return input.selectionStart === 0 && input.selectionEnd === input.value.length
+    } else {
+        return false
+    }
+}
+
+function aturSelection(
+    elem,
+    indexElement,
+    inputValue,
+    type,
+) {
+    const instansi = elem[indexElement]
+    const childList = instansi.children
+    currentDataMenu.forEach((_, index) => {
+        const textItem = childList[index]?.innerText
+        if (childList[index] && inputValue.length > 0) {
+            childList[index].setAttribute('class', 'hide')
+            const checkItem =
+                textItem.toLowerCase().indexOf(inputValue.toLowerCase()) > -1 ||
+                textItem.indexOf(inputValue) > -1
+            if (checkItem) {
+                childList[index].setAttribute('class', '')
+            }
+        } else if (childList[index]) {
+            childList[index].removeAttribute('class')
+            if (type === 'instansi') {
+                if (dataInputNamaKolom.instansi !== 'Silahkan Pilih') {
+                    const checkItem =
+                        textItem?.toLowerCase() == dataInputNamaKolom.instansi.toLowerCase() ||
+                        textItem == dataInputNamaKolom.instansi
+                    if (checkItem) {
+                        childList[index].setAttribute('class', 'selected active')
+                    }
+                } else {
+                    childList[0].setAttribute('class', 'selected active')
+                }
+            }
+        }
+    })
+}
+
+function clickBtnDropdown(indexElement, type) {
+    indexElementDropdown = indexElement
+    searchElem = document.getElementsByClassName('input-block-level form-control')
+    setTimeout(() => {
+        searchElem = searchElem[indexElement]
+        searchElem.removeAttribute('onkeydown')
+        searchElem.setAttribute('onkeydown', `searchInputOpt('${type}')`)
+    }, 0)
+
+    if (type === 'instansi') {
+        spinnerGlobalLoading('flex')
+        getSekolah()
+            .then(res => {
+                const data = res.dataSekolah.map(item => ({
+                    data_tokens: item.id,
+                    value: item.name
+                }))
+                const newData = [
+                    {
+                        data_tokens: 'silahkan-pilih',
+                        value: 'Silahkan Pilih'
+                    },
+                    ...data
+                ]
+                currentDataMenu = newData
+                searchInputOpt(type)
+                spinnerGlobalLoading('none')
+            })
+            .catch(err => console.log(err))
+    }
+}
+
+// on selection value from instansi
+function onSelectionFromAPI(selectId, type) {
+    const elem = document.getElementById(selectId)
+    // const loadingElem = document.getElementById(loadingId)
+    if (elem) {
+        const indexOption = elem.selectedIndex
+        // dataset (tokens) options yang dipilih
+        const tokens = elem.children[indexOption].dataset.tokens
+        // const data_tokens = optionElem.getAttribute('data-tokens')
+        const value = elem.options[elem.selectedIndex].value
+        if (type === 'instansi') {
+            dataInputNamaKolom.instansi = value
+        }
+    }
+}
+
+function checkBoxInstansi(elementId) {
+    const elem = document.getElementById(elementId)
+    if (elem) {
+        if (elem.checked) {
+            document.getElementById('secOptInstansi').style.display = 'none'
+            document.getElementById('textInstansi').style.display = 'flex'
+        } else {
+            document.getElementById('secOptInstansi').style.display = 'flex'
+            document.getElementById('textInstansi').style.display = 'none'
+        }
+    }
+}
+
 let loadingClientImg
 
 function openFileImg() {
@@ -24,6 +292,10 @@ elemImgFile.addEventListener('change', (e) => {
 
 function validateImgExt(file) {
     const getTypeFile = file[0].type.split('/')[1]
+    if(!getTypeFile || getTypeFile.length === 0){
+        alert('File Harus berupa .jpg/.jpeg/.png/.webp')
+        return
+    }
     if (
         getTypeFile.toLowerCase() === 'jpg' ||
         getTypeFile.toLowerCase() === 'jpeg' ||
@@ -395,3 +667,417 @@ function setOptionElement() {
 }
 
 setOptionElement()
+
+const titleAddDiklat = document.getElementById('titleAddDiklat')
+const btnSubmitDiklat = document.getElementById('btnSubmitDiklat')
+
+let inputDataAddDiklat = {
+    namaDiklat: '',
+    tahunDiklat: '',
+    jumlahJamPelatihan: ''
+}
+
+function clickAddDiklat() {
+    const elem = document.getElementsByClassName('modal-backdrop fade in')
+    setTimeout(() => {
+        if (elem?.length > 0) {
+            elem[0].style.display = 'none'
+        }
+    }, 0);
+    titleAddDiklat.innerText = 'Tambah Diklat'
+    btnSubmitDiklat.setAttribute('onclick', 'prosesTambahDiklat()')
+    btnSubmitDiklat.innerText = 'Tambah'
+    inputDataAddDiklat = {
+        namaDiklat: '',
+        tahunDiklat: '',
+        jumlahJamPelatihan: ''
+    }
+    removeValueInput('namaDiklat')
+    removeValueInput('tahunDiklat')
+    removeValueInput('jumlahJamPelatihan')
+}
+
+let inputDataKaryaTulis = {
+    judulBuku: '',
+    tahunTerbit: ''
+}
+
+let inputDataOrganisasi = {
+    namaOrganisasi: '',
+    jabatanOrganisasi: ''
+}
+
+let resultDataDiklat = []
+let resultDataKaryaTulis = []
+let resultDataOrganisasi = []
+
+const wrapListDiklat = document.getElementById('wrapListDiklat')
+
+function prosesTambahDiklat() {
+    const lengthInputDiklat = Object.entries(inputDataAddDiklat).map(e => e).length
+    resultDataDiklat.push(inputDataAddDiklat)
+    while (wrapListDiklat.hasChildNodes()) {
+        wrapListDiklat.removeChild(wrapListDiklat.firstChild)
+    }
+    resultDataDiklat.forEach((_, index) => {
+        wrapListDiklat.appendChild(createCardResultAdd(resultDataDiklat[index], lengthInputDiklat, index + 1, 'DIKLAT', 'removeCardDiklat', 'updateDiklat'))
+    })
+    inputDataAddDiklat = {
+        namaDiklat: '',
+        tahunDiklat: '',
+        jumlahJamPelatihan: ''
+    }
+    removeValueInput('namaDiklat')
+    removeValueInput('tahunDiklat')
+    removeValueInput('jumlahJamPelatihan')
+}
+
+function createCardResultAdd(dataInput, lengthData, indexNumber, inputType, funcDelete, funcUpdate) {
+    // create wrap card
+    var wrapCard = document.createElement('div')
+    wrapCard.setAttribute('class', 'add-card-group')
+    // create wrap action
+    var wrapAction = document.createElement('div')
+    wrapAction.setAttribute('style', 'display: flex; justify-content: space-between; margin-bottom: 1rem;')
+    // create btn action
+    // create number
+    var number = document.createElement('span')
+    number.innerText = `${indexNumber}.`
+    // create container icon
+    var containerIcon = document.createElement('div')
+    // btn update
+    var pencil = document.createElement('i')
+    pencil.setAttribute('class', 'fa-solid fa-pencil')
+    pencil.setAttribute('style', 'color: #428bca; cursor: pointer; margin-right: 1rem; font-size: 12.5px;')
+    pencil.setAttribute('onclick', `${funcUpdate}(${indexNumber})`)
+    // btn delete
+    var deleteBtn = document.createElement('i')
+    deleteBtn.setAttribute('class', 'fa-solid fa-trash')
+    deleteBtn.setAttribute('style', 'color: #ff0000; cursor: pointer; font-size: 12.5px;')
+    deleteBtn.setAttribute('onclick', `${funcDelete}(${indexNumber})`)
+    containerIcon.appendChild(pencil)
+    containerIcon.appendChild(deleteBtn)
+    wrapAction.appendChild(number)
+    wrapAction.appendChild(containerIcon)
+    // create body content
+    var bodyContent = document.createElement('div')
+    bodyContent.setAttribute('style', 'display: flex; flex-direction: column;')
+    let count = 0
+    Object.entries(dataInput).forEach((item) => {
+        count = count + 1
+        bodyContent.appendChild(createBodyContentCard(item[0], item[1], inputType))
+    })
+    wrapCard.appendChild(wrapAction)
+    if (count === lengthData) {
+        wrapCard.appendChild(bodyContent)
+        return wrapCard
+    }
+}
+
+function createBodyContentCard(titleValue, descValue, inputType) {
+    // container
+    let div = document.createElement('div')
+    div.setAttribute('style', 'margin: 3px 0;')
+    // title
+    let title = document.createElement('h5')
+    title.setAttribute('style', 'text-align: start; margin: 0;')
+    // text bold
+    let strong = document.createElement('strong')
+    if (inputType == 'DIKLAT') {
+        if (titleValue == 'namaDiklat') {
+            strong.innerText = 'Nama Diklat'
+        } else if (titleValue == 'tahunDiklat') {
+            strong.innerText = 'Tahun'
+        } else if (titleValue == 'jumlahJamPelatihan') {
+            strong.innerText = 'Jumlah Jam Pelatihan'
+        }
+    }else if(inputType === 'KARYA-TULIS-ILMIAH'){
+        if(titleValue == 'judulBuku'){
+            strong.innerText = 'Judul Buku'
+        }else if(titleValue == 'tahunTerbit'){
+            strong.innerText = 'Tahun Terbit'
+        }
+    }else if(inputType === 'ORGANISASI'){
+        if(titleValue == 'namaOrganisasi'){
+            strong.innerText = 'Nama Organisasi'
+        }else if(titleValue == 'jabatanOrganisasi'){
+            strong.innerText = 'Jabatan Organisasi'
+        }
+    }
+    title.appendChild(strong)
+    // deskripsi
+    let span = document.createElement('span')
+    span.setAttribute('style', 'font-size: 13px;')
+    span.innerText = descValue
+    div.appendChild(title)
+    div.appendChild(span)
+    return div
+}
+
+function changeInputAdd(elementId, nameInput, type) {
+    const elem = document.getElementById(elementId)
+    if (type === 'DIKLAT') {
+        inputDataAddDiklat[nameInput] = elem.value
+    }else if(type === 'KARYA-TULIS-ILMIAH'){
+        inputDataKaryaTulis[nameInput] = elem.value
+    }else if(type === 'ORGANISASI'){
+        inputDataOrganisasi[nameInput] = elem.value
+    }
+}
+
+function removeValueInput(elementId) {
+    const elem = document.getElementById(elementId)
+    elem.value = ''
+}
+
+function removeCardDiklat(index) {
+    const checkItem = resultDataDiklat.filter((_, i) => (i + 1) !== index)
+    resultDataDiklat = checkItem
+    const lengthInputDiklat = Object.entries(inputDataAddDiklat).map(e => e).length
+    while (wrapListDiklat.hasChildNodes()) {
+        wrapListDiklat.removeChild(wrapListDiklat.firstChild)
+    }
+    if (resultDataDiklat.length > 0) {
+        resultDataDiklat.forEach((_, index) => {
+            wrapListDiklat.appendChild(createCardResultAdd(resultDataDiklat[index], lengthInputDiklat, index + 1, 'DIKLAT', 'removeCardDiklat', 'updateDiklat'))
+        })
+    }
+}
+
+let currentIdxUpdtDiklat = null
+
+function updateDiklat(index) {
+    currentIdxUpdtDiklat = index
+    document.getElementById('clickAddDiklat').click()
+    titleAddDiklat.innerText = `Perbarui No. ${index}`
+    btnSubmitDiklat.setAttribute('onclick', 'updateInputDiklat()')
+    btnSubmitDiklat.innerText = 'Simpan'
+
+    const findData = resultDataDiklat.find((_, i)=> (i + 1) === index)
+    document.getElementById('namaDiklat').value = findData.namaDiklat
+    document.getElementById('tahunDiklat').value = findData.tahunDiklat
+    document.getElementById('jumlahJamPelatihan').value = findData.jumlahJamPelatihan
+    inputDataAddDiklat = {
+        namaDiklat: document.getElementById('namaDiklat').value = findData.namaDiklat,
+        tahunDiklat: document.getElementById('tahunDiklat').value = findData.tahunDiklat,
+        jumlahJamPelatihan: document.getElementById('jumlahJamPelatihan').value = findData.jumlahJamPelatihan
+    }
+}
+
+function updateInputDiklat(){
+    const {namaDiklat, tahunDiklat, jumlahJamPelatihan} = inputDataAddDiklat
+    resultDataDiklat[currentIdxUpdtDiklat - 1] = {
+        namaDiklat,
+        tahunDiklat,
+        jumlahJamPelatihan
+    }
+    const lengthInputDiklat = Object.entries(inputDataAddDiklat).map(e => e).length
+    while (wrapListDiklat.hasChildNodes()) {
+        wrapListDiklat.removeChild(wrapListDiklat.firstChild)
+    }
+    if (resultDataDiklat.length > 0) {
+        resultDataDiklat.forEach((_, index) => {
+            wrapListDiklat.appendChild(createCardResultAdd(resultDataDiklat[index], lengthInputDiklat, index + 1, 'DIKLAT', 'removeCardDiklat', 'updateDiklat'))
+        })
+    }
+    inputDataAddDiklat = {
+        namaDiklat: '',
+        tahunDiklat: '',
+        jumlahJamPelatihan: ''
+    }
+    removeValueInput('namaDiklat')
+    removeValueInput('tahunDiklat')
+    removeValueInput('jumlahJamPelatihan')
+}
+
+// KARYA TULIS ILMIAH
+const titleAddKarya = document.getElementById('titleAddKarya')
+const btnSubmitKarya = document.getElementById('btnSubmitKarya')
+
+const wrapListKaryaTulis = document.getElementById('listAddKarya')
+
+function clickAddKarya(){
+    const elem = document.getElementsByClassName('modal-backdrop fade in')
+    setTimeout(() => {
+        if (elem?.length > 0) {
+            elem[0].style.display = 'none'
+        }
+    }, 0);
+    titleAddKarya.innerText = 'Tambah Karya Tulis Ilmiah (KTI)'
+    btnSubmitKarya.setAttribute('onclick', 'prosesTambahKarya()')
+    btnSubmitKarya.innerText = 'Tambah'
+    removeValueInput('judulBuku')
+    removeValueInput('tahunTerbit')
+    inputDataKaryaTulis = {
+        judulBuku: '',
+        tahunTerbit: ''
+    }
+}
+
+function prosesTambahKarya(){
+    const lengthInputKarya = Object.entries(inputDataKaryaTulis).map(e => e).length
+    resultDataKaryaTulis.push(inputDataKaryaTulis)
+    while (wrapListKaryaTulis.hasChildNodes()) {
+        wrapListKaryaTulis.removeChild(wrapListKaryaTulis.firstChild)
+    }
+    resultDataKaryaTulis.forEach((_, index) => {
+        wrapListKaryaTulis.appendChild(createCardResultAdd(resultDataKaryaTulis[index], lengthInputKarya, index + 1, 'KARYA-TULIS-ILMIAH', 'removeCardKaryaTulis', 'updateKaryaTulis'))
+    })
+    inputDataKaryaTulis = {
+        judulBuku: '',
+        tahunTerbit: ''
+    }
+    removeValueInput('judulBuku')
+    removeValueInput('tahunTerbit')
+}
+
+function removeCardKaryaTulis(index){
+    const checkItem = resultDataKaryaTulis.filter((_, i) => (i + 1) !== index)
+    resultDataKaryaTulis = checkItem
+    const lengthInputKarya = Object.entries(inputDataKaryaTulis).map(e => e).length
+    while (wrapListKaryaTulis.hasChildNodes()) {
+        wrapListKaryaTulis.removeChild(wrapListKaryaTulis.firstChild)
+    }
+    if (resultDataKaryaTulis.length > 0) {
+        resultDataKaryaTulis.forEach((_, index) => {
+            wrapListKaryaTulis.appendChild(createCardResultAdd(resultDataKaryaTulis[index], lengthInputKarya, index + 1, 'KARYA-TULIS-ILMIAH', 'removeCardKaryaTulis', 'updateKaryaTulis'))
+        })
+    }
+}
+
+let currentIdxUptdKarya = null
+
+function updateKaryaTulis(index){
+    currentIdxUptdKarya = index
+    document.getElementById('clickAddKarya').click()
+    titleAddKarya.innerText = `Perbarui No. ${index}`
+    btnSubmitKarya.setAttribute('onclick', 'submitUpdtKaryaTulis()')
+    btnSubmitKarya.innerText = 'Simpan'
+
+    const findData = resultDataKaryaTulis.find((_, i)=> (i + 1) === index)
+    document.getElementById('judulBuku').value = findData.judulBuku
+    document.getElementById('tahunTerbit').value = findData.tahunTerbit
+    inputDataKaryaTulis = {
+        judulBuku: document.getElementById('judulBuku').value = findData.judulBuku,
+        tahunTerbit: document.getElementById('tahunTerbit').value = findData.tahunTerbit,
+    }
+}
+
+function submitUpdtKaryaTulis(){
+    const {judulBuku, tahunTerbit} = inputDataKaryaTulis
+    resultDataKaryaTulis[currentIdxUptdKarya - 1] = {
+        judulBuku,
+        tahunTerbit
+    }
+    const lengthInputKarya = Object.entries(inputDataKaryaTulis).map(e => e).length
+    while (wrapListKaryaTulis.hasChildNodes()) {
+        wrapListKaryaTulis.removeChild(wrapListKaryaTulis.firstChild)
+    }
+    if (resultDataKaryaTulis.length > 0) {
+        resultDataKaryaTulis.forEach((_, index) => {
+            wrapListKaryaTulis.appendChild(createCardResultAdd(resultDataKaryaTulis[index], lengthInputKarya, index + 1, 'KARYA-TULIS-ILMIAH', 'removeCardKaryaTulis', 'updateKaryaTulis'))
+        })
+    }
+    inputDataKaryaTulis = {
+        judulBuku: '',
+        tahunTerbit: ''
+    }
+    removeValueInput('judulBuku')
+    removeValueInput('tahunTerbit')
+}
+
+// ORGANISASI
+const titleAddOrganisasi = document.getElementById('titleAddOrganisasi')
+const btnSubmitOrganisasi = document.getElementById('btnSubmitOrganisasi')
+
+const wrapListAddOrganisasi = document.getElementById('listAddOrganisasi')
+
+function clickAddOrganisasi(){
+    const elem = document.getElementsByClassName('modal-backdrop fade in')
+    setTimeout(() => {
+        if (elem?.length > 0) {
+            elem[0].style.display = 'none'
+        }
+    }, 0);
+    titleAddOrganisasi.innerText = 'Tambahkan Organisasi'
+    btnSubmitOrganisasi.setAttribute('onclick', 'prosesTambahOrganisasi()')
+    btnSubmitOrganisasi.innerText = 'Tambah'
+    removeValueInput('namaOrganisasi')
+    removeValueInput('jabatanOrganisasi')
+    inputDataOrganisasi = {
+        namaOrganisasi: '',
+        jabatanOrganisasi: ''
+    }
+}
+
+function prosesTambahOrganisasi(){
+    const lengthInputOrganisasi = Object.entries(inputDataOrganisasi).map(e => e).length
+    resultDataOrganisasi.push(inputDataOrganisasi)
+    while (wrapListAddOrganisasi.hasChildNodes()) {
+        wrapListAddOrganisasi.removeChild(wrapListAddOrganisasi.firstChild)
+    }
+    resultDataOrganisasi.forEach((_, index) => {
+        wrapListAddOrganisasi.appendChild(createCardResultAdd(resultDataOrganisasi[index], lengthInputOrganisasi, index + 1, 'ORGANISASI', 'removeCardOrganisasi', 'updateCardOrganisasi'))
+    })
+    inputDataOrganisasi = {
+        namaOrganisasi: '',
+        jabatanOrganisasi: ''
+    }
+    removeValueInput('namaOrganisasi')
+    removeValueInput('jabatanOrganisasi')
+}
+
+function removeCardOrganisasi(index){
+    const checkItem = resultDataOrganisasi.filter((_, i) => (i + 1) !== index)
+    resultDataOrganisasi = checkItem
+    const lengthInputOrganisasi = Object.entries(inputDataOrganisasi).map(e => e).length
+    while (wrapListAddOrganisasi.hasChildNodes()) {
+        wrapListAddOrganisasi.removeChild(wrapListAddOrganisasi.firstChild)
+    }
+    if (resultDataOrganisasi.length > 0) {
+        resultDataOrganisasi.forEach((_, index) => {
+            wrapListAddOrganisasi.appendChild(createCardResultAdd(resultDataOrganisasi[index], lengthInputOrganisasi, index + 1, 'ORGANISASI', 'removeCardOrganisasi', 'updateCardOrganisasi'))
+        })
+    }
+}
+
+let currentIdxUptdOrganisasi = null
+
+function updateCardOrganisasi(index){
+    currentIdxUptdOrganisasi = index
+    document.getElementById('clickAddOrganisasi').click()
+    titleAddOrganisasi.innerText = `Perbarui No. ${index}`
+    btnSubmitOrganisasi.setAttribute('onclick', 'submitUpdtOrganisasi()')
+    btnSubmitOrganisasi.innerText = 'Simpan'
+
+    const findData = resultDataOrganisasi.find((_, i)=> (i + 1) === index)
+    document.getElementById('namaOrganisasi').value = findData.namaOrganisasi
+    document.getElementById('jabatanOrganisasi').value = findData.jabatanOrganisasi
+    inputDataOrganisasi = {
+        namaOrganisasi: document.getElementById('namaOrganisasi').value = findData.namaOrganisasi,
+        jabatanOrganisasi: document.getElementById('jabatanOrganisasi').value = findData.jabatanOrganisasi,
+    }
+}
+
+function submitUpdtOrganisasi(){
+    const {namaOrganisasi, jabatanOrganisasi} = inputDataOrganisasi
+    resultDataOrganisasi[currentIdxUptdOrganisasi - 1] = {
+        namaOrganisasi,
+        jabatanOrganisasi
+    }
+    const lengthInputOrganisasi = Object.entries(inputDataOrganisasi).map(e => e).length
+    while (wrapListAddOrganisasi.hasChildNodes()) {
+        wrapListAddOrganisasi.removeChild(wrapListAddOrganisasi.firstChild)
+    }
+    if (resultDataOrganisasi.length > 0) {
+        resultDataOrganisasi.forEach((_, index) => {
+            wrapListAddOrganisasi.appendChild(createCardResultAdd(resultDataOrganisasi[index], lengthInputOrganisasi, index + 1, 'ORGANISASI', 'removeCardOrganisasi', 'updateCardOrganisasi'))
+        })
+    }
+    inputDataOrganisasi = {
+        namaOrganisasi: '',
+        jabatanOrganisasi: ''
+    }
+    removeValueInput('namaOrganisasi')
+    removeValueInput('jabatanOrganisasi')
+}
