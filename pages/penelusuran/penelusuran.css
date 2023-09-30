@@ -35,7 +35,7 @@
     display: none;
     justify-content: center;
     align-items: center;
-    height: 120px;
+    height: 50px;
     background-color: #fff;
 }
 /* end navbar */
@@ -167,7 +167,14 @@ input[type="number"] {
 }
 
 @media screen and (max-width: 768px) {
+    .wrap-form-pengajuan {
+        margin: 130px 0 40px 0;
+    }
+
     /* navbar */
+    .navbar-page{
+        top: 50px !important;
+    }
     .banner-top {
         display: none;
     }
@@ -178,7 +185,7 @@ input[type="number"] {
 
     .banner-top-mobile img {
         display: flex;
-        width: 100%;
+        width: 60%;
     }
     /* end navbar */
 }

@@ -17,7 +17,7 @@ function spinnerGlobalLoading(display) {
 
 getSekolah()
     .then(res => {
-        if(res?.dataSekolah?.length > 0){
+        if (res?.dataSekolah?.length > 0) {
             const data = res.dataSekolah.map((item) => ({
                 data_tokens: item.id,
                 value: item.sekolah
@@ -292,7 +292,7 @@ elemImgFile.addEventListener('change', (e) => {
 
 function validateImgExt(file) {
     const getTypeFile = file[0].type.split('/')[1]
-    if(!getTypeFile || getTypeFile.length === 0){
+    if (!getTypeFile || getTypeFile.length === 0) {
         alert('File Harus berupa .jpg/.jpeg/.png/.webp')
         return
     }
@@ -791,16 +791,16 @@ function createBodyContentCard(titleValue, descValue, inputType) {
         } else if (titleValue == 'jumlahJamPelatihan') {
             strong.innerText = 'Jumlah Jam Pelatihan'
         }
-    }else if(inputType === 'KARYA-TULIS-ILMIAH'){
-        if(titleValue == 'judulBuku'){
+    } else if (inputType === 'KARYA-TULIS-ILMIAH') {
+        if (titleValue == 'judulBuku') {
             strong.innerText = 'Judul Buku'
-        }else if(titleValue == 'tahunTerbit'){
+        } else if (titleValue == 'tahunTerbit') {
             strong.innerText = 'Tahun Terbit'
         }
-    }else if(inputType === 'ORGANISASI'){
-        if(titleValue == 'namaOrganisasi'){
+    } else if (inputType === 'ORGANISASI') {
+        if (titleValue == 'namaOrganisasi') {
             strong.innerText = 'Nama Organisasi'
-        }else if(titleValue == 'jabatanOrganisasi'){
+        } else if (titleValue == 'jabatanOrganisasi') {
             strong.innerText = 'Jabatan Organisasi'
         }
     }
@@ -818,9 +818,9 @@ function changeInputAdd(elementId, nameInput, type) {
     const elem = document.getElementById(elementId)
     if (type === 'DIKLAT') {
         inputDataAddDiklat[nameInput] = elem.value
-    }else if(type === 'KARYA-TULIS-ILMIAH'){
+    } else if (type === 'KARYA-TULIS-ILMIAH') {
         inputDataKaryaTulis[nameInput] = elem.value
-    }else if(type === 'ORGANISASI'){
+    } else if (type === 'ORGANISASI') {
         inputDataOrganisasi[nameInput] = elem.value
     }
 }
@@ -853,7 +853,7 @@ function updateDiklat(index) {
     btnSubmitDiklat.setAttribute('onclick', 'updateInputDiklat()')
     btnSubmitDiklat.innerText = 'Simpan'
 
-    const findData = resultDataDiklat.find((_, i)=> (i + 1) === index)
+    const findData = resultDataDiklat.find((_, i) => (i + 1) === index)
     document.getElementById('namaDiklat').value = findData.namaDiklat
     document.getElementById('tahunDiklat').value = findData.tahunDiklat
     document.getElementById('jumlahJamPelatihan').value = findData.jumlahJamPelatihan
@@ -864,8 +864,8 @@ function updateDiklat(index) {
     }
 }
 
-function updateInputDiklat(){
-    const {namaDiklat, tahunDiklat, jumlahJamPelatihan} = inputDataAddDiklat
+function updateInputDiklat() {
+    const { namaDiklat, tahunDiklat, jumlahJamPelatihan } = inputDataAddDiklat
     resultDataDiklat[currentIdxUpdtDiklat - 1] = {
         namaDiklat,
         tahunDiklat,
@@ -896,7 +896,7 @@ const btnSubmitKarya = document.getElementById('btnSubmitKarya')
 
 const wrapListKaryaTulis = document.getElementById('listAddKarya')
 
-function clickAddKarya(){
+function clickAddKarya() {
     const elem = document.getElementsByClassName('modal-backdrop fade in')
     setTimeout(() => {
         if (elem?.length > 0) {
@@ -914,7 +914,7 @@ function clickAddKarya(){
     }
 }
 
-function prosesTambahKarya(){
+function prosesTambahKarya() {
     const lengthInputKarya = Object.entries(inputDataKaryaTulis).map(e => e).length
     resultDataKaryaTulis.push(inputDataKaryaTulis)
     while (wrapListKaryaTulis.hasChildNodes()) {
@@ -931,7 +931,7 @@ function prosesTambahKarya(){
     removeValueInput('tahunTerbit')
 }
 
-function removeCardKaryaTulis(index){
+function removeCardKaryaTulis(index) {
     const checkItem = resultDataKaryaTulis.filter((_, i) => (i + 1) !== index)
     resultDataKaryaTulis = checkItem
     const lengthInputKarya = Object.entries(inputDataKaryaTulis).map(e => e).length
@@ -947,14 +947,14 @@ function removeCardKaryaTulis(index){
 
 let currentIdxUptdKarya = null
 
-function updateKaryaTulis(index){
+function updateKaryaTulis(index) {
     currentIdxUptdKarya = index
     document.getElementById('clickAddKarya').click()
     titleAddKarya.innerText = `Perbarui No. ${index}`
     btnSubmitKarya.setAttribute('onclick', 'submitUpdtKaryaTulis()')
     btnSubmitKarya.innerText = 'Simpan'
 
-    const findData = resultDataKaryaTulis.find((_, i)=> (i + 1) === index)
+    const findData = resultDataKaryaTulis.find((_, i) => (i + 1) === index)
     document.getElementById('judulBuku').value = findData.judulBuku
     document.getElementById('tahunTerbit').value = findData.tahunTerbit
     inputDataKaryaTulis = {
@@ -963,8 +963,8 @@ function updateKaryaTulis(index){
     }
 }
 
-function submitUpdtKaryaTulis(){
-    const {judulBuku, tahunTerbit} = inputDataKaryaTulis
+function submitUpdtKaryaTulis() {
+    const { judulBuku, tahunTerbit } = inputDataKaryaTulis
     resultDataKaryaTulis[currentIdxUptdKarya - 1] = {
         judulBuku,
         tahunTerbit
@@ -992,7 +992,7 @@ const btnSubmitOrganisasi = document.getElementById('btnSubmitOrganisasi')
 
 const wrapListAddOrganisasi = document.getElementById('listAddOrganisasi')
 
-function clickAddOrganisasi(){
+function clickAddOrganisasi() {
     const elem = document.getElementsByClassName('modal-backdrop fade in')
     setTimeout(() => {
         if (elem?.length > 0) {
@@ -1010,7 +1010,7 @@ function clickAddOrganisasi(){
     }
 }
 
-function prosesTambahOrganisasi(){
+function prosesTambahOrganisasi() {
     const lengthInputOrganisasi = Object.entries(inputDataOrganisasi).map(e => e).length
     resultDataOrganisasi.push(inputDataOrganisasi)
     while (wrapListAddOrganisasi.hasChildNodes()) {
@@ -1027,7 +1027,7 @@ function prosesTambahOrganisasi(){
     removeValueInput('jabatanOrganisasi')
 }
 
-function removeCardOrganisasi(index){
+function removeCardOrganisasi(index) {
     const checkItem = resultDataOrganisasi.filter((_, i) => (i + 1) !== index)
     resultDataOrganisasi = checkItem
     const lengthInputOrganisasi = Object.entries(inputDataOrganisasi).map(e => e).length
@@ -1043,14 +1043,14 @@ function removeCardOrganisasi(index){
 
 let currentIdxUptdOrganisasi = null
 
-function updateCardOrganisasi(index){
+function updateCardOrganisasi(index) {
     currentIdxUptdOrganisasi = index
     document.getElementById('clickAddOrganisasi').click()
     titleAddOrganisasi.innerText = `Perbarui No. ${index}`
     btnSubmitOrganisasi.setAttribute('onclick', 'submitUpdtOrganisasi()')
     btnSubmitOrganisasi.innerText = 'Simpan'
 
-    const findData = resultDataOrganisasi.find((_, i)=> (i + 1) === index)
+    const findData = resultDataOrganisasi.find((_, i) => (i + 1) === index)
     document.getElementById('namaOrganisasi').value = findData.namaOrganisasi
     document.getElementById('jabatanOrganisasi').value = findData.jabatanOrganisasi
     inputDataOrganisasi = {
@@ -1059,8 +1059,8 @@ function updateCardOrganisasi(index){
     }
 }
 
-function submitUpdtOrganisasi(){
-    const {namaOrganisasi, jabatanOrganisasi} = inputDataOrganisasi
+function submitUpdtOrganisasi() {
+    const { namaOrganisasi, jabatanOrganisasi } = inputDataOrganisasi
     resultDataOrganisasi[currentIdxUptdOrganisasi - 1] = {
         namaOrganisasi,
         jabatanOrganisasi
@@ -1080,4 +1080,166 @@ function submitUpdtOrganisasi(){
     }
     removeValueInput('namaOrganisasi')
     removeValueInput('jabatanOrganisasi')
+}
+
+// LAMPIRAN DATA PENDUKUNG
+let inputLampiranData = {
+    skPustakawanTerakhir: null,
+    skKenaikanPangkatTerakhir: null,
+    dokumen1: null,
+    dokumen2: null,
+    dokumen3: null,
+}
+
+const inputPustakawanTerakhir = document.getElementById('pustakawanTerakhir')
+const inputKenaikanPangkatTerakhir = document.getElementById('kenaikanPangkatTerakhir')
+const inputLampiranData1 = document.getElementById('lampiranData1')
+const inputLampiranData2 = document.getElementById('lampiranData2')
+const inputLampiranData3 = document.getElementById('lampiranData3')
+// btn delete
+const deletePustakawanTerakhir = document.getElementById('deletePustakawanTerakhir')
+const deleteKenaikanPangkat = document.getElementById('deleteKenaikanPangkat')
+const deleteLampiranData1 = document.getElementById('deleteLampiranData1')
+const deleteLampiranData2 = document.getElementById('deleteLampiranData2')
+const deleteLampiranData3 = document.getElementById('deleteLampiranData3')
+
+// SK Pustakawan terakhir
+inputPustakawanTerakhir.addEventListener('change', (e) => {
+    const files = e.target.files
+    changeFilesLampiranGroup(
+        files,
+        'skPustakawanTerakhir',
+        inputPustakawanTerakhir,
+        deletePustakawanTerakhir
+    )
+})
+// SK Kenaikan Pangkat Terakhir
+inputKenaikanPangkatTerakhir.addEventListener('change', (e) => {
+    const files = e.target.files
+    changeFilesLampiranGroup(
+        files,
+        'skKenaikanPangkatTerakhir',
+        inputKenaikanPangkatTerakhir,
+        deleteKenaikanPangkat
+    )
+})
+// Dokumen 1
+inputLampiranData1.addEventListener('change', (e) => {
+    const files = e.target.files
+    changeFilesLampiranGroup(
+        files,
+        'dokumen1',
+        inputLampiranData1,
+        deleteLampiranData1
+    )
+})
+// Dokumen 2
+inputLampiranData2.addEventListener('change', (e) => {
+    const files = e.target.files
+    changeFilesLampiranGroup(
+        files,
+        'dokumen2',
+        inputLampiranData2,
+        deleteLampiranData2
+    )
+})
+// Dokumen 3
+inputLampiranData3.addEventListener('change', (e) => {
+    const files = e.target.files
+    changeFilesLampiranGroup(
+        files,
+        'dokumen3',
+        inputLampiranData3,
+        deleteLampiranData3
+    )
+})
+
+function changeFilesLampiranGroup(
+    files,
+    propertyData,
+    element,
+    btnDeleteElement
+) {
+    if (files[0] && validateLampiranFile(files)) {
+        if (validateSizeLampiranFiles(files)) {
+            inputLampiranData[propertyData] = files
+            changeStyleBtnDeleteFile(btnDeleteElement, 'pointer', 'btn btn-danger')
+        } else {
+            alert('Maaf, tidak bisa input file dengan ukuran lebih dari 2MB')
+            if (inputLampiranData[propertyData]?.[0]?.name) {
+                element.files = inputLampiranData[propertyData]
+            } else {
+                element.value = null
+            }
+        }
+    } else if (files[0]) {
+        alert('File Harus berupa .pdf/.jpg/.jpeg/.png/.svg')
+        if (inputLampiranData[propertyData]?.[0]?.name) {
+            element.files = inputLampiranData[propertyData]
+        } else {
+            element.value = null
+        }
+    } else if (!files[0] && inputLampiranData[propertyData]) {
+        element.files = inputLampiranData[propertyData]
+    }
+}
+
+function validateLampiranFile(files) {
+    const getTypeFile = files[0].type.split('/')[1]
+    if (!getTypeFile || getTypeFile.length === 0) {
+        return
+    }
+    if (
+        getTypeFile.toLowerCase() === 'jpg' ||
+        getTypeFile.toLowerCase() === 'jpeg' ||
+        getTypeFile.toLowerCase() === 'png' ||
+        getTypeFile.toLowerCase() === 'svg' ||
+        getTypeFile.toLowerCase() === 'svg+xml' ||
+        getTypeFile.toLowerCase() === 'pdf'
+    ) {
+        return 'success'
+    } else {
+        return
+    }
+}
+
+function validateSizeLampiranFiles(files) {
+    const sizeOfFile = files[0].size
+    if (sizeOfFile >= 2000000) {
+        return
+    }
+    return 'success'
+}
+
+function changeStyleBtnDeleteFile(
+    element,
+    cursor,
+    className
+) {
+    element.style.cursor = cursor
+    element.setAttribute('class', className)
+}
+
+function deleteFileLampiran(actionType) {
+    if (actionType === 'SK_PUSTAKAWAN_TERAKHIR') {
+        inputPustakawanTerakhir.value = null
+        inputLampiranData.skPustakawanTerakhir = null
+        changeStyleBtnDeleteFile(deletePustakawanTerakhir, 'not-allowed', 'btn btn-secondary')
+    } else if (actionType === 'SK_KENAIKAN_PANGKAT_TERAKHIR') {
+        inputKenaikanPangkatTerakhir.value = null
+        inputLampiranData.skKenaikanPangkatTerakhir = null
+        changeStyleBtnDeleteFile(deleteKenaikanPangkat, 'not-allowed', 'btn btn-secondary')
+    } else if (actionType === 'DOKUMEN_1') {
+        inputLampiranData1.value = null
+        inputLampiranData.dokumen1 = null
+        changeStyleBtnDeleteFile(deleteLampiranData1, 'not-allowed', 'btn btn-secondary')
+    } else if (actionType === 'DOKUMEN_2') {
+        inputLampiranData2.value = null
+        inputLampiranData.dokumen2 = null
+        changeStyleBtnDeleteFile(deleteLampiranData2, 'not-allowed', 'btn btn-secondary')
+    } else if (actionType === 'DOKUMEN_3') {
+        inputLampiranData3.value = null
+        inputLampiranData.dokumen3 = null
+        changeStyleBtnDeleteFile(deleteLampiranData3, 'not-allowed', 'btn btn-secondary')
+    }
 }

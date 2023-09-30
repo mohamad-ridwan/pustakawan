@@ -336,12 +336,12 @@
         </div>
         <!-- end form -->
 
-        <div class="border-batas"></div>
         <!-- DIKLAT -->
         <div style="display: flex; flex-direction: column; margin-top: 3rem;">
-            <h4 style="margin: 0 auto 3rem auto; text-align: center;"><strong>DIKLAT TEKNIS
+            <h4 style="margin: 3rem auto 0rem auto; text-align: center;"><strong>DIKLAT TEKNIS
                     KEPUSTAKAWAN</strong></h4>
-            <span style="text-align: start; font-size: 12.5px;"><strong>Tulis nama diklat, tahun, dan jumlah jam
+            <div class="border-batas"></div>
+            <span style="text-align: start; font-size: 12.5px; margin-top: 2rem;"><strong>Tulis nama diklat, tahun, dan jumlah jam
                     pelatihan</strong></span>
             <h5 style="text-align: start;"><strong>Contoh:</strong></h5>
             <ul>
@@ -422,13 +422,13 @@
                 </div>
             </div>
         </div>
-        <div class="border-batas"></div>
 
         <!-- KARYA TULIS -->
         <div style="display: flex; flex-direction: column; margin-top: 3rem;">
-            <h4 style="margin: 0 auto 3rem auto; text-align: center;"><strong style="text-transform: uppercase;">Judul
+            <h4 style="margin: 3rem auto 0rem auto; text-align: center;"><strong style="text-transform: uppercase;">Judul
                     Karya Tulis Ilmiah (KTI) dibidang PUSDOKINFO yang pernah diterbitkan (tuliskan)</strong></h4>
-            <span style="text-align: start; font-size: 12.5px;"><strong>Tuliskan judul Karya Tulis Ilmiah (KTI) dan
+            <div class="border-batas"></div>
+            <span style="text-align: start; font-size: 12.5px; margin-top: 2rem;"><strong>Tuliskan judul Karya Tulis Ilmiah (KTI) dan
                     tahun terbit</strong></span>
             <h5 style="text-align: start;"><strong>Contoh:</strong></h5>
             <ul>
@@ -475,12 +475,12 @@
             </div>
         </div>
 
-        <div class="border-batas"></div>
         <!-- ORGANISASI -->
         <div style="display: flex; flex-direction: column; margin-top: 3rem;">
-            <h4 style="margin: 0 auto 3rem auto; text-align: center;"><strong
+            <h4 style="margin: 3rem auto 0rem auto; text-align: center;"><strong
                     style="text-transform: uppercase;">Organisasi Profesi Yang Diikuti</strong></h4>
-            <span style="text-align: start; font-size: 12.5px;"><strong>Tulisakan Nama Organisasi dan jabatan (pengurus
+                    <div class="border-batas"></div>
+            <span style="text-align: start; font-size: 12.5px; margin-top: 2rem;"><strong>Tulisakan Nama Organisasi dan jabatan (pengurus
                     atau anggota)</strong></span>
             <h5 style="text-align: start;"><strong>Contoh:</strong></h5>
             <ul>
@@ -526,6 +526,128 @@
                 </div>
             </div>
         </div>
+        
+        <div style="display: flex; flex-direction: column; margin-top: 3rem;">
+            <h4 style="margin: 3rem auto 0rem auto; text-align: center;"><strong
+                    style="text-transform: uppercase;">Lampiran Data Pendukung dan Keterangan Tambahan</strong></h4>
+                    <div class="border-batas"></div>
+            <span style="text-align: start; font-size: 12.5px; margin-top: 2rem;"><strong>Mohon lampirkan berkas pendukung untuk validasi
+                    data</strong></span>
+            <h5 style="text-align: start;"><strong>Contoh:</strong></h5>
+            <ul>
+                <li>Salinan keputusan pengangkatan dalam jabatan pustakawan dan kenaikan pangkat terakhir</li>
+            </ul>
+            <span style="margin: 1rem 0 2rem 0;">Lampiran dalam bentuk pdf atau gambar (png, jpeg, jpg, svg), ukuran
+                maksimal 2MB</span>
+            <div>
+                <label for="pustakawanTerakhir" style="font-weight: normal;">SK Pustakawan terakhir</label>
+                <div style="display: flex;" class="input-lampiran-data">
+                    <input id="pustakawanTerakhir" type="file" class="form-control"
+                        accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
+                        style="margin-right: 1rem; margin-top: 0.5rem;">
+                    <button id="deletePustakawanTerakhir" type="button" class="btn btn-secondary"
+                        onclick="deleteFileLampiran('SK_PUSTAKAWAN_TERAKHIR')"
+                        style="cursor: not-allowed; margin-top: 0.5rem;">Hapus</button>
+                </div>
+            </div>
+            <span style="height: 2rem;"><small id="errPustakawanTerakhir" style="color: #ff0000;"></small></span>
+            <div>
+                <label for="kenaikanPangkatTerakhir" style="font-weight: normal;">SK Kenaikan Pangkat Terakhir</label>
+                <div style="display: flex;" class="input-lampiran-data">
+                    <input id="kenaikanPangkatTerakhir" type="file" class="form-control"
+                        accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
+                        style="margin-right: 1rem; margin-top: 0.5rem;">
+                    <button id="deleteKenaikanPangkat" type="button" class="btn btn-secondary"
+                        onclick="deleteFileLampiran('SK_KENAIKAN_PANGKAT_TERAKHIR')"
+                        style="cursor: not-allowed; margin-top: 0.5rem;">Hapus</button>
+                </div>
+            </div>
+            <span style="height: 2rem;"><small id="errKenaikanPangkatTerakhir" style="color: #ff0000;"></small></span>
+            <div>
+                <label for="lampiranData1" style="font-weight: normal;">Dokumen 1</label>
+                <div style="display: flex;" class="input-lampiran-data">
+                    <input id="lampiranData1" type="file" class="form-control"
+                        accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
+                        style="margin-right: 1rem; margin-top: 0.5rem;">
+                    <button id="deleteLampiranData1" type="button" class="btn btn-secondary"
+                        onclick="deleteFileLampiran('DOKUMEN_1')"
+                        style="cursor: not-allowed; margin-top: 0.5rem;">Hapus</button>
+                </div>
+            </div>
+            <span style="height: 2rem;"><small id="errLampiranData1" style="color: #ff0000;"></small></span>
+            <div>
+                <label for="lampiranData2" style="font-weight: normal;">Dokumen 2</label>
+                <div style="display: flex;" class="input-lampiran-data">
+                    <input id="lampiranData2" type="file" class="form-control"
+                        accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
+                        style="margin-right: 1rem; margin-top: 0.5rem;">
+                    <button id="deleteLampiranData2" type="button" class="btn btn-secondary"
+                        onclick="deleteFileLampiran('DOKUMEN_2')"
+                        style="cursor: not-allowed; margin-top: 0.5rem;">Hapus</button>
+                </div>
+            </div>
+            <span style="height: 2rem;"><small id="errLampiranData2" style="color: #ff0000;"></small></span>
+            <div>
+                <label for="lampiranData3" style="font-weight: normal;">Dokumen 3</label>
+                <div style="display: flex;" class="input-lampiran-data">
+                    <input id="lampiranData3" type="file" class="form-control"
+                        accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
+                        style="margin-right: 1rem; margin-top: 0.5rem;">
+                    <button id="deleteLampiranData3" type="button" class="btn btn-secondary"
+                        onclick="deleteFileLampiran('DOKUMEN_3')"
+                        style="cursor: not-allowed; margin-top: 0.5rem;">Hapus</button>
+                </div>
+            </div>
+            <span style="height: 2rem;"><small id="errLampiranData3" style="color: #ff0000;"></small></span>
+        </div>
+        <div class="border-batas"></div>
+        <div style="display: flex; flex-direction: column; margin-top: 3rem;">
+            <label for=""><small>Keterangan Tambahan</small></label>
+            <textarea name="" id="" cols="5" rows="4" class="form-control" style="resize: vertical;"></textarea>
+        </div>
+
+        <h4 style="margin: 4rem auto 0rem auto; text-align: center;"><strong style="text-transform: uppercase;">Data
+                Anda Sebagai Pengirim</strong></h4>
+        <div class="border-batas"></div>
+        <div class="container-data-pengirim" style="margin-bottom: 3rem;">
+            <div class="input-pengirim">
+                <label for="namaPengirim">
+                    <span><small>Nama</small></span>
+                </label>
+                <input id="namaPengirim" type="text" class="form-control" placeholder="">
+                <div class="wrap-err">
+                    <span id="errDataP1" class="err-text"></span>
+                </div>
+            </div>
+            <div class="input-pengirim">
+                <label for="emailPengirim">
+                    <span><small>Email</small></span>
+                </label>
+                <input id="emailPengirim" type="text" class="form-control" placeholder="">
+                <div class="wrap-err">
+                    <span id="errDataP2" class="err-text"></span>
+                </div>
+            </div>
+            <div class="input-pengirim">
+                <label for="telpPengirim">
+                    <span><small>Telp</small></span>
+                </label>
+                <input id="telpPengirim" type="tel" class="form-control" placeholder="">
+                <div class="wrap-err">
+                    <span id="errDataP3" class="err-text"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpiredCallback"
+            data-sitekey="6LeAY_4nAAAAAG4mEOA8_sXdkoXMSHb7MKLoqcgh"></div>
+        <span id="errCaptcha" style="color: #ff0000; font-size: small;"></span>
+
+        <div style="display: flex; justify-content: center;">
+            <button type="button" class="btn btn-success" style="margin-top: 2rem; width: fit-content;">
+                Submit
+            </button>
+        </div>
     </div>
 
     <div id="secGlobalLoading" style="display: flex; position: fixed; bottom: 2rem; right: 2rem; z-index: 1;">
@@ -541,6 +663,8 @@
         src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
     <!-- date picker -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+    <!-- re captcha -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="/utils/form-fungsional.js"></script>
 </body>
 
