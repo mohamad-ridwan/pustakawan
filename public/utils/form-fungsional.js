@@ -1,45 +1,47 @@
 const globalLoading = document.getElementById('secGlobalLoading')
 
 // fetch data instansi sekolah/mahasiswa
-async function getSekolah() {
-    try {
-        const getData = await fetch('https://api-sekolah-indonesia.vercel.app/sekolah?page=1&perPage=100')
-        const data = await getData.json(res => res)
-        return data
-    } catch (err) {
-        return err
-    }
-}
+// async function getSekolah() {
+//     try {
+//         const getData = await fetch('https://api-sekolah-indonesia.vercel.app/sekolah?page=1&perPage=100')
+//         const data = await getData.json(res => res)
+//         return data
+//     } catch (err) {
+//         return err
+//     }
+// }
+
+globalLoading.style.display = 'none'
 
 function spinnerGlobalLoading(display) {
     globalLoading.style.display = display
 }
 
-getSekolah()
-    .then(res => {
-        if (res?.dataSekolah?.length > 0) {
-            const data = res.dataSekolah.map((item) => ({
-                data_tokens: item.id,
-                value: item.sekolah
-            }))
-            loadCreateSelect('instansi', data)
-            removeDropdownMenu(6)
-            const newData = [
-                {
-                    data_tokens: 'silahkan-pilih',
-                    value: 'Silahkan Pilih'
-                },
-                ...data
-            ]
-            setTimeout(() => {
-                createMenuDropdown(newData, 6, 'instansi')
-                spinnerGlobalLoading('none')
-            }, 500);
-        }
-    })
-    .catch(err => {
-        console.log('error data sekolah', err)
-    })
+// getSekolah()
+//     .then(res => {
+//         if (res?.dataSekolah?.length > 0) {
+//             const data = res.dataSekolah.map((item) => ({
+//                 data_tokens: item.id,
+//                 value: item.sekolah
+//             }))
+//             loadCreateSelect('instansi', data)
+//             removeDropdownMenu(6)
+//             const newData = [
+//                 {
+//                     data_tokens: 'silahkan-pilih',
+//                     value: 'Silahkan Pilih'
+//                 },
+//                 ...data
+//             ]
+//             setTimeout(() => {
+//                 createMenuDropdown(newData, 6, 'instansi')
+//                 spinnerGlobalLoading('none')
+//             }, 500);
+//         }
+//     })
+//     .catch(err => {
+//         console.log('error data sekolah', err)
+//     })
 
 const dataInputNamaKolom = {
     nip: '',
@@ -205,37 +207,37 @@ function aturSelection(
     })
 }
 
-function clickBtnDropdown(indexElement, type) {
-    indexElementDropdown = indexElement
-    searchElem = document.getElementsByClassName('input-block-level form-control')
-    setTimeout(() => {
-        searchElem = searchElem[indexElement]
-        searchElem.removeAttribute('onkeydown')
-        searchElem.setAttribute('onkeydown', `searchInputOpt('${type}')`)
-    }, 0)
+// function clickBtnDropdown(indexElement, type) {
+//     indexElementDropdown = indexElement
+//     searchElem = document.getElementsByClassName('input-block-level form-control')
+//     setTimeout(() => {
+//         searchElem = searchElem[indexElement]
+//         searchElem.removeAttribute('onkeydown')
+//         searchElem.setAttribute('onkeydown', `searchInputOpt('${type}')`)
+//     }, 0)
 
-    if (type === 'instansi') {
-        spinnerGlobalLoading('flex')
-        getSekolah()
-            .then(res => {
-                const data = res.dataSekolah.map(item => ({
-                    data_tokens: item.id,
-                    value: item.name
-                }))
-                const newData = [
-                    {
-                        data_tokens: 'silahkan-pilih',
-                        value: 'Silahkan Pilih'
-                    },
-                    ...data
-                ]
-                currentDataMenu = newData
-                searchInputOpt(type)
-                spinnerGlobalLoading('none')
-            })
-            .catch(err => console.log(err))
-    }
-}
+//     if (type === 'instansi') {
+//         spinnerGlobalLoading('flex')
+//         getSekolah()
+//             .then(res => {
+//                 const data = res.dataSekolah.map(item => ({
+//                     data_tokens: item.id,
+//                     value: item.name
+//                 }))
+//                 const newData = [
+//                     {
+//                         data_tokens: 'silahkan-pilih',
+//                         value: 'Silahkan Pilih'
+//                     },
+//                     ...data
+//                 ]
+//                 currentDataMenu = newData
+//                 searchInputOpt(type)
+//                 spinnerGlobalLoading('none')
+//             })
+//             .catch(err => console.log(err))
+//     }
+// }
 
 // on selection value from instansi
 function onSelectionFromAPI(selectId, type) {
