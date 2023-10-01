@@ -40,6 +40,10 @@
 }
 /* end navbar */
 
+.modal{
+    background: rgba(0, 0, 0, 0.5);
+}
+
 .wrap-form-fungsional {
     display: flex;
     flex-direction: column;

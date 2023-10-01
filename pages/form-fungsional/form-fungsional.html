@@ -191,7 +191,7 @@
                 <label for="nomorHp"><span>Nomor HP</span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <input id="nomorHp" type="number" class="form-control input-grup" onwheel="this.blur()">
+                <input id="nomorHp" type="number" class="form-control input-grup" onwheel="this.blur()" onchange="changeTxtInputNmKolom('nomorHp', 'nomorHP')">
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom6"></small></span>
                 </div>
@@ -203,7 +203,7 @@
                 <label for="email"><span>Email</span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <input id="email" type="email" class="form-control input-grup">
+                <input id="email" type="email" class="form-control input-grup" onchange="changeTxtInputNmKolom('email', 'email')">
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom7"></small></span>
                 </div>
@@ -215,7 +215,7 @@
                 <label for="pendidikanTerakhir"><span>Pendidikan Terakhir</span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="pendidikanTerakhir" class="selectpicker form-control" data-live-search="true"></select>
+                <select id="pendidikanTerakhir" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('pendidikanTerakhir', 'pendidikanTerakhir')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom8"></small></span>
                 </div>
@@ -227,7 +227,7 @@
                 <label for="jurusBidangPendidikan"><span>Jurusan Bidang Pendidikan</span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="jurusBidangPendidikan" class="selectpicker form-control" data-live-search="true"></select>
+                <select id="jurusBidangPendidikan" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('jurusBidangPendidikan', 'jurusanBidangPendidikan')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom9"></small></span>
                 </div>
@@ -239,7 +239,7 @@
                 <label for="pangkat"><span>Pangkat</span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="pangkat" class="selectpicker form-control" data-live-search="true"></select>
+                <select id="pangkat" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('pangkat', 'pangkat')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom10"></small></span>
                 </div>
@@ -252,7 +252,7 @@
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tamatPangkatDP" class="input-group date" data-date-format="mm-dd-yyyy">
-                    <input id="tamatPangkat" class="form-control" type="text" />
+                    <input id="tamatPangkat" class="form-control" type="text" onchange="changeTxtInputNmKolom('tamatPangkat', 'tamatPangkat')"/>
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                 </div>
                 <div class="err-input">
@@ -266,7 +266,7 @@
                 <label for="jabatanFungsional"><span>Jabatan Fungsional Saat Ini</span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="jabatanFungsional" class="selectpicker form-control" data-live-search="true"></select>
+                <select id="jabatanFungsional" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('jabatanFungsional', 'jabatanFungsional')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom12"></small></span>
                 </div>
@@ -279,7 +279,7 @@
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tamatJabatanDP" class="input-group date" data-date-format="mm-dd-yyyy">
-                    <input id="tamatJabatan" class="form-control" type="text" />
+                    <input id="tamatJabatan" class="form-control" type="text" onchange="changeTxtInputNmKolom('tamatJabatan', 'tamatJabatan')"/>
                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                 </div>
                 <div class="err-input">
@@ -293,7 +293,7 @@
                 <label for="statusJabatan"><span>Status Jabatan Saat Ini</span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="statusJabatan" class="selectpicker form-control" data-live-search="true"></select>
+                <select id="statusJabatan" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('statusJabatan', 'statusJabatan')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom14"></small></span>
                 </div>
@@ -304,19 +304,19 @@
                 <label for="instansi"><span>Instansi</span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <!-- <div id="secOptInstansi">
+                <div id="secOptInstansi">
                     <select id="instansi" class="selectpicker form-control" data-live-search="true"
                         onchange="onSelectionFromAPI('instansi', 'instansi')"></select>
-                </div> -->
-                <input type="text" id="textInstansi" class="form-control" style="display: flex;"
-                    placeholder="Ketik nama instansi">
-                <!-- <div style="display: flex; align-items: center; margin-top: 1rem;">
+                </div>
+                <input type="text" id="textInstansi" class="form-control" style="display: none;"
+                    placeholder="Ketik nama instansi" onchange="changeTxtInputNmKolom('textInstansi', 'instansi')">
+                <div style="display: flex; align-items: center; margin-top: 1rem;">
                     <input id="checkboxInstansi" type="checkbox" name="instansiTdKDitemukan"
                         style="margin-top: 0; margin-right: 5px; cursor: pointer; height: 1.5rem; width: 1.5rem;"
                         onchange="checkBoxInstansi('checkboxInstansi')">
-                    <label for="instansiTdKDitemukan" style="margin: 0; font-weight: normal;">Instansi tidak
+                    <label for="checkboxInstansi" style="margin: 0; font-weight: normal; cursor: pointer;">Instansi tidak
                         ditemukan</label>
-                </div> -->
+                </div>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom15"></small></span>
                 </div>
@@ -328,7 +328,7 @@
                 <label for="diklatFungsional"><span>Diklat Fungsional Pustakawan</span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="diklatFungsional" class="selectpicker form-control" data-live-search="true"></select>
+                <select id="diklatFungsional" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('diklatFungsional', 'diklatFungsionalPustakawan')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom16"></small></span>
                 </div>
@@ -455,20 +455,20 @@
                             <label for="judulBuku"><small>Judul Buku</small></label>
                             <input type="text" class="form-control" id="judulBuku"
                                 onchange="changeInputAdd('judulBuku', 'judulBuku', 'KARYA-TULIS-ILMIAH')">
-                            <span style="height: 1.5rem;"><small id="errNmDiklat"
+                            <span style="height: 1.5rem;"><small id="errJudulBuku"
                                     style="color: #ff0000;"></small></span>
                         </div>
                         <div style="display: flex; flex-direction: column;">
                             <label for="tahunTerbit"><small>Tahun Terbit</small></label>
                             <input type="text" class="form-control" id="tahunTerbit"
                                 onchange="changeInputAdd('tahunTerbit', 'tahunTerbit', 'KARYA-TULIS-ILMIAH')">
-                            <span style="height: 1.5rem;"><small id="errThDiklat"
+                            <span style="height: 1.5rem;"><small id="errTahunTerbit"
                                     style="color: #ff0000;"></small></span>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-default" href="#addKarya" data-dismiss="modal">Batal</a>
-                        <a id="btnSubmitKarya" class="btn btn-primary" href="#addKarya" data-dismiss="modal"
+                        <a class="btn btn-default" data-dismiss="modal">Batal</a>
+                        <a id="btnSubmitKarya" class="btn btn-primary" data-dismiss="modal"
                             onclick="prosesTambahKarya()">Tambah</a>
                     </div>
                 </div>
@@ -507,20 +507,20 @@
                             <label for="namaOrganisasi"><small>Nama Organisasi</small></label>
                             <input type="text" class="form-control" id="namaOrganisasi"
                                 onchange="changeInputAdd('namaOrganisasi', 'namaOrganisasi', 'ORGANISASI')">
-                            <span style="height: 1.5rem;"><small id="errNmDiklat"
+                            <span style="height: 1.5rem;"><small id="errNmOrganisasi"
                                     style="color: #ff0000;"></small></span>
                         </div>
                         <div style="display: flex; flex-direction: column;">
-                            <label for="jabatanOrganisasi"><small>Jabatan</small></label>
+                            <label for="jabatanOrganisasi"><small>Jabatan (pengurus atau anggota)</small></label>
                             <input type="text" class="form-control" id="jabatanOrganisasi"
                                 onchange="changeInputAdd('jabatanOrganisasi', 'jabatanOrganisasi', 'ORGANISASI')">
-                            <span style="height: 1.5rem;"><small id="errThDiklat"
+                            <span style="height: 1.5rem;"><small id="errJbtOrganisasi"
                                     style="color: #ff0000;"></small></span>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <a class="btn btn-default" href="#addOrganisasi" data-dismiss="modal">Batal</a>
-                        <a id="btnSubmitOrganisasi" class="btn btn-primary" href="#addOrganisasi" data-dismiss="modal"
+                        <a class="btn btn-default" data-dismiss="modal">Batal</a>
+                        <a id="btnSubmitOrganisasi" class="btn btn-primary" data-dismiss="modal"
                             onclick="prosesTambahOrganisasi()">Tambah</a>
                     </div>
                 </div>

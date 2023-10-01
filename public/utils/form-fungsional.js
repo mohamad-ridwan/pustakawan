@@ -1,47 +1,50 @@
+const mailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+const phoneRegex = /[^0-9.]/g
+
 const globalLoading = document.getElementById('secGlobalLoading')
 
 // fetch data instansi sekolah/mahasiswa
-// async function getSekolah() {
-//     try {
-//         const getData = await fetch('https://api-sekolah-indonesia.vercel.app/sekolah?page=1&perPage=100')
-//         const data = await getData.json(res => res)
-//         return data
-//     } catch (err) {
-//         return err
-//     }
-// }
+async function getSekolah() {
+    try {
+        const getData = await fetch('https://api-sekolah-indonesia.vercel.app/sekolah?page=1&perPage=100')
+        const data = await getData.json(res => res)
+        return data
+    } catch (err) {
+        return err
+    }
+}
 
-globalLoading.style.display = 'none'
+// globalLoading.style.display = 'none'
 
 function spinnerGlobalLoading(display) {
     globalLoading.style.display = display
 }
 
-// getSekolah()
-//     .then(res => {
-//         if (res?.dataSekolah?.length > 0) {
-//             const data = res.dataSekolah.map((item) => ({
-//                 data_tokens: item.id,
-//                 value: item.sekolah
-//             }))
-//             loadCreateSelect('instansi', data)
-//             removeDropdownMenu(6)
-//             const newData = [
-//                 {
-//                     data_tokens: 'silahkan-pilih',
-//                     value: 'Silahkan Pilih'
-//                 },
-//                 ...data
-//             ]
-//             setTimeout(() => {
-//                 createMenuDropdown(newData, 6, 'instansi')
-//                 spinnerGlobalLoading('none')
-//             }, 500);
-//         }
-//     })
-//     .catch(err => {
-//         console.log('error data sekolah', err)
-//     })
+getSekolah()
+    .then(res => {
+        if (res?.dataSekolah?.length > 0) {
+            const data = res.dataSekolah.map((item) => ({
+                data_tokens: item.id,
+                value: item.sekolah
+            }))
+            loadCreateSelect('instansi', data)
+            removeDropdownMenu(6)
+            const newData = [
+                {
+                    data_tokens: 'silahkan-pilih',
+                    value: 'Silahkan Pilih'
+                },
+                ...data
+            ]
+            setTimeout(() => {
+                createMenuDropdown(newData, 6, 'instansi')
+                spinnerGlobalLoading('none')
+            }, 500);
+        }
+    })
+    .catch(err => {
+        console.log('error data sekolah', err)
+    })
 
 // DATA INPUT NAMA KOLOM
 let imgData = {
@@ -213,37 +216,37 @@ function aturSelection(
     })
 }
 
-// function clickBtnDropdown(indexElement, type) {
-//     indexElementDropdown = indexElement
-//     searchElem = document.getElementsByClassName('input-block-level form-control')
-//     setTimeout(() => {
-//         searchElem = searchElem[indexElement]
-//         searchElem.removeAttribute('onkeydown')
-//         searchElem.setAttribute('onkeydown', `searchInputOpt('${type}')`)
-//     }, 0)
+function clickBtnDropdown(indexElement, type) {
+    indexElementDropdown = indexElement
+    searchElem = document.getElementsByClassName('input-block-level form-control')
+    setTimeout(() => {
+        searchElem = searchElem[indexElement]
+        searchElem.removeAttribute('onkeydown')
+        searchElem.setAttribute('onkeydown', `searchInputOpt('${type}')`)
+    }, 0)
 
-//     if (type === 'instansi') {
-//         spinnerGlobalLoading('flex')
-//         getSekolah()
-//             .then(res => {
-//                 const data = res.dataSekolah.map(item => ({
-//                     data_tokens: item.id,
-//                     value: item.name
-//                 }))
-//                 const newData = [
-//                     {
-//                         data_tokens: 'silahkan-pilih',
-//                         value: 'Silahkan Pilih'
-//                     },
-//                     ...data
-//                 ]
-//                 currentDataMenu = newData
-//                 searchInputOpt(type)
-//                 spinnerGlobalLoading('none')
-//             })
-//             .catch(err => console.log(err))
-//     }
-// }
+    if (type === 'instansi') {
+        spinnerGlobalLoading('flex')
+        getSekolah()
+            .then(res => {
+                const data = res.dataSekolah.map(item => ({
+                    data_tokens: item.id,
+                    value: item.name
+                }))
+                const newData = [
+                    {
+                        data_tokens: 'silahkan-pilih',
+                        value: 'Silahkan Pilih'
+                    },
+                    ...data
+                ]
+                currentDataMenu = newData
+                searchInputOpt(type)
+                spinnerGlobalLoading('none')
+            })
+            .catch(err => console.log(err))
+    }
+}
 
 // on selection value from instansi
 function onSelectionFromAPI(selectId, type) {
@@ -267,9 +270,11 @@ function checkBoxInstansi(elementId) {
         if (elem.checked) {
             document.getElementById('secOptInstansi').style.display = 'none'
             document.getElementById('textInstansi').style.display = 'flex'
+            dataInputNamaKolom.instansi = document.getElementById('textInstansi').value
         } else {
             document.getElementById('secOptInstansi').style.display = 'flex'
             document.getElementById('textInstansi').style.display = 'none'
+            dataInputNamaKolom.instansi = document.getElementById('instansi').value
         }
     }
 }
@@ -671,9 +676,9 @@ function loadCreateSelect(elementId, data) {
 }
 
 // change input text nama kolom
-function changeTxtInputNmKolom(elementId, nameInput){
+function changeTxtInputNmKolom(elementId, nameInput) {
     const elem = document.getElementById(elementId)
-    if(elem){
+    if (elem) {
         dataInputNamaKolom[nameInput] = elem.value
     }
 }
@@ -711,6 +716,9 @@ function clickAddDiklat() {
     removeValueInput('namaDiklat')
     removeValueInput('tahunDiklat')
     removeValueInput('jumlahJamPelatihan')
+    removeErrModalInput('errNmDiklat')
+    removeErrModalInput('errThDiklat')
+    removeErrModalInput('errJmDiklat')
 }
 
 let inputDataKaryaTulis = {
@@ -730,7 +738,7 @@ let resultDataOrganisasi = []
 const wrapListDiklat = document.getElementById('wrapListDiklat')
 
 function prosesTambahDiklat() {
-    if(validateFormAddDiklat()){
+    if (validateFormAddDiklat()) {
         btnSubmitDiklat.setAttribute('data-dismiss', 'modal')
         const lengthInputDiklat = Object.entries(inputDataAddDiklat).map(e => e).length
         resultDataDiklat.push(inputDataAddDiklat)
@@ -751,44 +759,44 @@ function prosesTambahDiklat() {
         removeErrModalInput('errNmDiklat')
         removeErrModalInput('errThDiklat')
         removeErrModalInput('errJmDiklat')
-    }else{
+    } else {
         btnSubmitDiklat.removeAttribute('data-dismiss')
     }
 }
 
 const errText = 'Harus diisi'
 
-function validateFormAddDiklat(){
+function validateFormAddDiklat() {
     let err = {}
-    const {namaDiklat, tahunDiklat, jumlahJamPelatihan} = inputDataAddDiklat
-    if(!namaDiklat.trim()){
+    const { namaDiklat, tahunDiklat, jumlahJamPelatihan } = inputDataAddDiklat
+    if (!namaDiklat.trim()) {
         err.errNmDiklat = errText
     }
-    if(!tahunDiklat.trim()){
+    if (!tahunDiklat.trim()) {
         err.errThDiklat = errText
     }
-    if(!jumlahJamPelatihan.trim()){
+    if (!jumlahJamPelatihan.trim()) {
         err.errJmDiklat = errText
     }
-    if(namaDiklat.length > 0){
+    if (namaDiklat.length > 0) {
         removeErrModalInput('errNmDiklat')
     }
-    if(tahunDiklat.length > 0){
+    if (tahunDiklat.length > 0) {
         removeErrModalInput('errThDiklat')
     }
-    if(jumlahJamPelatihan.length > 0){
+    if (jumlahJamPelatihan.length > 0) {
         removeErrModalInput('errJmDiklat')
     }
-    if(Object.keys(err).length > 0){
-        Object.entries(err).forEach(text=>document.getElementById(text[0]).innerText = text[1])
+    if (Object.keys(err).length > 0) {
+        Object.entries(err).forEach(text => document.getElementById(text[0]).innerText = text[1])
         return
     }
     return 'success'
 }
 
-function removeErrModalInput(elementId){
+function removeErrModalInput(elementId) {
     const elem = document.getElementById(elementId)
-    if(elem){
+    if (elem) {
         elem.innerText = ''
     }
 }
@@ -909,6 +917,9 @@ let currentIdxUpdtDiklat = null
 
 function updateDiklat(index) {
     currentIdxUpdtDiklat = index
+    removeErrModalInput('errNmDiklat')
+    removeErrModalInput('errThDiklat')
+    removeErrModalInput('errJmDiklat')
     document.getElementById('clickAddDiklat').click()
     titleAddDiklat.innerText = `Perbarui No. ${index}`
     btnSubmitDiklat.setAttribute('onclick', 'updateInputDiklat()')
@@ -926,29 +937,34 @@ function updateDiklat(index) {
 }
 
 function updateInputDiklat() {
-    const { namaDiklat, tahunDiklat, jumlahJamPelatihan } = inputDataAddDiklat
-    resultDataDiklat[currentIdxUpdtDiklat - 1] = {
-        namaDiklat,
-        tahunDiklat,
-        jumlahJamPelatihan
+    if (validateFormAddDiklat()) {
+        btnSubmitDiklat.setAttribute('data-dismiss', 'modal')
+        const { namaDiklat, tahunDiklat, jumlahJamPelatihan } = inputDataAddDiklat
+        resultDataDiklat[currentIdxUpdtDiklat - 1] = {
+            namaDiklat,
+            tahunDiklat,
+            jumlahJamPelatihan
+        }
+        const lengthInputDiklat = Object.entries(inputDataAddDiklat).map(e => e).length
+        while (wrapListDiklat.hasChildNodes()) {
+            wrapListDiklat.removeChild(wrapListDiklat.firstChild)
+        }
+        if (resultDataDiklat.length > 0) {
+            resultDataDiklat.forEach((_, index) => {
+                wrapListDiklat.appendChild(createCardResultAdd(resultDataDiklat[index], lengthInputDiklat, index + 1, 'DIKLAT', 'removeCardDiklat', 'updateDiklat'))
+            })
+        }
+        inputDataAddDiklat = {
+            namaDiklat: '',
+            tahunDiklat: '',
+            jumlahJamPelatihan: ''
+        }
+        removeValueInput('namaDiklat')
+        removeValueInput('tahunDiklat')
+        removeValueInput('jumlahJamPelatihan')
+    } else {
+        btnSubmitDiklat.removeAttribute('data-dismiss')
     }
-    const lengthInputDiklat = Object.entries(inputDataAddDiklat).map(e => e).length
-    while (wrapListDiklat.hasChildNodes()) {
-        wrapListDiklat.removeChild(wrapListDiklat.firstChild)
-    }
-    if (resultDataDiklat.length > 0) {
-        resultDataDiklat.forEach((_, index) => {
-            wrapListDiklat.appendChild(createCardResultAdd(resultDataDiklat[index], lengthInputDiklat, index + 1, 'DIKLAT', 'removeCardDiklat', 'updateDiklat'))
-        })
-    }
-    inputDataAddDiklat = {
-        namaDiklat: '',
-        tahunDiklat: '',
-        jumlahJamPelatihan: ''
-    }
-    removeValueInput('namaDiklat')
-    removeValueInput('tahunDiklat')
-    removeValueInput('jumlahJamPelatihan')
 }
 
 // KARYA TULIS ILMIAH
@@ -973,23 +989,30 @@ function clickAddKarya() {
         judulBuku: '',
         tahunTerbit: ''
     }
+    removeErrModalInput('errJudulBuku')
+    removeErrModalInput('errTahunTerbit')
 }
 
 function prosesTambahKarya() {
-    const lengthInputKarya = Object.entries(inputDataKaryaTulis).map(e => e).length
-    resultDataKaryaTulis.push(inputDataKaryaTulis)
-    while (wrapListKaryaTulis.hasChildNodes()) {
-        wrapListKaryaTulis.removeChild(wrapListKaryaTulis.firstChild)
+    if (validateFormAddKarya()) {
+        btnSubmitKarya.setAttribute('data-dismiss', 'modal')
+        const lengthInputKarya = Object.entries(inputDataKaryaTulis).map(e => e).length
+        resultDataKaryaTulis.push(inputDataKaryaTulis)
+        while (wrapListKaryaTulis.hasChildNodes()) {
+            wrapListKaryaTulis.removeChild(wrapListKaryaTulis.firstChild)
+        }
+        resultDataKaryaTulis.forEach((_, index) => {
+            wrapListKaryaTulis.appendChild(createCardResultAdd(resultDataKaryaTulis[index], lengthInputKarya, index + 1, 'KARYA-TULIS-ILMIAH', 'removeCardKaryaTulis', 'updateKaryaTulis'))
+        })
+        inputDataKaryaTulis = {
+            judulBuku: '',
+            tahunTerbit: ''
+        }
+        removeValueInput('judulBuku')
+        removeValueInput('tahunTerbit')
+    } else {
+        btnSubmitKarya.removeAttribute('data-dismiss')
     }
-    resultDataKaryaTulis.forEach((_, index) => {
-        wrapListKaryaTulis.appendChild(createCardResultAdd(resultDataKaryaTulis[index], lengthInputKarya, index + 1, 'KARYA-TULIS-ILMIAH', 'removeCardKaryaTulis', 'updateKaryaTulis'))
-    })
-    inputDataKaryaTulis = {
-        judulBuku: '',
-        tahunTerbit: ''
-    }
-    removeValueInput('judulBuku')
-    removeValueInput('tahunTerbit')
 }
 
 function removeCardKaryaTulis(index) {
@@ -1025,26 +1048,53 @@ function updateKaryaTulis(index) {
 }
 
 function submitUpdtKaryaTulis() {
+    if (validateFormAddKarya()) {
+        btnSubmitKarya.setAttribute('data-dismiss', 'modal')
+        const { judulBuku, tahunTerbit } = inputDataKaryaTulis
+        resultDataKaryaTulis[currentIdxUptdKarya - 1] = {
+            judulBuku,
+            tahunTerbit
+        }
+        const lengthInputKarya = Object.entries(inputDataKaryaTulis).map(e => e).length
+        while (wrapListKaryaTulis.hasChildNodes()) {
+            wrapListKaryaTulis.removeChild(wrapListKaryaTulis.firstChild)
+        }
+        if (resultDataKaryaTulis.length > 0) {
+            resultDataKaryaTulis.forEach((_, index) => {
+                wrapListKaryaTulis.appendChild(createCardResultAdd(resultDataKaryaTulis[index], lengthInputKarya, index + 1, 'KARYA-TULIS-ILMIAH', 'removeCardKaryaTulis', 'updateKaryaTulis'))
+            })
+        }
+        inputDataKaryaTulis = {
+            judulBuku: '',
+            tahunTerbit: ''
+        }
+        removeValueInput('judulBuku')
+        removeValueInput('tahunTerbit')
+    } else {
+        btnSubmitKarya.removeAttribute('data-dismiss')
+    }
+}
+
+function validateFormAddKarya() {
+    let err = {}
     const { judulBuku, tahunTerbit } = inputDataKaryaTulis
-    resultDataKaryaTulis[currentIdxUptdKarya - 1] = {
-        judulBuku,
-        tahunTerbit
+    if (!judulBuku.trim()) {
+        err.errJudulBuku = errText
     }
-    const lengthInputKarya = Object.entries(inputDataKaryaTulis).map(e => e).length
-    while (wrapListKaryaTulis.hasChildNodes()) {
-        wrapListKaryaTulis.removeChild(wrapListKaryaTulis.firstChild)
+    if (!tahunTerbit.trim()) {
+        err.errTahunTerbit = errText
     }
-    if (resultDataKaryaTulis.length > 0) {
-        resultDataKaryaTulis.forEach((_, index) => {
-            wrapListKaryaTulis.appendChild(createCardResultAdd(resultDataKaryaTulis[index], lengthInputKarya, index + 1, 'KARYA-TULIS-ILMIAH', 'removeCardKaryaTulis', 'updateKaryaTulis'))
-        })
+    if (judulBuku.length > 0) {
+        removeErrModalInput('errJudulBuku')
     }
-    inputDataKaryaTulis = {
-        judulBuku: '',
-        tahunTerbit: ''
+    if (tahunTerbit.length > 0) {
+        removeErrModalInput('errTahunTerbit')
     }
-    removeValueInput('judulBuku')
-    removeValueInput('tahunTerbit')
+    if (Object.keys(err).length > 0) {
+        Object.entries(err).forEach(text => document.getElementById(text[0]).innerText = text[1])
+        return
+    }
+    return 'success'
 }
 
 // ORGANISASI
@@ -1069,23 +1119,30 @@ function clickAddOrganisasi() {
         namaOrganisasi: '',
         jabatanOrganisasi: ''
     }
+    removeErrModalInput('errNmOrganisasi')
+    removeErrModalInput('errJbtOrganisasi')
 }
 
 function prosesTambahOrganisasi() {
-    const lengthInputOrganisasi = Object.entries(inputDataOrganisasi).map(e => e).length
-    resultDataOrganisasi.push(inputDataOrganisasi)
-    while (wrapListAddOrganisasi.hasChildNodes()) {
-        wrapListAddOrganisasi.removeChild(wrapListAddOrganisasi.firstChild)
+    if (validateFormAddOrganisasi()) {
+        btnSubmitOrganisasi.setAttribute('data-dismiss', 'modal')
+        const lengthInputOrganisasi = Object.entries(inputDataOrganisasi).map(e => e).length
+        resultDataOrganisasi.push(inputDataOrganisasi)
+        while (wrapListAddOrganisasi.hasChildNodes()) {
+            wrapListAddOrganisasi.removeChild(wrapListAddOrganisasi.firstChild)
+        }
+        resultDataOrganisasi.forEach((_, index) => {
+            wrapListAddOrganisasi.appendChild(createCardResultAdd(resultDataOrganisasi[index], lengthInputOrganisasi, index + 1, 'ORGANISASI', 'removeCardOrganisasi', 'updateCardOrganisasi'))
+        })
+        inputDataOrganisasi = {
+            namaOrganisasi: '',
+            jabatanOrganisasi: ''
+        }
+        removeValueInput('namaOrganisasi')
+        removeValueInput('jabatanOrganisasi')
+    } else {
+        btnSubmitOrganisasi.removeAttribute('data-dismiss')
     }
-    resultDataOrganisasi.forEach((_, index) => {
-        wrapListAddOrganisasi.appendChild(createCardResultAdd(resultDataOrganisasi[index], lengthInputOrganisasi, index + 1, 'ORGANISASI', 'removeCardOrganisasi', 'updateCardOrganisasi'))
-    })
-    inputDataOrganisasi = {
-        namaOrganisasi: '',
-        jabatanOrganisasi: ''
-    }
-    removeValueInput('namaOrganisasi')
-    removeValueInput('jabatanOrganisasi')
 }
 
 function removeCardOrganisasi(index) {
@@ -1118,29 +1175,58 @@ function updateCardOrganisasi(index) {
         namaOrganisasi: document.getElementById('namaOrganisasi').value = findData.namaOrganisasi,
         jabatanOrganisasi: document.getElementById('jabatanOrganisasi').value = findData.jabatanOrganisasi,
     }
+    removeErrModalInput('errNmOrganisasi')
+    removeErrModalInput('errJbtOrganisasi')
 }
 
 function submitUpdtOrganisasi() {
+    if (validateFormAddOrganisasi()) {
+        btnSubmitOrganisasi.setAttribute('data-dismiss', 'modal')
+        const { namaOrganisasi, jabatanOrganisasi } = inputDataOrganisasi
+        resultDataOrganisasi[currentIdxUptdOrganisasi - 1] = {
+            namaOrganisasi,
+            jabatanOrganisasi
+        }
+        const lengthInputOrganisasi = Object.entries(inputDataOrganisasi).map(e => e).length
+        while (wrapListAddOrganisasi.hasChildNodes()) {
+            wrapListAddOrganisasi.removeChild(wrapListAddOrganisasi.firstChild)
+        }
+        if (resultDataOrganisasi.length > 0) {
+            resultDataOrganisasi.forEach((_, index) => {
+                wrapListAddOrganisasi.appendChild(createCardResultAdd(resultDataOrganisasi[index], lengthInputOrganisasi, index + 1, 'ORGANISASI', 'removeCardOrganisasi', 'updateCardOrganisasi'))
+            })
+        }
+        inputDataOrganisasi = {
+            namaOrganisasi: '',
+            jabatanOrganisasi: ''
+        }
+        removeValueInput('namaOrganisasi')
+        removeValueInput('jabatanOrganisasi')
+    } else {
+        btnSubmitOrganisasi.removeAttribute('data-dismiss')
+    }
+}
+
+function validateFormAddOrganisasi() {
+    let err = {}
     const { namaOrganisasi, jabatanOrganisasi } = inputDataOrganisasi
-    resultDataOrganisasi[currentIdxUptdOrganisasi - 1] = {
-        namaOrganisasi,
-        jabatanOrganisasi
+    if (!namaOrganisasi.trim()) {
+        err.errNmOrganisasi = errText
     }
-    const lengthInputOrganisasi = Object.entries(inputDataOrganisasi).map(e => e).length
-    while (wrapListAddOrganisasi.hasChildNodes()) {
-        wrapListAddOrganisasi.removeChild(wrapListAddOrganisasi.firstChild)
+    if (!jabatanOrganisasi.trim()) {
+        err.errJbtOrganisasi = errText
     }
-    if (resultDataOrganisasi.length > 0) {
-        resultDataOrganisasi.forEach((_, index) => {
-            wrapListAddOrganisasi.appendChild(createCardResultAdd(resultDataOrganisasi[index], lengthInputOrganisasi, index + 1, 'ORGANISASI', 'removeCardOrganisasi', 'updateCardOrganisasi'))
-        })
+    if (namaOrganisasi.length > 0) {
+        removeErrModalInput('errNmOrganisasi')
     }
-    inputDataOrganisasi = {
-        namaOrganisasi: '',
-        jabatanOrganisasi: ''
+    if (jabatanOrganisasi.length > 0) {
+        removeErrModalInput('errJbtOrganisasi')
     }
-    removeValueInput('namaOrganisasi')
-    removeValueInput('jabatanOrganisasi')
+    if (Object.keys(err).length > 0) {
+        Object.entries(err).forEach(text => document.getElementById(text[0]).innerText = text[1])
+        return
+    }
+    return 'success'
 }
 
 // LAMPIRAN DATA PENDUKUNG
@@ -1307,5 +1393,93 @@ function deleteFileLampiran(actionType) {
 
 // submit form
 function submitForm() {
-    console.log(dataInputNamaKolom)
+    validateFormNamaKolom()
+}
+
+function validateFormNamaKolom() {
+    let err = {}
+    const {
+        files,
+        imgURL,
+        nip,
+        namaLengkap,
+        tempatLahir,
+        tanggalLahir,
+        jenisKelamin,
+        nomorHP,
+        email,
+        pendidikanTerakhir,
+        jurusanBidangPendidikan,
+        pangkat,
+        tamatPangkat,
+        jabatanFungsional,
+        tamatJabatan,
+        statusJabatan,
+        instansi,
+        diklatFungsionalPustakawan
+    } = dataInputNamaKolom
+    const errData = []
+    for (let i = 0; i <= 15; i++) {
+        errData.push(`errNmKolom${i + 1}`)
+    }
+
+    if (!nip.trim()) {
+        err.errNmKolom1 = errText
+    }
+    if (!namaLengkap.trim()) {
+        err.errNmKolom2 = errText
+    }
+    if (!tempatLahir.trim()) {
+        err.errNmKolom3 = errText
+    }
+    if (!tanggalLahir.trim()) {
+        err.errNmKolom4 = errText
+    }
+    if (!jenisKelamin.trim()) {
+        err.errNmKolom5 = errText
+    }
+    if (!nomorHP.trim()) {
+        err.errNmKolom6 = errText
+    } else if (phoneRegex.test(nomorHP)) {
+        err.errNmKolom6 = 'Nomor telpon tidak valid!'
+    }
+    if (!email.trim()) {
+        err.errNmKolom7 = errText
+    } else if (!mailRegex.test(email)) {
+        err.errNmKolom7 = 'Alamat email tidak valid!'
+    }
+    if (pendidikanTerakhir === 'Silahkan Pilih') {
+        err.errNmKolom8 = errText
+    }
+    if (jurusanBidangPendidikan === 'Silahkan Pilih') {
+        err.errNmKolom9 = errText
+    }
+    if (pangkat === 'Silahkan Pilih') {
+        err.errNmKolom10 = errText
+    }
+    if (!tamatPangkat.trim()) {
+        err.errNmKolom11 = errText
+    }
+    if (jabatanFungsional === 'Silahkan Pilih') {
+        err.errNmKolom12 = errText
+    }
+    if (!tamatJabatan.trim()) {
+        err.errNmKolom13 = errText
+    }
+    if (statusJabatan === 'Silahkan Pilih') {
+        err.errNmKolom14 = errText
+    }
+    if (!instansi.trim() || instansi === 'Silahkan Pilih') {
+        err.errNmKolom15 = errText
+    }
+    removeErrInputForm(errData)
+    if (Object.keys(err).length > 0) {
+        Object.entries(err).forEach(err => document.getElementById(err[0]).innerText = err[1])
+        return
+    }
+    return 'success'
+}
+
+function removeErrInputForm(data) {
+    data.forEach(elementId => document.getElementById(elementId).innerText = '')
 }
