@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="penelusuran.css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"> -->
+    <!-- select option bootstrap -->
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+    <!-- end select option bootstrap -->
+    <!-- date picker -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet"
+        type="text/css" />
+    <!-- end datepicker -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.2/css/all.css">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" />
+    <title>Pusat Pengembangan Pustakawan Perpustakaan Nasional RI</title>
+</head>
+
+<body>
+    <!-- navbar -->
+    <nav class="navbar navbar-fixed-top banner-top">
+        <div class="container container-banner-top">
+            <div class="left">
+                <img src="../../images/logo.png" alt="">
+            </div>
+            <div class="right">
+                <span style="text-align: end; margin-bottom: 0.5rem;"><strong>Hubungi Kami</strong></span>
+                <p style="text-align: end; margin: 0;">Jl. Salemba Raya 28A Jakarta Pusat 10430, Indonesia</p>
+                <div style="justify-content: flex-end; display: flex;">
+                    <span style="text-align: end; margin-right: 1rem;"><small><i class="fa-solid fa-phone-flip"
+                                style="margin-right: 0.5rem;"></i>0800 1737787</small></span>
+                    <span style="text-align: end;"><small><i class="fa-solid fa-globe"
+                                style="margin-right: 0.5rem;"></i><a href="https://pustakawan.perpusnas.go.id/"
+                                target="_blank">pustakawan.perpusnas.go.id</a></small></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <nav class="navbar navbar-fixed-top banner-top-mobile" style="justify-content: center; align-items: center;">
+        <div class="container">
+            <img src="../../images/logo.png" alt="" style="margin: 0 auto;">
+        </div>
+    </nav>
+    <nav class="navbar navbar-fixed-top navbar-page" role="navigation" style="background-color: #023BAC;">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                    <i class="fa-solid fa-bars" style="color: #fff; font-size: 24px;"></i>
+                </button>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/" style="color: #fff; background-color: transparent;">Beranda</a></li>
+                    <!-- <li><a href="#">Link</a></li> -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                            style="color: #fff; background-color: transparent;">Data Pustakawan <span
+                                class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="../pilih-menu/pilih-menu.html"
+                                    style="color: #555; background-color: #fff;">Pilih Menu</a></li>
+                            <li><a href="../pengajuan-mandiri/pengajuan-mandiri.html"
+                                    style="color: #555; background-color: #fff;">Pengajuan Mandiri</a></li>
+                            <li><a href="../penelusuran/penelusuran.html"
+                                    style="color: #555; background-color: #fff;">Penelusuran</a>
+                            </li>
+                            <li><a href="../form-fungsional/form-fungsional.html"
+                                    style="color: #555; background-color: #fff;">Form Fungsional</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- end navbar -->
+
+    <div class="container wrap-form-pengajuan">
+        <div class="title">
+            <h4>Penelusuran Data Tenaga Perpustakaan</h4>
+            <span class="border-bottom"></span>
+        </div>
+        <!-- form pengajuan -->
+        <div class="container-pengajuan">
+            <!-- row left -->
+            <div class="row-left" id="rowLeft">
+                <h5>
+                    Instansi
+                </h5>
+                <div class="wrap-input">
+                    <select id="instansi1" class="selectpicker" data-live-search="true"
+                        onchange="onSelectGroup('instansi1', 'pemerintah', 'INSTANSI')"></select>
+                    <div class="wrap-err">
+                        <span id="errInstansi1" class="err-text"></span>
+                    </div>
+                </div>
+                <div class="wrap-input">
+                    <input id="nipNama" type="text" class="form-control" placeholder="Cari NIP / Nama"
+                        aria-describedby="addon-wrapping" onchange="changeInputTxt('nipNama', 'nipNama', 'INSTANSI')">
+                    <div class="wrap-err">
+                        <span id="errInstansi2" class="err-text"></span>
+                    </div>
+                </div>
+                <div class="wrap-input">
+                    <select id="instansi2" class="selectpicker" data-live-search="true"
+                        onchange="onSelectGroup('instansi2', 'jabatan', 'INSTANSI')"></select>
+                    <div class="wrap-err">
+                        <span id="errInstansi3" class="err-text"></span>
+                    </div>
+                </div>
+                <div class="wrap-input">
+                    <select id="instansi3" class="selectpicker" data-live-search="true"
+                        onchange="onSelectGroup('instansi3', 'pendidikan', 'INSTANSI')"></select>
+                    <div class="wrap-err">
+                        <span id="errInstansi4" class="err-text"></span>
+                    </div>
+                </div>
+                <div class="wrap-input">
+                    <input id="namaInstansi" type="text" class="form-control" placeholder="Nama Instansi"
+                        aria-describedby="addon-wrapping"
+                        onchange="changeInputTxt('namaInstansi', 'namaInstansi', 'INSTANSI')">
+                    <div class="wrap-err">
+                        <span id="errInstansi5" class="err-text"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- row right -->
+            <div class="row-right">
+                <h5>
+                    Tenaga Perpustakaan
+                </h5>
+                <div class="wrap-input">
+                    <select id="perpus1" class="selectpicker" data-live-search="true"
+                        onchange="onSelectGroup('perpus1', 'pustakawan')"></select>
+                    <div class="wrap-err">
+                        <span id="errPerpus1" class="err-text"></span>
+                    </div>
+                </div>
+                <div class="wrap-input">
+                    <select id="perpus2" class="selectpicker" data-live-search="true"
+                        onchange="onSelectGroup('perpus2', 'pangkat', 'TENAGA-PERPUS')"></select>
+                    <div class="wrap-err">
+                        <span id="errPerpus2" class="err-text"></span>
+                    </div>
+                </div>
+                <div class="wrap-input">
+                    <select id="perpus3" class="selectpicker" data-live-search="true"
+                        onchange="onSelectGroup('perpus3', 'bidang', 'TENAGA-PERPUS')"></select>
+                    <div class="wrap-err">
+                        <span id="errPerpus3" class="err-text"></span>
+                    </div>
+                </div>
+                <div class="wrap-input">
+                    <select id="perpus4" class="selectpicker" data-live-search="true"
+                        onchange="onSelectGroup('perpus4', 'aktif', 'TENAGA-PERPUS')"></select>
+                    <div class="wrap-err">
+                        <span id="errPerpus4" class="err-text"></span>
+                    </div>
+                </div>
+                <div class="wrap-input">
+                    <select id="perpus5" class="selectpicker" data-live-search="true"
+                        onchange="onSelectGroup('perpus5', 'jenisPerpustakaan', 'TENAGA-PERPUS')"></select>
+                    <div class="wrap-err">
+                        <span id="errPerpus5" class="err-text"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: 2rem; align-items: center; display: flex; justify-content: space-between;">
+            <h5>
+                Wilayah (Pilih dari daerah yang terbesar dulu)
+            </h5>
+            <div id="loadingWilayah" class="loading-grup">
+                <span class="loading-spinner"></span>
+            </div>
+        </div>
+        <div class="container-wilayah form-grup">
+            <div class="wrap-input">
+                <label for="instansi4">
+                    <span><small>Provinsi</small></span>
+                </label>
+                <select id="instansi4" class="selectpicker" data-live-search="true"
+                    onchange="onSelectWilayah('instansi4', 'provinsi', 'loadingWilayah')">
+                    <option data-tokens="provinsi">Provinsi</option>
+                </select>
+                <div class="wrap-err">
+                    <span id="errWilayah1" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input" id="wrapInstansi5">
+                <label for="instansi5">
+                    <span><small>Kab/Kota</small></span>
+                </label>
+                <select id="instansi5" class="selectpicker" data-live-search="true"
+                    onchange="onSelectWilayah('instansi5', 'kabupaten/kota', 'loadingWilayah')">
+                    <option data-tokens="kabkota">Kab/Kota</option>
+                </select>
+                <div class="wrap-err">
+                    <span id="errWilayah2" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input" id="wrapInstansi6">
+                <label for="instansi6">
+                    <span><small>Kecamatan</small></span>
+                </label>
+                <select id="instansi6" class="selectpicker" data-live-search="true"
+                    onchange="onSelectWilayah('instansi6', 'kecamatan', 'loadingWilayah')">
+                    <option data-tokens="kecamatan">Kecamatan</option>
+                </select>
+                <div class="wrap-err">
+                    <span id="errWilayah3" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input" id="wrapInstansi7">
+                <label for="instansi7">
+                    <span><small>Kelurahan</small></span>
+                </label>
+                <select id="instansi7" class="selectpicker" data-live-search="true"
+                    onchange="onSelectWilayah('instansi7', 'kelurahan', 'loadingWilayah')">
+                    <option data-tokens="kelurahan">Kelurahan</option>
+                </select>
+                <div class="wrap-err">
+                    <span id="errWilayah4" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input">
+                <input id="rt" type="number" class="form-control" placeholder="Rt" aria-describedby="addon-wrapping"
+                    onchange="changeInputTxt('rt', 'rt', 'WILAYAH')" onwheel="this.blur()">
+                <div class="wrap-err">
+                    <span id="errWilayah5" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input">
+                <input id="rw" type="number" class="form-control" placeholder="Rw" aria-describedby="addon-wrapping"
+                    onchange="changeInputTxt('rw', 'rw', 'WILAYAH')" onwheel="this.blur()">
+                <div class="wrap-err">
+                    <span id="errWilayah6" class="err-text"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- form pengajuan untuk update -->
+        <div class="pengajuan-update">
+            <h5>
+                Silahkan pilih data yang ingin diperbarui. (Data ini akan kami ubah sesuai dengan yang Anda isikan
+                dibawah ini)
+            </h5>
+        </div>
+        <div class="container-pilih-update form-grup">
+            <div class="wrap-input">
+                <input id="nipNamaU" type="text" class="form-control" placeholder="Cari NIP / Nama"
+                    onchange="changeInputTxt('nipNamaU', 'nipNama', 'PENGAJUAN-UPDATE')">
+                <div class="wrap-err">
+                    <span id="errUpdate1" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input">
+                <select id="pilihUpdate1" class="selectpicker" data-live-search="true"
+                    onchange="onSelectGroup('pilihUpdate1', 'pangkat', 'PENGAJUAN-UPDATE')"></select>
+                <div class="wrap-err">
+                    <span id="errUpdate2" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input">
+                <label for="tamatPangkat">
+                    <span><small>Tamat Pangkat</small></span>
+                </label>
+                <div id="tamatPangkatDP" class="input-group date" data-date-format="mm-dd-yyyy">
+                    <input id="tamatPangkat" class="form-control" type="text" />
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                </div>
+                <div class="wrap-err">
+                    <span id="errUpdate3" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input">
+                <label>
+                    <span><small>Jabatan</small></span>
+                </label>
+                <select id="pilihUpdate2" class="selectpicker" data-live-search="true"
+                    onchange="onSelectGroup('pilihUpdate2', 'jabatan', 'PENGAJUAN-UPDATE')"></select>
+                <div class="wrap-err">
+                    <span id="errUpdate4" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input">
+                <label for="tamatJabatan">
+                    <span><small>Tamat Jabatan</small></span>
+                </label>
+                <div id="tamatJabatanDP" class="input-group date" data-date-format="mm-dd-yyyy">
+                    <input id="tamatJabatan" class="form-control" type="text" />
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                </div>
+                <div class="wrap-err">
+                    <span id="errUpdate5" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input">
+                <label>
+                    <span><small>Bidang</small></span>
+                </label>
+                <select id="pilihUpdate3" class="selectpicker" data-live-search="true"
+                    onchange="onSelectGroup('pilihUpdate3', 'bidang', 'PENGAJUAN-UPDATE')"></select>
+                <div class="wrap-err">
+                    <span id="errUpdate6" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input">
+                <select id="pilihUpdate4" class="selectpicker" data-live-search="true"
+                    onchange="onSelectGroup('pilihUpdate4', 'pendidikan', 'PENGAJUAN-UPDATE')"></select>
+                <div class="wrap-err">
+                    <span id="errUpdate7" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input">
+                <select id="pilihUpdate5" class="selectpicker" data-live-search="true"
+                    onchange="onSelectGroup('pilihUpdate5', 'statusJabatan', 'PENGAJUAN-UPDATE')"></select>
+                <div class="wrap-err">
+                    <span id="errUpdate8" class="err-text"></span>
+                </div>
+            </div>
+            <div class="wrap-input">
+                <input id="namaInstansiU" type="text" class="form-control" placeholder="Nama Instansi"
+                    onchange="changeInputTxt('namaInstansiU', 'namaInstansi', 'PENGAJUAN-UPDATE')">
+                <div class="wrap-err">
+                    <span id="errUpdate9" class="err-text"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="title" style="margin-top: 2rem; margin-bottom: 2rem;">
+            <h4>Data Anda Sebagai Pengirim</h4>
+            <span class="border-bottom"></span>
+        </div>
+        <div class="container-data-pengirim form-grup" style="margin-bottom: 3rem;">
+            <div class="input-pengirim">
+                <label for="namaPengirim">
+                    <span><small>Nama</small></span>
+                </label>
+                <input id="namaPengirim" type="text" class="form-control" placeholder=""
+                    onchange="changeInputTxt('namaPengirim', 'nama', 'DATA-PENGIRIM')">
+                <div class="wrap-err">
+                    <span id="errDataP1" class="err-text"></span>
+                </div>
+            </div>
+            <div class="input-pengirim">
+                <label for="emailPengirim">
+                    <span><small>Email</small></span>
+                </label>
+                <input id="emailPengirim" type="text" class="form-control" placeholder=""
+                    onchange="changeInputTxt('emailPengirim', 'email', 'DATA-PENGIRIM')">
+                <div class="wrap-err">
+                    <span id="errDataP2" class="err-text"></span>
+                </div>
+            </div>
+            <div class="input-pengirim">
+                <label for="telpPengirim">
+                    <span><small>Telp</small></span>
+                </label>
+                <input id="telpPengirim" type="tel" class="form-control" placeholder=""
+                    onchange="changeInputTxt('telpPengirim', 'telp', 'DATA-PENGIRIM')">
+                <div class="wrap-err">
+                    <span id="errDataP3" class="err-text"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpiredCallback"
+            data-sitekey="6LeAY_4nAAAAAG4mEOA8_sXdkoXMSHb7MKLoqcgh"></div>
+        <span id="errCaptcha" style="color: #ff0000; font-size: small;"></span>
+
+        <div class="container-loading-submit" style="display: flex; justify-content: flex-end;">
+            <div id="loadingSubmit" class="loading-grup">
+                <span class="loading-spinner"></span>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: center;">
+            <button type="button" class="btn btn-success" onclick="clickSubmit()"
+                style="margin-top: 2rem; width: fit-content;">
+                Submit
+            </button>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+    <!-- date picker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+    <!-- re captcha -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- emailjs -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
+    </script>
+    <script src="/utils/penelusuran.js"></script>
+</body>
+
+</html>
