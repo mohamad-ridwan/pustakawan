@@ -108,7 +108,7 @@
                 <input id="fileClientImg" type="file" accept=".jpg, .jpeg, .png, .webp" style="display: none;">
             </div>
         </div>
-        <button id="deleteClientImg" style="width: fit-content; display: none;" onclick="deleteClientImg()">
+        <button id="deleteClientImg" class="btn btn-danger" style="width: fit-content; display: none;" onclick="deleteClientImg()">
             Hapus Foto
         </button>
 
@@ -125,7 +125,7 @@
         <!-- input nama kolom -->
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="nip"><span>NIP</span></label>
+                <label for="nip"><span>NIP <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <input id="nip" type="text" class="form-control input-grup" onchange="changeTxtInputNmKolom('nip', 'nip')">
@@ -137,7 +137,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="namaLengkap"><span>Nama Lengkap</span></label>
+                <label for="namaLengkap"><span>Nama Lengkap <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <input id="namaLengkap" type="text" class="form-control input-grup" onchange="changeTxtInputNmKolom('namaLengkap', 'namaLengkap')">
@@ -149,7 +149,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="tempatLahir"><span>Tempat Lahir</span></label>
+                <label for="tempatLahir"><span>Tempat Lahir <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <input id="tempatLahir" type="text" class="form-control input-grup" onchange="changeTxtInputNmKolom('tempatLahir', 'tempatLahir')">
@@ -161,7 +161,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="tanggalLahir"><span>Tanggal Lahir</span></label>
+                <label for="tanggalLahir"><span>Tanggal Lahir <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tanggalLahirDP" class="input-group date" data-date-format="mm-dd-yyyy">
@@ -176,7 +176,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="jenisKelamin"><span>Jenis Kelamin</span></label>
+                <label for="jenisKelamin"><span>Jenis Kelamin <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <select id="jenisKelamin" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('jenisKelamin', 'jenisKelamin')"></select>
@@ -188,7 +188,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="nomorHp"><span>Nomor HP</span></label>
+                <label for="nomorHp"><span>Nomor HP <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <input id="nomorHp" type="number" class="form-control input-grup" onwheel="this.blur()" onchange="changeTxtInputNmKolom('nomorHp', 'nomorHP')">
@@ -200,7 +200,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="email"><span>Email</span></label>
+                <label for="email"><span>Email <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <input id="email" type="email" class="form-control input-grup" onchange="changeTxtInputNmKolom('email', 'email')">
@@ -212,7 +212,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="pendidikanTerakhir"><span>Pendidikan Terakhir</span></label>
+                <label for="pendidikanTerakhir"><span>Pendidikan Terakhir <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <select id="pendidikanTerakhir" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('pendidikanTerakhir', 'pendidikanTerakhir')"></select>
@@ -224,7 +224,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="jurusBidangPendidikan"><span>Jurusan Bidang Pendidikan</span></label>
+                <label for="jurusBidangPendidikan"><span>Jurusan Bidang Pendidikan <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <select id="jurusBidangPendidikan" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('jurusBidangPendidikan', 'jurusanBidangPendidikan')"></select>
@@ -236,7 +236,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="pangkat"><span>Pangkat</span></label>
+                <label for="pangkat"><span>Pangkat <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <select id="pangkat" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('pangkat', 'pangkat')"></select>
@@ -248,7 +248,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="tamatPangkat"><span>Tamat Pangkat</span></label>
+                <label for="tamatPangkat"><span>Tamat Pangkat <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tamatPangkatDP" class="input-group date" data-date-format="mm-dd-yyyy">
@@ -263,7 +263,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="jabatanFungsional"><span>Jabatan Fungsional Saat Ini</span></label>
+                <label for="jabatanFungsional"><span>Jabatan Fungsional Saat Ini <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <select id="jabatanFungsional" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('jabatanFungsional', 'jabatanFungsional')"></select>
@@ -275,7 +275,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="tamatJabatan"><span>Tamat Jabatan</span></label>
+                <label for="tamatJabatan"><span>Tamat Jabatan <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tamatJabatanDP" class="input-group date" data-date-format="mm-dd-yyyy">
@@ -290,7 +290,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="statusJabatan"><span>Status Jabatan Saat Ini</span></label>
+                <label for="statusJabatan"><span>Status Jabatan Saat Ini <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <select id="statusJabatan" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('statusJabatan', 'statusJabatan')"></select>
@@ -301,7 +301,7 @@
         </div>
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="instansi"><span>Instansi</span></label>
+                <label for="instansi"><span>Instansi <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="secOptInstansi">
@@ -325,7 +325,7 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="diklatFungsional"><span>Diklat Fungsional Pustakawan</span></label>
+                <label for="diklatFungsional"><span>Diklat Fungsional Pustakawan <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <select id="diklatFungsional" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('diklatFungsional', 'diklatFungsionalPustakawan')"></select>
@@ -612,7 +612,7 @@
         <div class="container-data-pengirim" style="margin-bottom: 3rem;">
             <div class="input-pengirim">
                 <label for="namaPengirim">
-                    <span><small>Nama</small></span>
+                    <span><small>Nama <span style="color: #ff0000;">*</span></small></span>
                 </label>
                 <input id="namaPengirim" type="text" class="form-control" placeholder="">
                 <div class="wrap-err">
@@ -621,7 +621,7 @@
             </div>
             <div class="input-pengirim">
                 <label for="emailPengirim">
-                    <span><small>Email</small></span>
+                    <span><small>Email <span style="color: #ff0000;">*</span></small></span>
                 </label>
                 <input id="emailPengirim" type="text" class="form-control" placeholder="">
                 <div class="wrap-err">
@@ -630,7 +630,7 @@
             </div>
             <div class="input-pengirim">
                 <label for="telpPengirim">
-                    <span><small>Telp</small></span>
+                    <span><small>Telp <span style="color: #ff0000;">*</span></small></span>
                 </label>
                 <input id="telpPengirim" type="tel" class="form-control" placeholder="">
                 <div class="wrap-err">

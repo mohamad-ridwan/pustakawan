@@ -1425,6 +1425,8 @@ function validateFormNamaKolom() {
 
     if (!nip.trim()) {
         err.errNmKolom1 = errText
+    }else if(nip.length !== 18){
+        err.errNmKolom1 = 'NIP harus terdiri dari 18 Digit'
     }
     if (!namaLengkap.trim()) {
         err.errNmKolom2 = errText
