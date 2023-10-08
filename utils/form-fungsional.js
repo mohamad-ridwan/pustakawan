@@ -757,6 +757,7 @@ nipElement.addEventListener('change', (e) => {
     if (e.target.value.length === 18) {
         validateNIP(e.target.value)
             .then(res => {
+                console.log(res.message)
                 document.getElementById('errNmKolom1').innerText = res.text
                 if (res.message === 'error') {
                     document.getElementById('errNmKolom1').style.color = '#ff0000'
