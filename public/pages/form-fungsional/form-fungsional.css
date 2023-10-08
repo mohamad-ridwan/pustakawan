@@ -38,9 +38,10 @@
     height: 50px;
     background-color: #fff;
 }
+
 /* end navbar */
 
-.modal{
+.modal {
     background: rgba(0, 0, 0, 0.5);
 }
 
@@ -114,7 +115,8 @@ p {
 
 .err-input {
     display: flex;
-    height: 2rem;
+    height: auto;
+    min-height: 3rem;
 }
 
 .txt-err {
@@ -221,6 +223,7 @@ input[type="file"]::-webkit-file-upload-button {
         display: flex;
         width: 60%;
     }
+
     /* end navbar */
 }
 

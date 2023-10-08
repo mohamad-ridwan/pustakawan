@@ -1,5 +1,6 @@
 const mailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
-const phoneRegex = /[^0-9.]/g
+// const phoneRegex = /[^0-9.]/g
+const phoneRegex = /^\d*$/
 
 const globalLoading = document.getElementById('secGlobalLoading')
 
@@ -405,6 +406,8 @@ function deleteClientImg() {
         files: null,
         imgURL: ''
     }
+    dataInputNamaKolom['files'] = null
+    dataInputNamaKolom['imgURL'] = ''
 }
 
 // datepicker
@@ -682,6 +685,97 @@ function changeTxtInputNmKolom(elementId, nameInput) {
         dataInputNamaKolom[nameInput] = elem.value
     }
 }
+
+const nipElement = document.getElementById('nip')
+const phoneElement = document.getElementById('telpPengirim')
+
+// Restricts input for the given textbox to the given inputFilter.
+function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
+    ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout"].forEach(function (event) {
+        textbox.addEventListener(event, function (e) {
+            if (inputTYPE === 'NIP' && this.value.length > 18) {
+                this.setCustomValidity('Maksimal NIP 18 digit');
+                this.reportValidity();
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                return
+            }
+            if (inputFilter(this.value)) {
+                // Accepted value
+                if (["keydown", "mousedown", "focusout"].indexOf(e.type) >= 0) {
+                    this.classList.remove("input-error");
+                    this.setCustomValidity("");
+                }
+                this.oldValue = this.value;
+                this.oldSelectionStart = this.selectionStart;
+                this.oldSelectionEnd = this.selectionEnd;
+            } else if (this.hasOwnProperty("oldValue")) {
+                // Rejected value - restore the previous one
+                this.classList.add("input-error");
+                this.setCustomValidity(errMsg);
+                this.reportValidity();
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+            } else {
+                // Rejected value - nothing to restore
+                this.value = "";
+            }
+        });
+    });
+}
+
+setInputFilter(nipElement, (value) => phoneRegex.test(value), "Harus berupa angka", 'NIP');
+setInputFilter(phoneElement, (value) => phoneRegex.test(value), "Harus berupa angka");
+
+const formControll = document.getElementsByClassName('form-control')
+
+function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
+    const btnSelect = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
+    const btnAddCard = document.getElementsByClassName('btn-add-card')
+    if (isRemoveDisabled) {
+        removeDisabledAttr(elements, 1)
+        removeDisabledAttr(btnSelect, 0)
+        removeDisabledAttr(btnAddCard, 0)
+    } else {
+        addDisabledAttr(elements, isDisabled, 1)
+        addDisabledAttr(btnSelect, isDisabled, 0)
+        addDisabledAttr(btnAddCard, isDisabled, 0)
+    }
+}
+
+function addDisabledAttr(element, isDisabled, starIdx){
+    for (let i = starIdx; i < element.length; i++)
+    element[i].setAttribute('disabled', isDisabled)
+}
+function removeDisabledAttr(element, starIdx){
+    for (let i = starIdx; i < element.length; i++)
+    element[i].removeAttribute('disabled')
+}
+
+// cek nip apakah sudah ada di db
+nipElement.addEventListener('change', (e) => {
+    if (e.target.value.length === 18) {
+        validateNIP(e.target.value)
+            .then(res => {
+                document.getElementById('errNmKolom1').innerText = res.text
+                if (res.message === 'error') {
+                    document.getElementById('errNmKolom1').style.color = '#ff0000'
+                    changeDisableInput(formControll, 'true')
+                } else {
+                    document.getElementById('errNmKolom1').style.color = '#46923c'
+                    changeDisableInput(formControll, null, true)
+                }
+            })
+    }else{
+        changeDisableInput(formControll, 'true')
+        document.getElementById('errNmKolom1').innerText = 'NIP harus terdiri dari 18 Digit'
+        document.getElementById('errNmKolom1').style.color = '#ff0000'
+    }
+})
+
+setTimeout(() => {
+    changeDisableInput(formControll, 'true')
+}, 500);
 
 function setOptionElement() {
     Object.entries(dataNamaKolom).forEach(item => loadCreateSelect(item[1].id, item[1].data))
@@ -1301,6 +1395,23 @@ inputLampiranData3.addEventListener('change', (e) => {
     )
 })
 
+// keterangan tambahan
+let dataKeteranganTambahan = ''
+document.getElementById('keteranganTambahan').addEventListener('change', (e) => {
+    dataKeteranganTambahan = e.target.value
+})
+
+// change input data pengirim
+let dataInputPengirim = {
+    nama: '',
+    email: '',
+    telp: ''
+}
+function changeInputDataPengirim(elementId, nameInput) {
+    const elem = document.getElementById(elementId)
+    if (elem) dataInputPengirim[nameInput] = elem.value
+}
+
 function changeFilesLampiranGroup(
     files,
     propertyData,
@@ -1394,6 +1505,22 @@ function deleteFileLampiran(actionType) {
 // submit form
 function submitForm() {
     validateFormNamaKolom()
+    validateFormAddCard()
+    validateFormLampiranData()
+    validateDataPengirim()
+    validateCaptcha()
+}
+
+async function validateNIP(nip) {
+    return await new Promise((resolve, reject) => {
+        $.post('https://pustakawan.perpusnas.go.id/validasi/nip', { nip }, (data, status) => {
+            if (parseInt(data) > 0) {
+                resolve({ message: 'error', text: 'Data NIP ini telah terdaftar didatabase. Apabila ingin melihat/mengupdate data, silakan pilih menu Revisi Data.' })
+            } else {
+                resolve({ message: 'success', text: 'NIP bisa digunakan' })
+            }
+        })
+    })
 }
 
 function validateFormNamaKolom() {
@@ -1418,15 +1545,27 @@ function validateFormNamaKolom() {
         instansi,
         diklatFungsionalPustakawan
     } = dataInputNamaKolom
-    const errData = []
-    for (let i = 0; i <= 15; i++) {
-        errData.push(`errNmKolom${i + 1}`)
+    let errData = []
+    for (let i = 0; i <= 16; i++) {
+        errData.push(`errNmKolom${i}`)
+        if (
+            document.getElementById(`errNmKolom${i}`).id == 'errNmKolom1' &&
+            document.getElementById(`errNmKolom${i}`).innerText !== 'Harus diisi'
+        ) {
+            const removeErrNIP = errData.filter(item => item !== 'errNmKolom1')
+            errData = removeErrNIP
+        }
     }
 
+    if (!files) {
+        err.errNmKolom0 = errText
+    }
     if (!nip.trim()) {
         err.errNmKolom1 = errText
-    }else if(nip.length !== 18){
+        document.getElementById('errNmKolom1').style.color = '#ff0000'
+    } else if (nip.length !== 18) {
         err.errNmKolom1 = 'NIP harus terdiri dari 18 Digit'
+        document.getElementById('errNmKolom1').style.color = '#ff0000'
     }
     if (!namaLengkap.trim()) {
         err.errNmKolom2 = errText
@@ -1479,6 +1618,102 @@ function validateFormNamaKolom() {
         Object.entries(err).forEach(err => document.getElementById(err[0]).innerText = err[1])
         return
     }
+    return 'success'
+}
+
+function validateFormAddCard() {
+    let err = {}
+    const errData = ['errDiklat', 'errAddKarya', 'errAddOrganisasi']
+    if (resultDataDiklat.length === 0) {
+        err.errDiklat = errText
+    }
+    if (resultDataKaryaTulis.length === 0) {
+        err.errAddKarya = errText
+    }
+    if (resultDataOrganisasi.length === 0) {
+        err.errAddOrganisasi = errText
+    }
+    removeErrInputForm(errData)
+    if (Object.keys(err).length > 0) {
+        Object.entries(err).forEach(err => document.getElementById(err[0]).innerText = err[1])
+        return
+    }
+    return 'success'
+}
+
+function validateFormLampiranData() {
+    let err = {}
+    const errData = ['errPustakawanTerakhir', 'errKenaikanPangkatTerakhir', 'errLampiranData1', 'errLampiranData2', 'errLampiranData3', 'errKeteranganTambahan']
+    const {
+        skPustakawanTerakhir,
+        skKenaikanPangkatTerakhir,
+        dokumen1,
+        dokumen2,
+        dokumen3
+    } = inputLampiranData
+    if (!skPustakawanTerakhir) {
+        err.errPustakawanTerakhir = errText
+    }
+    if (!skKenaikanPangkatTerakhir) {
+        err.errKenaikanPangkatTerakhir = errText
+    }
+    if (!dokumen1) {
+        err.errLampiranData1 = errText
+    }
+    if (!dokumen2) {
+        err.errLampiranData2 = errText
+    }
+    if (!dokumen3) {
+        err.errLampiranData3 = errText
+    }
+    if (!dataKeteranganTambahan.trim()) {
+        err.errKeteranganTambahan = errText
+    }
+    removeErrInputForm(errData)
+    if (Object.keys(err).length > 0) {
+        Object.entries(err).forEach(err => document.getElementById(err[0]).innerText = err[1])
+        return
+    }
+    return 'success'
+}
+
+function validateDataPengirim() {
+    let err = {}
+    const { nama, email, telp } = dataInputPengirim
+    const errData = []
+    for (let i = 0; i < 3; i++) {
+        errData.push(`errDataP${i + 1}`)
+    }
+    if (!nama.trim()) {
+        err.errDataP1 = errText
+    }
+    if (!email.trim()) {
+        err.errDataP2 = errText
+    } else if (!mailRegex.test(email)) {
+        err.errDataP2 = 'Alamat email tidak valid'
+    }
+    if (!telp.trim()) {
+        err.errDataP3 = errText
+    }
+    removeErrInputForm(errData)
+    if (Object.keys(err).length > 0) {
+        Object.entries(err).forEach(err => document.getElementById(err[0]).innerText = err[1])
+        return
+    }
+    return 'success'
+}
+
+function isCaptchaChecked() {
+    return grecaptcha && grecaptcha.getResponse().length !== 0
+}
+
+function validateCaptcha() {
+    const elem = document.getElementById('errCaptcha')
+    if (!isCaptchaChecked()) {
+        elem.innerText = 'Mohon ceklis cekbox'
+        return
+    }
+    elem.innerText = ''
     return 'success'
 }
 
