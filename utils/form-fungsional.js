@@ -732,21 +732,21 @@ setInputFilter(nomorHPElement, (value) => phoneRegex.test(value), "Harus berupa 
 const formControll = document.getElementsByClassName('form-control')
 
 function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
-    const btnSelect = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
+    const btnSelect = document.getElementsByClassName('dropdown-toggle')
     const btnDisabledSelect = document.getElementsByClassName('disabled')
     const btnAddCard = document.getElementsByClassName('btn-add-card')
     if (isRemoveDisabled) {
         removeDisabledAttr(elements, 1)
         removeDisabledAttr(btnSelect, 0)
         removeDisabledAttr(btnAddCard, 0)
-        setTimeout(() => {
-            removeClassDisabled(btnDisabledSelect)
-        }, 0);
     } else {
         addDisabledAttr(elements, isDisabled, 1)
         addDisabledAttr(btnSelect, isDisabled, 0)
         addDisabledAttr(btnAddCard, isDisabled, 0)
     }
+    setTimeout(() => {
+        removeClassDisabled(btnDisabledSelect)
+    }, 500);
 }
 
 function addDisabledAttr(element, isDisabled, starIdx) {

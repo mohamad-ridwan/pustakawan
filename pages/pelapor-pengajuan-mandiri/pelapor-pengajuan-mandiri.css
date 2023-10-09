@@ -1,4 +1,8 @@
 /* navbar */
+.navbar-fixed-top{
+    z-index: 9999999 !important;
+}
+
 .banner-top {
     display: flex;
     height: 120px;
