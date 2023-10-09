@@ -741,7 +741,7 @@ function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
         removeDisabledAttr(elements, 1)
         removeDisabledAttr(btnSelect, 0)
         removeDisabledAttr(btnAddCard, 0)
-    } else {
+    } else if(isDisabled) {
         addDisabledAttr(elements, isDisabled, 1)
         addDisabledAttr(btnSelect, isDisabled, 0)
         addDisabledAttr(btnAddCard, isDisabled, 0)
