@@ -733,8 +733,10 @@ const formControll = document.getElementsByClassName('form-control')
 
 function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
     const btnSelect = document.getElementsByClassName('dropdown-toggle')
-    const btnDisabledSelect = document.getElementsByClassName('disabled')
+    const btnDisabled = document.getElementsByClassName('btn dropdown-toggle selectpicker disabled btn-default')
+    const disabledEl = document.getElementsByClassName('disabled')
     const btnAddCard = document.getElementsByClassName('btn-add-card')
+    const dropdownMenu = document.getElementsByClassName('dropdown-menu inner selectpicker')
     if (isRemoveDisabled) {
         removeDisabledAttr(elements, 1)
         removeDisabledAttr(btnSelect, 0)
@@ -745,8 +747,14 @@ function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
         addDisabledAttr(btnAddCard, isDisabled, 0)
     }
     setTimeout(() => {
-        removeClassDisabled(btnDisabledSelect)
-    }, 500);
+        removeClassDisabled(disabledEl)
+        setTimeout(() => {
+            removeClassDisabled(btnDisabled)
+            setTimeout(() => {
+                removeDisabledOfMenu(dropdownMenu)
+            }, 0);
+        }, 0);
+    }, 1000);
 }
 
 function addDisabledAttr(element, isDisabled, starIdx) {
@@ -761,6 +769,13 @@ function removeDisabledAttr(element, starIdx) {
 function removeClassDisabled(element){
     for (let i = 0; i < element.length; i++){
         element[i].classList.remove('disabled')
+    }
+}
+function removeDisabledOfMenu(element){
+    for (let i = 0; i < element.length; i++){
+        for(let iChild = 0; iChild < element[i].childNodes.length; iChild++){
+            element[i].childNodes[iChild].classList.remove('disabled')
+        }
     }
 }
 
