@@ -688,6 +688,7 @@ function changeTxtInputNmKolom(elementId, nameInput) {
 
 const nipElement = document.getElementById('nip')
 const phoneElement = document.getElementById('telpPengirim')
+const nomorHPElement = document.getElementById('nomorHp')
 
 // Restricts input for the given textbox to the given inputFilter.
 function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
@@ -726,16 +727,21 @@ function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
 
 setInputFilter(nipElement, (value) => phoneRegex.test(value), "Harus berupa angka", 'NIP');
 setInputFilter(phoneElement, (value) => phoneRegex.test(value), "Harus berupa angka");
+setInputFilter(nomorHPElement, (value) => phoneRegex.test(value), "Harus berupa angka");
 
 const formControll = document.getElementsByClassName('form-control')
 
 function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
     const btnSelect = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
+    const btnDisabledSelect = document.getElementsByClassName('disabled')
     const btnAddCard = document.getElementsByClassName('btn-add-card')
     if (isRemoveDisabled) {
         removeDisabledAttr(elements, 1)
         removeDisabledAttr(btnSelect, 0)
         removeDisabledAttr(btnAddCard, 0)
+        setTimeout(() => {
+            removeClassDisabled(btnDisabledSelect)
+        }, 0);
     } else {
         addDisabledAttr(elements, isDisabled, 1)
         addDisabledAttr(btnSelect, isDisabled, 0)
@@ -743,19 +749,26 @@ function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
     }
 }
 
-function addDisabledAttr(element, isDisabled, starIdx){
+function addDisabledAttr(element, isDisabled, starIdx) {
     for (let i = starIdx; i < element.length; i++)
-    element[i].setAttribute('disabled', isDisabled)
+        element[i].setAttribute('disabled', isDisabled)
 }
-function removeDisabledAttr(element, starIdx){
+function removeDisabledAttr(element, starIdx) {
     for (let i = starIdx; i < element.length; i++)
-    element[i].removeAttribute('disabled')
+        element[i].removeAttribute('disabled')
+}
+
+function removeClassDisabled(element){
+    for (let i = 0; i < element.length; i++){
+        element[i].classList.remove('disabled')
+    }
 }
 
 // cek nip apakah sudah ada di db
-nipElement.addEventListener('change', (e) => {
+nipElement.addEventListener('change', async (e) => {
     if (e.target.value.length === 18) {
-        validateNIP(e.target.value)
+        document.getElementById('secGlobalLoading').style.display = 'flex'
+        await validateNIP(e.target.value)
             .then(res => {
                 document.getElementById('errNmKolom1').innerText = res.text
                 if (res.message === 'error') {
@@ -765,8 +778,9 @@ nipElement.addEventListener('change', (e) => {
                     document.getElementById('errNmKolom1').style.color = '#46923c'
                     changeDisableInput(formControll, null, true)
                 }
+                document.getElementById('secGlobalLoading').style.display = 'none'
             })
-    }else{
+    } else {
         changeDisableInput(formControll, 'true')
         document.getElementById('errNmKolom1').innerText = 'NIP harus terdiri dari 18 Digit'
         document.getElementById('errNmKolom1').style.color = '#ff0000'
@@ -1511,9 +1525,11 @@ function submitForm() {
     validateCaptcha()
 }
 
+const corsHeroku = 'https://cors-anywhere.herokuapp.com'
+
 async function validateNIP(nip) {
     return await new Promise((resolve, reject) => {
-        $.post('https://pustakawan.perpusnas.go.id/validasi/nip', { nip }, (data, status) => {
+        $.post('https://pustakawan.perpusnas.go.id/validasi/nip', { nip }, (data, status, tes) => {
             if (parseInt(data) > 0) {
                 resolve({ message: 'error', text: 'Data NIP ini telah terdaftar didatabase. Apabila ingin melihat/mengupdate data, silakan pilih menu Revisi Data.' })
             } else {
