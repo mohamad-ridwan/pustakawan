@@ -741,7 +741,7 @@ function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
         removeDisabledAttr(elements, 1)
         removeDisabledAttr(btnSelect, 0)
         removeDisabledAttr(btnAddCard, 0)
-    } else if(isDisabled) {
+    } else if (isDisabled) {
         addDisabledAttr(elements, isDisabled, 1)
         addDisabledAttr(btnSelect, isDisabled, 0)
         addDisabledAttr(btnAddCard, isDisabled, 0)
@@ -766,14 +766,14 @@ function removeDisabledAttr(element, starIdx) {
         element[i].removeAttribute('disabled')
 }
 
-function removeClassDisabled(element){
-    for (let i = 0; i < element.length; i++){
+function removeClassDisabled(element) {
+    for (let i = 0; i < element.length; i++) {
         element[i].classList.remove('disabled')
     }
 }
-function removeDisabledOfMenu(element){
-    for (let i = 0; i < element.length; i++){
-        for(let iChild = 0; iChild < element[i].childNodes.length; iChild++){
+function removeDisabledOfMenu(element) {
+    for (let i = 0; i < element.length; i++) {
+        for (let iChild = 0; iChild < element[i].childNodes.length; iChild++) {
             element[i].childNodes[iChild].classList.remove('disabled')
         }
     }
@@ -802,7 +802,7 @@ nipElement.addEventListener('change', async (e) => {
     }
 })
 
-window.onload = ()=>{
+window.onload = () => {
     changeDisableInput(formControll, 'true')
 }
 
@@ -1532,12 +1532,46 @@ function deleteFileLampiran(actionType) {
 }
 
 // submit form
-function submitForm() {
-    validateFormNamaKolom()
-    validateFormAddCard()
-    validateFormLampiranData()
-    validateDataPengirim()
-    validateCaptcha()
+async function submitForm() {
+    await Promise.all([
+        validateFormNamaKolom(),
+        validateFormAddCard(),
+        validateFormLampiranData(),
+        validateDataPengirim(),
+        validateCaptcha()
+    ])
+    .then(res=>{
+        const checkValidate = res.filter(validate=>validate === undefined)
+        if(checkValidate.length > 0){
+            return 'failed'
+        }
+        return 'success'
+    })
+    .then(res=>{
+        if(res === 'success'){
+            alert('Data berhasil dikirim')
+            console.log(resultFormData())
+        }
+    })
+    .catch(err=>console.log('err-submit-form', err))
+}
+
+function resultFormData(){
+    const diklat = resultDataDiklat.map(item=>`${item.namaDiklat},${item.tahunDiklat},${item.jumlahJamPelatihan}`)
+    const karyaTulis = resultDataKaryaTulis.map(item=>`${item.judulBuku},${item.tahunTerbit}`)
+    const organisasi = resultDataOrganisasi.map(item=>`${item.namaOrganisasi},${item.jabatanOrganisasi}`)
+    
+    const dataDiklat = diklat.join(';')
+    const dataKaryaTulis = karyaTulis.join(';')
+    const dataOrganisasi = organisasi.join(';')
+    return {
+        ...dataInputNamaKolom,
+        dataDiklat,
+        dataKaryaTulis,
+        dataOrganisasi,
+        keteranganTambahan: dataKeteranganTambahan,
+        ...dataInputPengirim,
+    }
 }
 
 const corsHeroku = 'https://cors-anywhere.herokuapp.com'
@@ -1612,7 +1646,7 @@ function validateFormNamaKolom() {
     }
     if (!nomorHP.trim()) {
         err.errNmKolom6 = errText
-    } else if (phoneRegex.test(nomorHP)) {
+    } else if (!phoneRegex.test(nomorHP)) {
         err.errNmKolom6 = 'Nomor telpon tidak valid!'
     }
     if (!email.trim()) {
