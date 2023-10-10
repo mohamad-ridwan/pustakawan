@@ -752,9 +752,9 @@ function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
             removeClassDisabled(btnDisabled)
             setTimeout(() => {
                 removeDisabledOfMenu(dropdownMenu)
-            }, 0);
-        }, 0);
-    }, 1000);
+            }, 500);
+        }, 500);
+    }, 1500);
 }
 
 function addDisabledAttr(element, isDisabled, starIdx) {
@@ -802,9 +802,9 @@ nipElement.addEventListener('change', async (e) => {
     }
 })
 
-setTimeout(() => {
+window.onload = ()=>{
     changeDisableInput(formControll, 'true')
-}, 500);
+}
 
 function setOptionElement() {
     Object.entries(dataNamaKolom).forEach(item => loadCreateSelect(item[1].id, item[1].data))
