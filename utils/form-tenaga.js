@@ -29,7 +29,7 @@ getSekolah()
                 value: item.sekolah
             }))
             loadCreateSelect('instansi', data)
-            removeDropdownMenu(6)
+            removeDropdownMenu(5)
             const newData = [
                 {
                     data_tokens: 'silahkan-pilih',
@@ -38,7 +38,7 @@ getSekolah()
                 ...data
             ]
             setTimeout(() => {
-                createMenuDropdown(newData, 6, 'instansi')
+                createMenuDropdown(newData, 5, 'instansi')
                 spinnerGlobalLoading('none')
             }, 500);
         }
@@ -47,7 +47,7 @@ getSekolah()
         console.log('error data sekolah', err)
     })
 
-// DATA INPUT NAMA KOLOM
+// DATA DATA INPUT FORM
 let imgData = {
     files: null,
     imgURL: ''
@@ -64,222 +64,12 @@ const dataInputNamaKolom = {
     pendidikanTerakhir: 'Silahkan Pilih',
     jurusanBidangPendidikan: 'Silahkan Pilih',
     pangkat: 'Silahkan Pilih',
-    tamatPangkat: '',
-    jabatanFungsional: 'Silahkan Pilih',
-    tamatJabatan: '',
-    statusJabatan: 'Silahkan Pilih',
+    statusDinas: 'Silahkan Pilih',
     instansi: 'Silahkan Pilih',
     diklatFungsionalPustakawan: 'Tidak Pernah'
 }
 
-// function loadCreateSelect(elementId, data) {
-//     const instansi = document.getElementById(elementId)
-//     if (instansi) {
-//         data.forEach(item => {
-//             let node = document.createElement('option')
-//             node.setAttribute('data-tokens', item.data_tokens)
-//             const textNode = document.createTextNode(item.value)
-//             node.appendChild(textNode)
-//             instansi.appendChild(node)
-//         })
-//     }
-// }
-
-// remove dropdown menu
-function removeDropdownMenu(indexElement) {
-    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
-    setTimeout(() => {
-        var currentElem = elem[indexElement]
-        var children = currentElem?.lastElementChild
-        while (children) {
-            currentElem.removeChild(children)
-            children = currentElem.lastElementChild
-        }
-    }, 500);
-}
-
-// untuk load data search menu dropdown
-let currentDataMenu
-let indexElementDropdown
-
-var btnDropdown = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
-var searchElem = document.getElementsByClassName('input-block-level form-control')
-var wrapBtnGroup = document.getElementsByClassName('btn-group bootstrap-select')
-
-// create menu dropdown
-function createMenuDropdown(data, indexElement, type) {
-    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
-
-    if (elem && data.length > 0) {
-        currentDataMenu = data
-        indexElementDropdown = indexElement
-        const instansi = elem[indexElement]
-        wrapBtnGroup = document.getElementsByClassName('btn-group bootstrap-select')
-        wrapBtnGroup = wrapBtnGroup[indexElement]
-        searchElem = document.getElementsByClassName('input-block-level form-control')
-        searchElem = searchElem[indexElement]
-        // searchElem?.setAttribute('onkeydown', `clickSearch('${daerah}')`)
-        searchElem?.setAttribute('onkeydown', `searchInputOpt('${type}')`)
-        btnDropdown = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
-        btnDropdown = btnDropdown[indexElement]
-        btnDropdown?.setAttribute('onclick', `clickBtnDropdown(${indexElement}, '${type}')`)
-
-        data.forEach((item, index) => {
-            // list element
-            var li = document.createElement('li')
-            li.setAttribute('data-original-index', index)
-            li.setAttribute('class', index === 0 ? 'selected active' : '')
-            // tag a element
-            var tagA = document.createElement('a')
-            tagA.setAttribute('data-normalized-text', `<span class=&quot;text&quot;>${item.value}</span>`)
-            tagA.setAttribute('tabindex', '0')
-            tagA.setAttribute('class', '')
-            // children tag a
-            // span with text content
-            var spanChild = document.createElement('span')
-            spanChild.setAttribute('class', 'text')
-            spanChild.innerHTML = item.value
-            var spanChild2 = document.createElement('span')
-            spanChild2.setAttribute('class', 'glyphicon glyphicon-ok check-mark')
-            tagA.appendChild(spanChild)
-            tagA.appendChild(spanChild2)
-            li.appendChild(tagA)
-            instansi?.appendChild(li)
-        })
-    }
-}
-
-function searchInputOpt(type) {
-    loadSearchDataDropdown(indexElementDropdown, searchElem.value, searchElem, type)
-}
-
-function loadSearchDataDropdown(
-    indexElement,
-    inputValue,
-    event,
-    type
-) {
-    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
-    // event.addEventListener('keyup', (e) => {
-    //     if (e?.code === 'Enter') {
-    //         console.log('sukses')
-    //     }
-    // })
-
-    if (isTextSelected(event) && currentDataMenu?.length > 0) {
-        aturSelection(elem, indexElement, '', type)
-    } else if (currentDataMenu?.length > 0) {
-        aturSelection(elem, indexElement, inputValue, type)
-    }
-}
-
-function isTextSelected(input) {
-    if (input.selectionStart !== undefined) {
-        return input.selectionStart === 0 && input.selectionEnd === input.value.length
-    } else {
-        return false
-    }
-}
-
-function aturSelection(
-    elem,
-    indexElement,
-    inputValue,
-    type,
-) {
-    const instansi = elem[indexElement]
-    const childList = instansi.children
-    currentDataMenu.forEach((_, index) => {
-        const textItem = childList[index]?.innerText
-        if (childList[index] && inputValue.length > 0) {
-            childList[index].setAttribute('class', 'hide')
-            const checkItem =
-                textItem.toLowerCase().indexOf(inputValue.toLowerCase()) > -1 ||
-                textItem.indexOf(inputValue) > -1
-            if (checkItem) {
-                childList[index].setAttribute('class', '')
-            }
-        } else if (childList[index]) {
-            childList[index].removeAttribute('class')
-            if (type === 'instansi') {
-                if (dataInputNamaKolom.instansi !== 'Silahkan Pilih') {
-                    const checkItem =
-                        textItem?.toLowerCase() == dataInputNamaKolom.instansi.toLowerCase() ||
-                        textItem == dataInputNamaKolom.instansi
-                    if (checkItem) {
-                        childList[index].setAttribute('class', 'selected active')
-                    }
-                } else {
-                    childList[0].setAttribute('class', 'selected active')
-                }
-            }
-        }
-    })
-}
-
-function clickBtnDropdown(indexElement, type) {
-    indexElementDropdown = indexElement
-    searchElem = document.getElementsByClassName('input-block-level form-control')
-    setTimeout(() => {
-        searchElem = searchElem[indexElement]
-        searchElem.removeAttribute('onkeydown')
-        searchElem.setAttribute('onkeydown', `searchInputOpt('${type}')`)
-    }, 0)
-
-    if (type === 'instansi') {
-        spinnerGlobalLoading('flex')
-        getSekolah()
-            .then(res => {
-                const data = res.dataSekolah.map(item => ({
-                    data_tokens: item.id,
-                    value: item.name
-                }))
-                const newData = [
-                    {
-                        data_tokens: 'silahkan-pilih',
-                        value: 'Silahkan Pilih'
-                    },
-                    ...data
-                ]
-                currentDataMenu = newData
-                searchInputOpt(type)
-                spinnerGlobalLoading('none')
-            })
-            .catch(err => console.log(err))
-    }
-}
-
-// on selection value from instansi
-function onSelectionFromAPI(selectId, type) {
-    const elem = document.getElementById(selectId)
-    // const loadingElem = document.getElementById(loadingId)
-    if (elem) {
-        const indexOption = elem.selectedIndex
-        // dataset (tokens) options yang dipilih
-        const tokens = elem.children[indexOption].dataset.tokens
-        // const data_tokens = optionElem.getAttribute('data-tokens')
-        const value = elem.options[elem.selectedIndex].value
-        if (type === 'instansi') {
-            dataInputNamaKolom.instansi = value
-        }
-    }
-}
-
-function checkBoxInstansi(elementId) {
-    const elem = document.getElementById(elementId)
-    if (elem) {
-        if (elem.checked) {
-            document.getElementById('secOptInstansi').style.display = 'none'
-            document.getElementById('textInstansi').style.display = 'flex'
-            dataInputNamaKolom.instansi = document.getElementById('textInstansi').value
-        } else {
-            document.getElementById('secOptInstansi').style.display = 'flex'
-            document.getElementById('textInstansi').style.display = 'none'
-            dataInputNamaKolom.instansi = document.getElementById('instansi').value
-        }
-    }
-}
-
+// CASE FOR INPUT IMG PROFILE
 let loadingClientImg
 
 function openFileImg() {
@@ -290,6 +80,17 @@ function openFileImg() {
 
 const clientImg = document.getElementById('clientImg')
 const btnDeleteClientImg = document.getElementById('deleteClientImg')
+
+function deleteClientImg() {
+    clientImg.setAttribute('src', '/images/noimg.png')
+    btnDeleteClientImg.style.display = 'none'
+    imgData = {
+        files: null,
+        imgURL: ''
+    }
+    dataInputNamaKolom['files'] = null
+    dataInputNamaKolom['imgURL'] = ''
+}
 
 const elemImgFile = document.getElementById('fileClientImg')
 elemImgFile.addEventListener('change', (e) => {
@@ -398,16 +199,147 @@ function changeLocalClientImg(imgBlobUrl) {
     clientImg.setAttribute('src', imgBlobUrl)
     btnDeleteClientImg.style.display = 'flex'
 }
+// END CASE FOR INPUT IMG PROFILE
 
-function deleteClientImg() {
-    clientImg.setAttribute('src', '/images/noimg.png')
-    btnDeleteClientImg.style.display = 'none'
-    imgData = {
-        files: null,
-        imgURL: ''
+// CASE FOR INPUT NAMA KOLOM
+// change input text nama kolom
+function changeTxtInputNmKolom(elementId, nameInput) {
+    const elem = document.getElementById(elementId)
+    if (elem) {
+        dataInputNamaKolom[nameInput] = elem.value
     }
-    dataInputNamaKolom['files'] = null
-    dataInputNamaKolom['imgURL'] = ''
+}
+
+const nipElement = document.getElementById('nip')
+const phoneElement = document.getElementById('telpPengirim')
+const nomorHPElement = document.getElementById('nomorHp')
+
+// Restricts input for the given textbox to the given inputFilter.
+function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
+    ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout"].forEach(function (event) {
+        textbox.addEventListener(event, function (e) {
+            if (inputTYPE === 'NIP' && this.value.length > 18) {
+                this.setCustomValidity('Maksimal NIP 18 digit');
+                this.reportValidity();
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                return
+            }
+            if (inputFilter(this.value)) {
+                // Accepted value
+                if (["keydown", "mousedown", "focusout"].indexOf(e.type) >= 0) {
+                    this.classList.remove("input-error");
+                    this.setCustomValidity("");
+                }
+                this.oldValue = this.value;
+                this.oldSelectionStart = this.selectionStart;
+                this.oldSelectionEnd = this.selectionEnd;
+            } else if (this.hasOwnProperty("oldValue")) {
+                // Rejected value - restore the previous one
+                this.classList.add("input-error");
+                this.setCustomValidity(errMsg);
+                this.reportValidity();
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+            } else {
+                // Rejected value - nothing to restore
+                this.value = "";
+            }
+        });
+    });
+}
+
+setInputFilter(nipElement, (value) => phoneRegex.test(value), "Harus berupa angka", 'NIP');
+// setInputFilter(phoneElement, (value) => phoneRegex.test(value), "Harus berupa angka");
+// setInputFilter(nomorHPElement, (value) => phoneRegex.test(value), "Harus berupa angka");
+
+const formControll = document.getElementsByClassName('form-control')
+
+function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
+    const btnSelect = document.getElementsByClassName('dropdown-toggle')
+    const btnDisabled = document.getElementsByClassName('btn dropdown-toggle selectpicker disabled btn-default')
+    const disabledEl = document.getElementsByClassName('disabled')
+    const btnAddCard = document.getElementsByClassName('btn-add-card')
+    const dropdownMenu = document.getElementsByClassName('dropdown-menu inner selectpicker')
+    if (isRemoveDisabled) {
+        removeDisabledAttr(elements, 1)
+        removeDisabledAttr(btnSelect, 0)
+        removeDisabledAttr(btnAddCard, 0)
+    } else if (isDisabled) {
+        addDisabledAttr(elements, isDisabled, 1)
+        addDisabledAttr(btnSelect, isDisabled, 0)
+        addDisabledAttr(btnAddCard, isDisabled, 0)
+    }
+    setTimeout(() => {
+        removeClassDisabled(disabledEl)
+        setTimeout(() => {
+            removeClassDisabled(btnDisabled)
+            setTimeout(() => {
+                removeDisabledOfMenu(dropdownMenu)
+            }, 500);
+        }, 500);
+    }, 1500);
+}
+
+function addDisabledAttr(element, isDisabled, starIdx) {
+    for (let i = starIdx; i < element.length; i++)
+        element[i].setAttribute('disabled', isDisabled)
+}
+function removeDisabledAttr(element, starIdx) {
+    for (let i = starIdx; i < element.length; i++)
+        element[i].removeAttribute('disabled')
+}
+
+function removeClassDisabled(element) {
+    for (let i = 0; i < element.length; i++) {
+        element[i].classList.remove('disabled')
+    }
+}
+function removeDisabledOfMenu(element) {
+    for (let i = 0; i < element.length; i++) {
+        for (let iChild = 0; iChild < element[i].childNodes.length; iChild++) {
+            element[i].childNodes[iChild].classList.remove('disabled')
+        }
+    }
+}
+
+// cek nip apakah sudah ada di db
+nipElement.addEventListener('change', async (e) => {
+    if (e.target.value.length === 18) {
+        document.getElementById('secGlobalLoading').style.display = 'flex'
+        await validateNIP(e.target.value)
+            .then(res => {
+                document.getElementById('errNmKolom1').innerText = res.text
+                if (res.message === 'error') {
+                    document.getElementById('errNmKolom1').style.color = '#ff0000'
+                    changeDisableInput(formControll, 'true')
+                } else {
+                    document.getElementById('errNmKolom1').style.color = '#46923c'
+                    changeDisableInput(formControll, null, true)
+                }
+                document.getElementById('secGlobalLoading').style.display = 'none'
+            })
+    } else if(e.target.value.length > 0) {
+        changeDisableInput(formControll, 'true')
+        document.getElementById('errNmKolom1').innerText = 'NIP harus terdiri dari 18 Digit'
+        document.getElementById('errNmKolom1').style.color = '#ff0000'
+    }else{
+        changeDisableInput(formControll, null, true)
+        document.getElementById('errNmKolom1').innerText = ''
+        document.getElementById('errNmKolom1').style.color = '#ff0000'
+    }
+})
+
+async function validateNIP(nip) {
+    return await new Promise((resolve, reject) => {
+        $.post('https://pustakawan.perpusnas.go.id/validasi/nip', { nip }, (data, status, tes) => {
+            if (parseInt(data) > 0) {
+                resolve({ message: 'error', text: 'Data NIP ini telah terdaftar didatabase. Apabila ingin melihat/mengupdate data, silakan pilih menu Revisi Data.' })
+            } else {
+                resolve({ message: 'success', text: 'NIP bisa digunakan' })
+            }
+        })
+    })
 }
 
 // datepicker
@@ -417,18 +349,86 @@ $(function () {
         todayHighlight: true
     }).datepicker('update', new Date());
 });
-$(function () {
-    $("#tamatPangkatDP").datepicker({
-        autoclose: true,
-        todayHighlight: true
-    }).datepicker('update', new Date());
-});
-$(function () {
-    $("#tamatJabatanDP").datepicker({
-        autoclose: true,
-        todayHighlight: true
-    }).datepicker('update', new Date());
-});
+// end datepicker
+
+// create menu dropdown btn select
+function loadCreateSelect(elementId, data) {
+    const instansi = document.getElementById(elementId)
+    if (instansi) {
+        data.forEach(item => {
+            let node = document.createElement('option')
+            node.setAttribute('data-tokens', item.data_tokens)
+            const textNode = document.createTextNode(item.value)
+            node.appendChild(textNode)
+            instansi.appendChild(node)
+        })
+    }
+}
+
+// remove dropdown menu
+function removeDropdownMenu(indexElement) {
+    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
+    setTimeout(() => {
+        var currentElem = elem[indexElement]
+        var children = currentElem?.lastElementChild
+        while (children) {
+            currentElem.removeChild(children)
+            children = currentElem.lastElementChild
+        }
+    }, 500);
+}
+
+// untuk load data search menu dropdown
+let currentDataMenu
+let indexElementDropdown
+
+var btnDropdown = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
+var searchElem = document.getElementsByClassName('input-block-level form-control')
+var wrapBtnGroup = document.getElementsByClassName('btn-group bootstrap-select')
+
+// create menu dropdown
+function createMenuDropdown(data, indexElement, type) {
+    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
+
+    if (elem && data.length > 0) {
+        currentDataMenu = data
+        indexElementDropdown = indexElement
+        const instansi = elem[indexElement]
+        wrapBtnGroup = document.getElementsByClassName('btn-group bootstrap-select')
+        wrapBtnGroup = wrapBtnGroup[indexElement]
+        searchElem = document.getElementsByClassName('input-block-level form-control')
+        searchElem = searchElem[indexElement]
+        // searchElem?.setAttribute('onkeydown', `clickSearch('${daerah}')`)
+        searchElem?.setAttribute('onkeydown', `searchInputOpt('${type}')`)
+        btnDropdown = document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default')
+        btnDropdown = btnDropdown[indexElement]
+        btnDropdown?.setAttribute('onclick', `clickBtnDropdown(${indexElement}, '${type}')`)
+
+        data.forEach((item, index) => {
+            // list element
+            var li = document.createElement('li')
+            li.setAttribute('data-original-index', index)
+            li.setAttribute('class', index === 0 ? 'selected active' : '')
+            // tag a element
+            var tagA = document.createElement('a')
+            tagA.setAttribute('data-normalized-text', `<span class=&quot;text&quot;>${item.value}</span>`)
+            tagA.setAttribute('tabindex', '0')
+            tagA.setAttribute('class', '')
+            // children tag a
+            // span with text content
+            var spanChild = document.createElement('span')
+            spanChild.setAttribute('class', 'text')
+            spanChild.innerHTML = item.value
+            var spanChild2 = document.createElement('span')
+            spanChild2.setAttribute('class', 'glyphicon glyphicon-ok check-mark')
+            tagA.appendChild(spanChild)
+            tagA.appendChild(spanChild2)
+            li.appendChild(tagA)
+            instansi?.appendChild(li)
+        })
+    }
+}
+// end create menu dropdown btn select
 
 const dataNamaKolom = {
     jenisKelamin: {
@@ -579,60 +579,6 @@ const dataNamaKolom = {
             }
         ]
     },
-    jabatanFungsional: {
-        id: 'jabatanFungsional',
-        data: [
-            {
-                data_tokens: 'silahkan-pilih',
-                value: 'Silahkan Pilih'
-            },
-            {
-                data_tokens: 'pustakawan-terampil-asisten-perpustakaan-terampil',
-                value: 'Pustakawan Terampil / Asisten Perpustakaan  Terampil'
-            },
-            {
-                data_tokens: 'pustakawan-mahir-asisten-perpustakaan-mahir',
-                value: 'Pustakawan Mahir / Asisten Perpustakaan Mahir'
-            },
-            {
-                data_tokens: 'pustakawan-penyelia-asisten-perpustakaan-penyelia',
-                value: 'Pustakawan Penyelia / Asisten Perpustakaan  Penyelia'
-            },
-            {
-                data_tokens: 'pustakawan-ahli-pertama',
-                value: 'Pustakawan Ahli Pertama'
-            },
-            {
-                data_tokens: 'pustakawan-ahli-muda',
-                value: 'Pustakawan Ahli Muda'
-            },
-            {
-                data_tokens: 'pustakawan-ahli-madya',
-                value: 'Pustakawan Ahli Madya'
-            },
-            {
-                data_tokens: 'pustakawan-ahli-utama',
-                value: 'Pustakawan Ahli Utama'
-            }
-        ]
-    },
-    statusJabatan: {
-        id: 'statusJabatan',
-        data: [
-            {
-                data_tokens: 'silahkan-pilih',
-                value: 'Silahkan Pilih'
-            },
-            {
-                data_tokens: 'aktif',
-                value: 'Aktif'
-            },
-            {
-                data_tokens: 'dbs',
-                value: 'DBS'
-            }
-        ]
-    },
     diklatFungsional: {
         id: 'diklatFungsional',
         data: [
@@ -654,6 +600,75 @@ const dataNamaKolom = {
             }
         ]
     },
+    statusDinas: {
+        id: 'statusDinas',
+        data: [
+            {
+                data_tokens: 'silahkan-pilih',
+                value: 'Silahkan Pilih'
+            },
+            {
+                data_tokens: 'kepala-perpustakaan',
+                value: 'Kepala Perpustakaan'
+            },
+            {
+                data_tokens: 'pustakawan-swasta',
+                value: 'Pustakawan Swasta'
+            },
+            {
+                data_tokens: 'pejabat-pimpinan-tinggi-pratama',
+                value: 'Pejabat Pimpinan Tinggi Pratama'
+            },
+            {
+                data_tokens: 'pejabat-administrator',
+                value: 'Pejabat Administrator'
+            },
+            {
+                data_tokens: 'pejabat-pengawas',
+                value: 'Pejabat Pengawas'
+            },
+            {
+                data_tokens: 'staf-administrasi-(fu)',
+                value: 'Staf Administrasi (FU)'
+            },
+            {
+                data_tokens: 'tenaga-teknis-komputer',
+                value: 'Tenaga Teknis Komputer'
+            },
+            {
+                data_tokens: 'tenaga-teknis-av',
+                value: 'Tenaga Teknis A.V'
+            },
+            {
+                data_tokens: 'ketatausahaan',
+                value: 'Ketatausahaan'
+            },
+            {
+                data_tokens: 'administrasi-keuangan',
+                value: 'Administrasi Keuangan'
+            },
+            {
+                data_tokens: 'petugas-pengelola-perpustakaan',
+                value: 'Petugas/Pengelola Perpustakaan'
+            },
+            {
+                data_tokens: 'fungsional-tertentu-lainnya',
+                value: 'Fungsional Tertentu Lainnya'
+            },
+            {
+                data_tokens: 'sekretaris-utama',
+                value: 'Sekretaris Utama'
+            },
+            {
+                data_tokens: 'penyuluh-perpustakaan',
+                value: 'Penyuluh Perpustakaan'
+            },
+            {
+                data_tokens: 'pengawas-perpustakaan',
+                value: 'Pengawas Perpustakaan'
+            },
+        ]
+    },
     instansi: {
         id: 'instansi',
         data: [
@@ -665,265 +680,151 @@ const dataNamaKolom = {
     }
 }
 
-function loadCreateSelect(elementId, data) {
-    const elem = document.getElementById(elementId)
-    if (elem) {
-        data.forEach(item => {
-            let node = document.createElement('option')
-            node.setAttribute('data-tokens', item.data_tokens)
-            const textNode = document.createTextNode(item.value)
-            node.appendChild(textNode)
-            elem.appendChild(node)
-        })
-    }
-}
-
-// change input text nama kolom
-function changeTxtInputNmKolom(elementId, nameInput) {
-    const elem = document.getElementById(elementId)
-    if (elem) {
-        dataInputNamaKolom[nameInput] = elem.value
-    }
-}
-
-const nipElement = document.getElementById('nip')
-const phoneElement = document.getElementById('telpPengirim')
-const nomorHPElement = document.getElementById('nomorHp')
-
-// Restricts input for the given textbox to the given inputFilter.
-function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
-    ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout"].forEach(function (event) {
-        textbox.addEventListener(event, function (e) {
-            if (inputTYPE === 'NIP' && this.value.length > 18) {
-                this.setCustomValidity('Maksimal NIP 18 digit');
-                this.reportValidity();
-                this.value = this.oldValue;
-                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-                return
-            }
-            if (inputFilter(this.value)) {
-                // Accepted value
-                if (["keydown", "mousedown", "focusout"].indexOf(e.type) >= 0) {
-                    this.classList.remove("input-error");
-                    this.setCustomValidity("");
-                }
-                this.oldValue = this.value;
-                this.oldSelectionStart = this.selectionStart;
-                this.oldSelectionEnd = this.selectionEnd;
-            } else if (this.hasOwnProperty("oldValue")) {
-                // Rejected value - restore the previous one
-                this.classList.add("input-error");
-                this.setCustomValidity(errMsg);
-                this.reportValidity();
-                this.value = this.oldValue;
-                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-            } else {
-                // Rejected value - nothing to restore
-                this.value = "";
-            }
-        });
-    });
-}
-
-setInputFilter(nipElement, (value) => phoneRegex.test(value), "Harus berupa angka", 'NIP');
-setInputFilter(phoneElement, (value) => phoneRegex.test(value), "Harus berupa angka");
-setInputFilter(nomorHPElement, (value) => phoneRegex.test(value), "Harus berupa angka");
-
-const formControll = document.getElementsByClassName('form-control')
-
-function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
-    const btnSelect = document.getElementsByClassName('dropdown-toggle')
-    const btnDisabled = document.getElementsByClassName('btn dropdown-toggle selectpicker disabled btn-default')
-    const disabledEl = document.getElementsByClassName('disabled')
-    const btnAddCard = document.getElementsByClassName('btn-add-card')
-    const dropdownMenu = document.getElementsByClassName('dropdown-menu inner selectpicker')
-    if (isRemoveDisabled) {
-        removeDisabledAttr(elements, 1)
-        removeDisabledAttr(btnSelect, 0)
-        removeDisabledAttr(btnAddCard, 0)
-    } else if (isDisabled) {
-        addDisabledAttr(elements, isDisabled, 1)
-        addDisabledAttr(btnSelect, isDisabled, 0)
-        addDisabledAttr(btnAddCard, isDisabled, 0)
-    }
-    setTimeout(() => {
-        removeClassDisabled(disabledEl)
-        setTimeout(() => {
-            removeClassDisabled(btnDisabled)
-            setTimeout(() => {
-                removeDisabledOfMenu(dropdownMenu)
-            }, 500);
-        }, 500);
-    }, 1500);
-}
-
-function addDisabledAttr(element, isDisabled, starIdx) {
-    for (let i = starIdx; i < element.length; i++)
-        element[i].setAttribute('disabled', isDisabled)
-}
-function removeDisabledAttr(element, starIdx) {
-    for (let i = starIdx; i < element.length; i++)
-        element[i].removeAttribute('disabled')
-}
-
-function removeClassDisabled(element) {
-    for (let i = 0; i < element.length; i++) {
-        element[i].classList.remove('disabled')
-    }
-}
-function removeDisabledOfMenu(element) {
-    for (let i = 0; i < element.length; i++) {
-        for (let iChild = 0; iChild < element[i].childNodes.length; iChild++) {
-            element[i].childNodes[iChild].classList.remove('disabled')
-        }
-    }
-}
-
-// cek nip apakah sudah ada di db
-nipElement.addEventListener('change', async (e) => {
-    if (e.target.value.length === 18) {
-        document.getElementById('secGlobalLoading').style.display = 'flex'
-        await validateNIP(e.target.value)
-            .then(res => {
-                document.getElementById('errNmKolom1').innerText = res.text
-                if (res.message === 'error') {
-                    document.getElementById('errNmKolom1').style.color = '#ff0000'
-                    changeDisableInput(formControll, 'true')
-                } else {
-                    document.getElementById('errNmKolom1').style.color = '#46923c'
-                    changeDisableInput(formControll, null, true)
-                }
-                document.getElementById('secGlobalLoading').style.display = 'none'
-            })
-    } else {
-        changeDisableInput(formControll, 'true')
-        document.getElementById('errNmKolom1').innerText = 'NIP harus terdiri dari 18 Digit'
-        document.getElementById('errNmKolom1').style.color = '#ff0000'
-    }
-})
-
-window.onload = () => {
-    changeDisableInput(formControll, 'true')
-}
-
 function setOptionElement() {
     Object.entries(dataNamaKolom).forEach(item => loadCreateSelect(item[1].id, item[1].data))
 }
 
 setOptionElement()
 
-const titleAddDiklat = document.getElementById('titleAddDiklat')
-const btnSubmitDiklat = document.getElementById('btnSubmitDiklat')
-
-let inputDataAddDiklat = {
-    namaDiklat: '',
-    tahunDiklat: '',
-    jumlahJamPelatihan: ''
+function searchInputOpt(type) {
+    loadSearchDataDropdown(indexElementDropdown, searchElem.value, searchElem, type)
 }
 
-function clickAddDiklat() {
-    const elem = document.getElementsByClassName('modal-backdrop fade in')
-    setTimeout(() => {
-        if (elem?.length > 0) {
-            elem[0].style.display = 'none'
-        }
-    }, 0);
-    titleAddDiklat.innerText = 'Tambah Diklat Teknis Kepustakawan'
-    btnSubmitDiklat.setAttribute('onclick', 'prosesTambahDiklat()')
-    btnSubmitDiklat.innerText = 'Tambah'
-    inputDataAddDiklat = {
-        namaDiklat: '',
-        tahunDiklat: '',
-        jumlahJamPelatihan: ''
+function loadSearchDataDropdown(
+    indexElement,
+    inputValue,
+    event,
+    type
+) {
+    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')
+    // event.addEventListener('keyup', (e) => {
+    //     if (e?.code === 'Enter') {
+    //         console.log('sukses')
+    //     }
+    // })
+
+    if (isTextSelected(event) && currentDataMenu?.length > 0) {
+        aturSelection(elem, indexElement, '', type)
+    } else if (currentDataMenu?.length > 0) {
+        aturSelection(elem, indexElement, inputValue, type)
     }
-    removeValueInput('namaDiklat')
-    removeValueInput('tahunDiklat')
-    removeValueInput('jumlahJamPelatihan')
-    removeErrModalInput('errNmDiklat')
-    removeErrModalInput('errThDiklat')
-    removeErrModalInput('errJmDiklat')
 }
 
-let inputDataKaryaTulis = {
-    judulBuku: '',
-    tahunTerbit: ''
+function isTextSelected(input) {
+    if (input.selectionStart !== undefined) {
+        return input.selectionStart === 0 && input.selectionEnd === input.value.length
+    } else {
+        return false
+    }
 }
 
-let inputDataOrganisasi = {
-    namaOrganisasi: '',
-    jabatanOrganisasi: ''
+function aturSelection(
+    elem,
+    indexElement,
+    inputValue,
+    type,
+) {
+    const instansi = elem[indexElement]
+    const childList = instansi.children
+    currentDataMenu.forEach((_, index) => {
+        const textItem = childList[index]?.innerText
+        if (childList[index] && inputValue.length > 0) {
+            childList[index].setAttribute('class', 'hide')
+            const checkItem =
+                textItem.toLowerCase().indexOf(inputValue.toLowerCase()) > -1 ||
+                textItem.indexOf(inputValue) > -1
+            if (checkItem) {
+                childList[index].setAttribute('class', '')
+            }
+        } else if (childList[index]) {
+            childList[index].removeAttribute('class')
+            if (type === 'instansi') {
+                if (dataInputNamaKolom.instansi !== 'Silahkan Pilih') {
+                    const checkItem =
+                        textItem?.toLowerCase() == dataInputNamaKolom.instansi.toLowerCase() ||
+                        textItem == dataInputNamaKolom.instansi
+                    if (checkItem) {
+                        childList[index].setAttribute('class', 'selected active')
+                    }
+                } else {
+                    childList[0].setAttribute('class', 'selected active')
+                }
+            }
+        }
+    })
 }
 
+function clickBtnDropdown(indexElement, type) {
+    indexElementDropdown = indexElement
+    searchElem = document.getElementsByClassName('input-block-level form-control')
+    setTimeout(() => {
+        searchElem = searchElem[indexElement]
+        searchElem.removeAttribute('onkeydown')
+        searchElem.setAttribute('onkeydown', `searchInputOpt('${type}')`)
+    }, 0)
+
+    if (type === 'instansi') {
+        spinnerGlobalLoading('flex')
+        getSekolah()
+            .then(res => {
+                const data = res.dataSekolah.map(item => ({
+                    data_tokens: item.id,
+                    value: item.name
+                }))
+                const newData = [
+                    {
+                        data_tokens: 'silahkan-pilih',
+                        value: 'Silahkan Pilih'
+                    },
+                    ...data
+                ]
+                currentDataMenu = newData
+                searchInputOpt(type)
+                spinnerGlobalLoading('none')
+            })
+            .catch(err => console.log(err))
+    }
+}
+
+// on selection value from instansi
+function onSelectionFromAPI(selectId, type) {
+    const elem = document.getElementById(selectId)
+    // const loadingElem = document.getElementById(loadingId)
+    if (elem) {
+        const indexOption = elem.selectedIndex
+        // dataset (tokens) options yang dipilih
+        const tokens = elem.children[indexOption].dataset.tokens
+        // const data_tokens = optionElem.getAttribute('data-tokens')
+        const value = elem.options[elem.selectedIndex].value
+        if (type === 'instansi') {
+            dataInputNamaKolom.instansi = value
+        }
+    }
+}
+
+function checkBoxInstansi(elementId) {
+    const elem = document.getElementById(elementId)
+    if (elem) {
+        if (elem.checked) {
+            document.getElementById('secOptInstansi').style.display = 'none'
+            document.getElementById('textInstansi').style.display = 'flex'
+            dataInputNamaKolom.instansi = document.getElementById('textInstansi').value
+        } else {
+            document.getElementById('secOptInstansi').style.display = 'flex'
+            document.getElementById('textInstansi').style.display = 'none'
+            dataInputNamaKolom.instansi = document.getElementById('instansi').value
+        }
+    }
+}
+// END CASE FOR INPUT NAMA KOLOM
+
+// CASE CARD INPUT ADD DATA
+// RESULT INPUT ADD DATA
 let resultDataDiklat = []
 let resultDataKaryaTulis = []
 let resultDataOrganisasi = []
 
-const wrapListDiklat = document.getElementById('wrapListDiklat')
-
-function prosesTambahDiklat() {
-    if (validateFormAddDiklat()) {
-        btnSubmitDiklat.setAttribute('data-dismiss', 'modal')
-        const lengthInputDiklat = Object.entries(inputDataAddDiklat).map(e => e).length
-        resultDataDiklat.push(inputDataAddDiklat)
-        while (wrapListDiklat.hasChildNodes()) {
-            wrapListDiklat.removeChild(wrapListDiklat.firstChild)
-        }
-        resultDataDiklat.forEach((_, index) => {
-            wrapListDiklat.appendChild(createCardResultAdd(resultDataDiklat[index], lengthInputDiklat, index + 1, 'DIKLAT', 'removeCardDiklat', 'updateDiklat'))
-        })
-        inputDataAddDiklat = {
-            namaDiklat: '',
-            tahunDiklat: '',
-            jumlahJamPelatihan: ''
-        }
-        removeValueInput('namaDiklat')
-        removeValueInput('tahunDiklat')
-        removeValueInput('jumlahJamPelatihan')
-        removeErrModalInput('errNmDiklat')
-        removeErrModalInput('errThDiklat')
-        removeErrModalInput('errJmDiklat')
-    } else {
-        btnSubmitDiklat.removeAttribute('data-dismiss')
-    }
-}
-
-const errText = 'Harus diisi'
-
-function validateFormAddDiklat() {
-    let err = {}
-    const { namaDiklat, tahunDiklat, jumlahJamPelatihan } = inputDataAddDiklat
-    if (!namaDiklat.trim()) {
-        err.errNmDiklat = errText
-    }
-    if (!tahunDiklat.trim()) {
-        err.errThDiklat = errText
-    }
-    if (!jumlahJamPelatihan.trim()) {
-        err.errJmDiklat = errText
-    }
-    if (namaDiklat.length > 0) {
-        removeErrModalInput('errNmDiklat')
-    }
-    if (tahunDiklat.length > 0) {
-        removeErrModalInput('errThDiklat')
-    }
-    if (jumlahJamPelatihan.length > 0) {
-        removeErrModalInput('errJmDiklat')
-    }
-    if (Object.keys(err).length > 0) {
-        Object.entries(err).forEach(text => document.getElementById(text[0]).innerText = text[1])
-        return
-    }
-    return 'success'
-}
-
-function removeErrModalInput(elementId) {
-    const elem = document.getElementById(elementId)
-    if (elem) {
-        elem.innerText = ''
-    }
-}
-
+// PROSES ADD CARD
 function createCardResultAdd(dataInput, lengthData, indexNumber, inputType, funcDelete, funcUpdate) {
     // create wrap card
     var wrapCard = document.createElement('div')
@@ -1006,20 +907,66 @@ function createBodyContentCard(titleValue, descValue, inputType) {
     return div
 }
 
-function changeInputAdd(elementId, nameInput, type) {
-    const elem = document.getElementById(elementId)
-    if (type === 'DIKLAT') {
-        inputDataAddDiklat[nameInput] = elem.value
-    } else if (type === 'KARYA-TULIS-ILMIAH') {
-        inputDataKaryaTulis[nameInput] = elem.value
-    } else if (type === 'ORGANISASI') {
-        inputDataOrganisasi[nameInput] = elem.value
-    }
+// DIKLAT
+const titleAddDiklat = document.getElementById('titleAddDiklat')
+const btnSubmitDiklat = document.getElementById('btnSubmitDiklat')
+
+let inputDataAddDiklat = {
+    namaDiklat: '',
+    tahunDiklat: '',
+    jumlahJamPelatihan: ''
 }
 
-function removeValueInput(elementId) {
-    const elem = document.getElementById(elementId)
-    elem.value = ''
+function clickAddDiklat() {
+    const elem = document.getElementsByClassName('modal-backdrop fade in')
+    setTimeout(() => {
+        if (elem?.length > 0) {
+            elem[0].style.display = 'none'
+        }
+    }, 0);
+    titleAddDiklat.innerText = 'Tambah Diklat Teknis Kepustakawan'
+    btnSubmitDiklat.setAttribute('onclick', 'prosesTambahDiklat()')
+    btnSubmitDiklat.innerText = 'Tambah'
+    inputDataAddDiklat = {
+        namaDiklat: '',
+        tahunDiklat: '',
+        jumlahJamPelatihan: ''
+    }
+    removeValueInput('namaDiklat')
+    removeValueInput('tahunDiklat')
+    removeValueInput('jumlahJamPelatihan')
+    removeErrModalInput('errNmDiklat')
+    removeErrModalInput('errThDiklat')
+    removeErrModalInput('errJmDiklat')
+}
+
+const wrapListDiklat = document.getElementById('wrapListDiklat')
+
+function prosesTambahDiklat() {
+    if (validateFormAddDiklat()) {
+        btnSubmitDiklat.setAttribute('data-dismiss', 'modal')
+        const lengthInputDiklat = Object.entries(inputDataAddDiklat).map(e => e).length
+        resultDataDiklat.push(inputDataAddDiklat)
+        while (wrapListDiklat.hasChildNodes()) {
+            wrapListDiklat.removeChild(wrapListDiklat.firstChild)
+        }
+        resultDataDiklat.forEach((_, index) => {
+            wrapListDiklat.appendChild(createCardResultAdd(resultDataDiklat[index], lengthInputDiklat, index + 1, 'DIKLAT', 'removeCardDiklat', 'updateDiklat'))
+        })
+        inputDataAddDiklat = {
+            namaDiklat: '',
+            tahunDiklat: '',
+            jumlahJamPelatihan: ''
+        }
+        removeValueInput('namaDiklat')
+        removeValueInput('tahunDiklat')
+        removeValueInput('jumlahJamPelatihan')
+        removeErrModalInput('errNmDiklat')
+        removeErrModalInput('errThDiklat')
+        removeErrModalInput('errJmDiklat')
+    } else {
+        btnSubmitDiklat.removeAttribute('data-dismiss')
+    }
 }
 
 function removeCardDiklat(index) {
@@ -1089,136 +1036,7 @@ function updateInputDiklat() {
         btnSubmitDiklat.removeAttribute('data-dismiss')
     }
 }
-
-// KARYA TULIS ILMIAH
-const titleAddKarya = document.getElementById('titleAddKarya')
-const btnSubmitKarya = document.getElementById('btnSubmitKarya')
-
-const wrapListKaryaTulis = document.getElementById('listAddKarya')
-
-function clickAddKarya() {
-    const elem = document.getElementsByClassName('modal-backdrop fade in')
-    setTimeout(() => {
-        if (elem?.length > 0) {
-            elem[0].style.display = 'none'
-        }
-    }, 0);
-    titleAddKarya.innerText = 'Tambah Karya Tulis Ilmiah (KTI)'
-    btnSubmitKarya.setAttribute('onclick', 'prosesTambahKarya()')
-    btnSubmitKarya.innerText = 'Tambah'
-    removeValueInput('judulBuku')
-    removeValueInput('tahunTerbit')
-    inputDataKaryaTulis = {
-        judulBuku: '',
-        tahunTerbit: ''
-    }
-    removeErrModalInput('errJudulBuku')
-    removeErrModalInput('errTahunTerbit')
-}
-
-function prosesTambahKarya() {
-    if (validateFormAddKarya()) {
-        btnSubmitKarya.setAttribute('data-dismiss', 'modal')
-        const lengthInputKarya = Object.entries(inputDataKaryaTulis).map(e => e).length
-        resultDataKaryaTulis.push(inputDataKaryaTulis)
-        while (wrapListKaryaTulis.hasChildNodes()) {
-            wrapListKaryaTulis.removeChild(wrapListKaryaTulis.firstChild)
-        }
-        resultDataKaryaTulis.forEach((_, index) => {
-            wrapListKaryaTulis.appendChild(createCardResultAdd(resultDataKaryaTulis[index], lengthInputKarya, index + 1, 'KARYA-TULIS-ILMIAH', 'removeCardKaryaTulis', 'updateKaryaTulis'))
-        })
-        inputDataKaryaTulis = {
-            judulBuku: '',
-            tahunTerbit: ''
-        }
-        removeValueInput('judulBuku')
-        removeValueInput('tahunTerbit')
-    } else {
-        btnSubmitKarya.removeAttribute('data-dismiss')
-    }
-}
-
-function removeCardKaryaTulis(index) {
-    const checkItem = resultDataKaryaTulis.filter((_, i) => (i + 1) !== index)
-    resultDataKaryaTulis = checkItem
-    const lengthInputKarya = Object.entries(inputDataKaryaTulis).map(e => e).length
-    while (wrapListKaryaTulis.hasChildNodes()) {
-        wrapListKaryaTulis.removeChild(wrapListKaryaTulis.firstChild)
-    }
-    if (resultDataKaryaTulis.length > 0) {
-        resultDataKaryaTulis.forEach((_, index) => {
-            wrapListKaryaTulis.appendChild(createCardResultAdd(resultDataKaryaTulis[index], lengthInputKarya, index + 1, 'KARYA-TULIS-ILMIAH', 'removeCardKaryaTulis', 'updateKaryaTulis'))
-        })
-    }
-}
-
-let currentIdxUptdKarya = null
-
-function updateKaryaTulis(index) {
-    currentIdxUptdKarya = index
-    document.getElementById('clickAddKarya').click()
-    titleAddKarya.innerText = `Perbarui No. ${index}`
-    btnSubmitKarya.setAttribute('onclick', 'submitUpdtKaryaTulis()')
-    btnSubmitKarya.innerText = 'Simpan'
-
-    const findData = resultDataKaryaTulis.find((_, i) => (i + 1) === index)
-    document.getElementById('judulBuku').value = findData.judulBuku
-    document.getElementById('tahunTerbit').value = findData.tahunTerbit
-    inputDataKaryaTulis = {
-        judulBuku: document.getElementById('judulBuku').value = findData.judulBuku,
-        tahunTerbit: document.getElementById('tahunTerbit').value = findData.tahunTerbit,
-    }
-}
-
-function submitUpdtKaryaTulis() {
-    if (validateFormAddKarya()) {
-        btnSubmitKarya.setAttribute('data-dismiss', 'modal')
-        const { judulBuku, tahunTerbit } = inputDataKaryaTulis
-        resultDataKaryaTulis[currentIdxUptdKarya - 1] = {
-            judulBuku,
-            tahunTerbit
-        }
-        const lengthInputKarya = Object.entries(inputDataKaryaTulis).map(e => e).length
-        while (wrapListKaryaTulis.hasChildNodes()) {
-            wrapListKaryaTulis.removeChild(wrapListKaryaTulis.firstChild)
-        }
-        if (resultDataKaryaTulis.length > 0) {
-            resultDataKaryaTulis.forEach((_, index) => {
-                wrapListKaryaTulis.appendChild(createCardResultAdd(resultDataKaryaTulis[index], lengthInputKarya, index + 1, 'KARYA-TULIS-ILMIAH', 'removeCardKaryaTulis', 'updateKaryaTulis'))
-            })
-        }
-        inputDataKaryaTulis = {
-            judulBuku: '',
-            tahunTerbit: ''
-        }
-        removeValueInput('judulBuku')
-        removeValueInput('tahunTerbit')
-    } else {
-        btnSubmitKarya.removeAttribute('data-dismiss')
-    }
-}
-
-function validateFormAddKarya() {
-    let err = {}
-    const { judulBuku, tahunTerbit } = inputDataKaryaTulis
-    if (!judulBuku.trim()) {
-        err.errJudulBuku = errText
-    }
-    if (!tahunTerbit.trim()) {
-        err.errTahunTerbit = errText
-    }
-    if (judulBuku.length > 0) {
-        removeErrModalInput('errJudulBuku')
-    }
-    if (tahunTerbit.length > 0) {
-        removeErrModalInput('errTahunTerbit')
-    }
-    if (Object.keys(err).length > 0) {
-        Object.entries(err).forEach(text => document.getElementById(text[0]).innerText = text[1])
-        return
-    }
-    return 'success'
-}
+// END DIKLAT
 
 // ORGANISASI
 const titleAddOrganisasi = document.getElementById('titleAddOrganisasi')
@@ -1329,7 +1147,41 @@ function submitUpdtOrganisasi() {
         btnSubmitOrganisasi.removeAttribute('data-dismiss')
     }
 }
+// END ORGANISASI
 
+// VALIDATE ADD INPUT DATA
+const errText = 'Harus diisi'
+
+// VALIDATE DIKLAT
+function validateFormAddDiklat() {
+    let err = {}
+    const { namaDiklat, tahunDiklat, jumlahJamPelatihan } = inputDataAddDiklat
+    if (!namaDiklat.trim()) {
+        err.errNmDiklat = errText
+    }
+    if (!tahunDiklat.trim()) {
+        err.errThDiklat = errText
+    }
+    if (!jumlahJamPelatihan.trim()) {
+        err.errJmDiklat = errText
+    }
+    if (namaDiklat.length > 0) {
+        removeErrModalInput('errNmDiklat')
+    }
+    if (tahunDiklat.length > 0) {
+        removeErrModalInput('errThDiklat')
+    }
+    if (jumlahJamPelatihan.length > 0) {
+        removeErrModalInput('errJmDiklat')
+    }
+    if (Object.keys(err).length > 0) {
+        Object.entries(err).forEach(text => document.getElementById(text[0]).innerText = text[1])
+        return
+    }
+    return 'success'
+}
+
+// VALIDATE ORGANISASI
 function validateFormAddOrganisasi() {
     let err = {}
     const { namaOrganisasi, jabatanOrganisasi } = inputDataOrganisasi
@@ -1352,37 +1204,43 @@ function validateFormAddOrganisasi() {
     return 'success'
 }
 
-// LAMPIRAN DATA PENDUKUNG
+function removeErrModalInput(elementId) {
+    const elem = document.getElementById(elementId)
+    if (elem) {
+        elem.innerText = ''
+    }
+}
+
+function changeInputAdd(elementId, nameInput, type) {
+    const elem = document.getElementById(elementId)
+    if (type === 'DIKLAT') {
+        inputDataAddDiklat[nameInput] = elem.value
+    } else if (type === 'KARYA-TULIS-ILMIAH') {
+        inputDataKaryaTulis[nameInput] = elem.value
+    } else if (type === 'ORGANISASI') {
+        inputDataOrganisasi[nameInput] = elem.value
+    }
+}
+// END CASE CARD INPUT ADD DATA
+
+// CASE LAMPIRAN DATA PENDUKUNG
 let inputLampiranData = {
-    skPustakawanTerakhir: null,
     skKenaikanPangkatTerakhir: null,
     dokumen1: null,
     dokumen2: null,
     dokumen3: null,
 }
 
-const inputPustakawanTerakhir = document.getElementById('pustakawanTerakhir')
 const inputKenaikanPangkatTerakhir = document.getElementById('kenaikanPangkatTerakhir')
 const inputLampiranData1 = document.getElementById('lampiranData1')
 const inputLampiranData2 = document.getElementById('lampiranData2')
 const inputLampiranData3 = document.getElementById('lampiranData3')
 // btn delete
-const deletePustakawanTerakhir = document.getElementById('deletePustakawanTerakhir')
 const deleteKenaikanPangkat = document.getElementById('deleteKenaikanPangkat')
 const deleteLampiranData1 = document.getElementById('deleteLampiranData1')
 const deleteLampiranData2 = document.getElementById('deleteLampiranData2')
 const deleteLampiranData3 = document.getElementById('deleteLampiranData3')
 
-// SK Pustakawan terakhir
-inputPustakawanTerakhir.addEventListener('change', (e) => {
-    const files = e.target.files
-    changeFilesLampiranGroup(
-        files,
-        'skPustakawanTerakhir',
-        inputPustakawanTerakhir,
-        deletePustakawanTerakhir
-    )
-})
 // SK Kenaikan Pangkat Terakhir
 inputKenaikanPangkatTerakhir.addEventListener('change', (e) => {
     const files = e.target.files
@@ -1423,23 +1281,6 @@ inputLampiranData3.addEventListener('change', (e) => {
         deleteLampiranData3
     )
 })
-
-// keterangan tambahan
-let dataKeteranganTambahan = ''
-document.getElementById('keteranganTambahan').addEventListener('change', (e) => {
-    dataKeteranganTambahan = e.target.value
-})
-
-// change input data pengirim
-let dataInputPengirim = {
-    nama: '',
-    email: '',
-    telp: ''
-}
-function changeInputDataPengirim(elementId, nameInput) {
-    const elem = document.getElementById(elementId)
-    if (elem) dataInputPengirim[nameInput] = elem.value
-}
 
 function changeFilesLampiranGroup(
     files,
@@ -1530,8 +1371,29 @@ function deleteFileLampiran(actionType) {
         changeStyleBtnDeleteFile(deleteLampiranData3, 'not-allowed', 'btn btn-secondary')
     }
 }
+// END CASE LAMPIRAN DATA PENDUKUNG
 
-// submit form
+// KETERANGAN TAMBAHAN
+let dataKeteranganTambahan = ''
+document.getElementById('keteranganTambahan').addEventListener('change', (e) => {
+    dataKeteranganTambahan = e.target.value
+})
+// END KETERANGAN TAMBAHAN
+
+// CASE INPUT DATA PENGIRIM
+let dataInputPengirim = {
+    nama: '',
+    email: '',
+    telp: ''
+}
+
+function changeInputDataPengirim(elementId, nameInput) {
+    const elem = document.getElementById(elementId)
+    if (elem) dataInputPengirim[nameInput] = elem.value
+}
+// END CASE INPUT DATA PENGIRIM
+
+// SUBMIT FORM
 async function submitForm() {
     await Promise.all([
         validateFormNamaKolom(),
@@ -1558,35 +1420,18 @@ async function submitForm() {
 
 function resultFormData(){
     const diklat = resultDataDiklat.map(item=>`${item.namaDiklat},${item.tahunDiklat},${item.jumlahJamPelatihan}`)
-    const karyaTulis = resultDataKaryaTulis.map(item=>`${item.judulBuku},${item.tahunTerbit}`)
     const organisasi = resultDataOrganisasi.map(item=>`${item.namaOrganisasi},${item.jabatanOrganisasi}`)
     
     const dataDiklat = diklat.join(';')
-    const dataKaryaTulis = karyaTulis.join(';')
     const dataOrganisasi = organisasi.join(';')
     return {
         ...dataInputNamaKolom,
         dataDiklat,
-        dataKaryaTulis,
         dataOrganisasi,
         ...inputLampiranData,
         keteranganTambahan: dataKeteranganTambahan,
         ...dataInputPengirim,
     }
-}
-
-const corsHeroku = 'https://cors-anywhere.herokuapp.com'
-
-async function validateNIP(nip) {
-    return await new Promise((resolve, reject) => {
-        $.post('https://pustakawan.perpusnas.go.id/validasi/nip', { nip }, (data, status, tes) => {
-            if (parseInt(data) > 0) {
-                resolve({ message: 'error', text: 'Data NIP ini telah terdaftar didatabase. Apabila ingin melihat/mengupdate data, silakan pilih menu Revisi Data.' })
-            } else {
-                resolve({ message: 'success', text: 'NIP bisa digunakan' })
-            }
-        })
-    })
 }
 
 function validateFormNamaKolom() {
@@ -1604,15 +1449,12 @@ function validateFormNamaKolom() {
         pendidikanTerakhir,
         jurusanBidangPendidikan,
         pangkat,
-        tamatPangkat,
-        jabatanFungsional,
-        tamatJabatan,
-        statusJabatan,
+        statusDinas,
         instansi,
         diklatFungsionalPustakawan
     } = dataInputNamaKolom
     let errData = []
-    for (let i = 0; i <= 16; i++) {
+    for (let i = 0; i <= 12; i++) {
         errData.push(`errNmKolom${i}`)
         if (
             document.getElementById(`errNmKolom${i}`).id == 'errNmKolom1' &&
@@ -1626,10 +1468,7 @@ function validateFormNamaKolom() {
     if (!files) {
         err.errNmKolom0 = errText
     }
-    if (!nip.trim()) {
-        err.errNmKolom1 = errText
-        document.getElementById('errNmKolom1').style.color = '#ff0000'
-    } else if (nip.length !== 18) {
+    if (nip.length > 0 && nip.length < 18) {
         err.errNmKolom1 = 'NIP harus terdiri dari 18 Digit'
         document.getElementById('errNmKolom1').style.color = '#ff0000'
     }
@@ -1664,20 +1503,11 @@ function validateFormNamaKolom() {
     if (pangkat === 'Silahkan Pilih') {
         err.errNmKolom10 = errText
     }
-    if (!tamatPangkat.trim()) {
+    if(statusDinas === 'Silahkan Pilih'){
         err.errNmKolom11 = errText
     }
-    if (jabatanFungsional === 'Silahkan Pilih') {
-        err.errNmKolom12 = errText
-    }
-    if (!tamatJabatan.trim()) {
-        err.errNmKolom13 = errText
-    }
-    if (statusJabatan === 'Silahkan Pilih') {
-        err.errNmKolom14 = errText
-    }
     if (!instansi.trim() || instansi === 'Silahkan Pilih') {
-        err.errNmKolom15 = errText
+        err.errNmKolom12 = errText
     }
     removeErrInputForm(errData)
     if (Object.keys(err).length > 0) {
@@ -1689,12 +1519,9 @@ function validateFormNamaKolom() {
 
 function validateFormAddCard() {
     let err = {}
-    const errData = ['errDiklat', 'errAddKarya', 'errAddOrganisasi']
+    const errData = ['errDiklat', 'errAddOrganisasi']
     if (resultDataDiklat.length === 0) {
         err.errDiklat = errText
-    }
-    if (resultDataKaryaTulis.length === 0) {
-        err.errAddKarya = errText
     }
     if (resultDataOrganisasi.length === 0) {
         err.errAddOrganisasi = errText
@@ -1709,17 +1536,13 @@ function validateFormAddCard() {
 
 function validateFormLampiranData() {
     let err = {}
-    const errData = ['errPustakawanTerakhir', 'errKenaikanPangkatTerakhir', 'errLampiranData1', 'errLampiranData2', 'errLampiranData3', 'errKeteranganTambahan']
+    const errData = ['errKenaikanPangkatTerakhir', 'errLampiranData1', 'errLampiranData2', 'errLampiranData3', 'errKeteranganTambahan']
     const {
-        skPustakawanTerakhir,
         skKenaikanPangkatTerakhir,
         dokumen1,
         dokumen2,
         dokumen3
     } = inputLampiranData
-    if (!skPustakawanTerakhir) {
-        err.errPustakawanTerakhir = errText
-    }
     if (!skKenaikanPangkatTerakhir) {
         err.errKenaikanPangkatTerakhir = errText
     }
@@ -1781,6 +1604,12 @@ function validateCaptcha() {
     }
     elem.innerText = ''
     return 'success'
+}
+// END SUBMIT FORM
+
+function removeValueInput(elementId) {
+    const elem = document.getElementById(elementId)
+    elem.value = ''
 }
 
 function removeErrInputForm(data) {
