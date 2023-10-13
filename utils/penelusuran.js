@@ -1081,6 +1081,7 @@ function clickSubmit() {
                 res.forEach(item => {
                     if (item == undefined) {
                         value = 'failed'
+                        createAlert('Mohon lengkapi formulir Anda!.')
                     }
                 })
                 return value

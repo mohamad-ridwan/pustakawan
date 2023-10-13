@@ -1,0 +1,19 @@
+.alert{
+    position: fixed;
+    z-index: 999999 !important;
+    top: 200px;
+    right: 40px;
+    width: auto;
+    max-width: 368px;
+}
+
+.msg-alert{
+    text-align: start;
+}
+
+
+@media screen and (max-width: 768px) {
+    .alert{
+        top: 150px;
+    }
+}

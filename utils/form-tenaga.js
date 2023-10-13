@@ -250,8 +250,8 @@ function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
 }
 
 setInputFilter(nipElement, (value) => phoneRegex.test(value), "Harus berupa angka", 'NIP');
-// setInputFilter(phoneElement, (value) => phoneRegex.test(value), "Harus berupa angka");
-// setInputFilter(nomorHPElement, (value) => phoneRegex.test(value), "Harus berupa angka");
+setInputFilter(phoneElement, (value) => phoneRegex.test(value), "Harus berupa angka");
+setInputFilter(nomorHPElement, (value) => phoneRegex.test(value), "Harus berupa angka");
 
 const formControll = document.getElementsByClassName('form-control')
 
@@ -1405,6 +1405,7 @@ async function submitForm() {
     .then(res=>{
         const checkValidate = res.filter(validate=>validate === undefined)
         if(checkValidate.length > 0){
+            createAlert('Mohon lengkapi formulir Anda!.')
             return 'failed'
         }
         return 'success'

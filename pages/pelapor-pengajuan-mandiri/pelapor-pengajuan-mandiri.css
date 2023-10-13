@@ -1,49 +1,3 @@
-/* navbar */
-.navbar-fixed-top{
-    z-index: 1040 !important;
-}
-
-.banner-top {
-    display: flex;
-    height: 120px;
-    padding-bottom: 1.5rem;
-    background-color: #fff;
-}
-
-.navbar-page {
-    top: 120px !important;
-}
-
-.container-banner-top {
-    display: flex;
-    justify-content: space-between;
-}
-
-.container-banner-top .left img {
-    width: 80%;
-}
-
-.container-banner-top .right {
-    justify-content: flex-end;
-}
-
-.container-banner-top .right,
-.left {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    justify-content: center;
-}
-
-.banner-top-mobile {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    background-color: #fff;
-}
-/* end navbar */
-
 .wrap-pelapor-pengajuan {
     display: flex;
     flex-direction: column;
@@ -85,23 +39,4 @@
     .wrap-pelapor-pengajuan {
         margin: 130px 0 40px 0;
     }
-
-    /* navbar */
-    .navbar-page {
-        top: 50px !important;
-    }
-
-    .banner-top {
-        display: none;
-    }
-
-    .banner-top-mobile {
-        display: flex;
-    }
-
-    .banner-top-mobile img {
-        display: flex;
-        width: 60%;
-    }
-    /* end navbar */
 }

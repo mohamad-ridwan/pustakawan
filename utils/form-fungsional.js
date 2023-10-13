@@ -1543,6 +1543,7 @@ async function submitForm() {
     .then(res=>{
         const checkValidate = res.filter(validate=>validate === undefined)
         if(checkValidate.length > 0){
+            createAlert('Mohon lengkapi formulir Anda!.')
             return 'failed'
         }
         return 'success'

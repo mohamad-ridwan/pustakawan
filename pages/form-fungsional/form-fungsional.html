@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="form-fungsional.css">
+    <link rel="stylesheet" href="../../utils/alert.css">
+    <link rel="stylesheet" href="../../utils/navbar.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet"
         href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
@@ -19,6 +21,17 @@
 </head>
 
 <body>
+    <!-- alert -->
+    <div id="wrapAlert">
+        <!-- <div class="alert alert-danger alert-dismissible fade in">
+            <button id="closeAlert" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">x</span>
+            </button>
+            <p class="msg-alert">Mohon Lengkapi Formulir Anda</p>
+        </div> -->
+    </div>
+    <!-- end alert -->
+
     <!-- navbar -->
     <nav class="navbar navbar-fixed-top banner-top">
         <div class="container container-banner-top">
@@ -90,7 +103,7 @@
             <span class="border-bottom"></span>
         </div>
 
-        <div class="row" style="margin-top: 15px;">
+        <div class="row" id="fotoProfil" style="margin-top: 15px;">
             <div style="width: 180px; margin-left: 20px;">
                 <label for=""><small>Foto Profil <span style="color: #ff0000;">*</span></small></label>
                 <div class="thumbnail" style="position: relative; cursor: pointer;" onclick="openFileImg()">
@@ -641,7 +654,7 @@
                 <label for="emailPengirim">
                     <span><small>Email <span style="color: #ff0000;">*</span></small></span>
                 </label>
-                <input id="emailPengirim" type="text" class="form-control" onchange="changeInputDataPengirim('emailPengirim', 'email')">
+                <input id="emailPengirim" type="email" class="form-control" onchange="changeInputDataPengirim('emailPengirim', 'email')">
                 <div class="wrap-err">
                     <span id="errDataP2" class="err-text"></span>
                 </div>
@@ -684,6 +697,7 @@
     <!-- re captcha -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="/utils/form-fungsional.js"></script>
+    <script src="/utils/alert.js"></script>
 </body>
 
 </html>

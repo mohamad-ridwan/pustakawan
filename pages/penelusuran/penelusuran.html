@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="penelusuran.css">
+    <link rel="stylesheet" href="../../utils/navbar.css">
+    <link rel="stylesheet" href="../../utils/alert.css">
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous"> -->
     <!-- select option bootstrap -->
@@ -22,6 +24,17 @@
 </head>
 
 <body>
+    <!-- alert -->
+    <div id="wrapAlert">
+        <!-- <div class="alert alert-danger alert-dismissible fade in">
+            <button id="closeAlert" type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">x</span>
+            </button>
+            <p class="msg-alert">Mohon Lengkapi Formulir Anda</p>
+        </div> -->
+    </div>
+    <!-- end alert -->
+
     <!-- navbar -->
     <nav class="navbar navbar-fixed-top banner-top">
         <div class="container container-banner-top">
@@ -278,7 +291,7 @@
                 </label>
                 <div id="tamatPangkatDP" class="input-group date" data-date-format="mm-dd-yyyy">
                     <input id="tamatPangkat" class="form-control" type="text" />
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    <span class="input-group-addon" style="cursor: pointer;"><i class="glyphicon glyphicon-calendar"></i></span>
                 </div>
                 <div class="wrap-err">
                     <span id="errUpdate3" class="err-text"></span>
@@ -300,7 +313,7 @@
                 </label>
                 <div id="tamatJabatanDP" class="input-group date" data-date-format="mm-dd-yyyy">
                     <input id="tamatJabatan" class="form-control" type="text" />
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    <span class="input-group-addon" style="cursor: pointer;"><i class="glyphicon glyphicon-calendar"></i></span>
                 </div>
                 <div class="wrap-err">
                     <span id="errUpdate5" class="err-text"></span>
@@ -405,6 +418,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
     </script>
     <script src="/utils/penelusuran.js"></script>
+    <script src="/utils/alert.js"></script>
 </body>
 
 </html>
