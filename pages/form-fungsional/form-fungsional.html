@@ -184,7 +184,7 @@
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tanggalLahirDP" class="input-group date" data-date-format="mm-dd-yyyy">
-                    <input id="tanggalLahir" class="form-control" type="text" onchange="changeTxtInputNmKolom('tanggalLahir', 'tanggalLahir')"/>
+                    <input id="tanggalLahir" class="form-control" type="text" onchange="changeTxtInputNmKolom('tanggalLahir', 'tanggalLahir')">
                     <span class="input-group-addon" style="cursor: pointer;"><i class="glyphicon glyphicon-calendar"></i></span>
                 </div>
                 <div class="err-input">
@@ -678,7 +678,7 @@
         <span id="errCaptcha" style="color: #ff0000; font-size: small;"></span>
 
         <div style="display: flex; justify-content: center;">
-            <button type="button" class="btn btn-success" style="margin-top: 2rem; width: fit-content;" onclick="submitForm()">
+            <button id="submitFormFungsional" type="button" class="btn btn-success" style="margin-top: 2rem; width: fit-content;" onclick="submitForm()">
                 Submit
             </button>
         </div>
@@ -699,6 +699,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
     <!-- re captcha -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script type="module" src="/utils/firebase.js"></script>
     <script src="/utils/form-fungsional.js"></script>
     <script src="/utils/alert.js"></script>
 </body>

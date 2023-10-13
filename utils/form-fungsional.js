@@ -1531,6 +1531,8 @@ function deleteFileLampiran(actionType) {
     }
 }
 
+localStorage.removeItem('result-data-fs')
+
 // submit form
 async function submitForm() {
     await Promise.all([
@@ -1540,28 +1542,28 @@ async function submitForm() {
         validateDataPengirim(),
         validateCaptcha()
     ])
-    .then(res=>{
-        const checkValidate = res.filter(validate=>validate === undefined)
-        if(checkValidate.length > 0){
-            createAlert('Mohon lengkapi formulir Anda!.')
-            return 'failed'
-        }
-        return 'success'
-    })
-    .then(res=>{
-        if(res === 'success'){
-            alert('Data berhasil dikirim')
-            console.log(resultFormData())
-        }
-    })
-    .catch(err=>console.log('err-submit-form', err))
+        .then(res => {
+            const checkValidate = res.filter(validate => validate === undefined)
+            if (checkValidate.length > 0) {
+                createAlert('Mohon lengkapi formulir Anda!.')
+                return 'failed'
+            }
+            return 'success'
+        })
+        .then(res => {
+            if (res === 'success') {
+                localStorage.setItem('result-data-fs', 'success')
+                alert('Data berhasil dikirim')
+            }
+        })
+        .catch(err => console.log('err-submit-form', err))
 }
 
-function resultFormData(){
-    const diklat = resultDataDiklat.map(item=>`${item.namaDiklat},${item.tahunDiklat},${item.jumlahJamPelatihan}`)
-    const karyaTulis = resultDataKaryaTulis.map(item=>`${item.judulBuku},${item.tahunTerbit}`)
-    const organisasi = resultDataOrganisasi.map(item=>`${item.namaOrganisasi},${item.jabatanOrganisasi}`)
-    
+function resultFormData() {
+    const diklat = resultDataDiklat.map(item => `${item.namaDiklat},${item.tahunDiklat},${item.jumlahJamPelatihan}`)
+    const karyaTulis = resultDataKaryaTulis.map(item => `${item.judulBuku},${item.tahunTerbit}`)
+    const organisasi = resultDataOrganisasi.map(item => `${item.namaOrganisasi},${item.jabatanOrganisasi}`)
+
     const dataDiklat = diklat.join(';')
     const dataKaryaTulis = karyaTulis.join(';')
     const dataOrganisasi = organisasi.join(';')
