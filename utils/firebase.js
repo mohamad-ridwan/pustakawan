@@ -74,6 +74,7 @@ document.getElementById('submitFormFungsional').addEventListener('click', () => 
                 resultData.dokumen3 = res[5].dokumen3
                 delete resultData.imgURL
                 console.log(resultData)
+                localStorage.removeItem('result-data-fs')
             })
         }
     }, 0)
