@@ -80,6 +80,40 @@ document.getElementById('submitFormFungsional').addEventListener('click', () => 
     }, 0)
 })
 
+// form submit tenaga
+document.getElementById('submitFormTenaga').addEventListener('click', () => {
+    setTimeout(() => {
+        const getLocalStorage = localStorage.getItem('result-data-tenaga')
+        if (getLocalStorage == 'success') {
+            const {
+                files,
+                skKenaikanPangkatTerakhir,
+                dokumen1,
+                dokumen2,
+                dokumen3
+            } = resultFormDataTenaga()
+            Promise.all([
+                pushUpload(files, 'files'),
+                pushUpload(skKenaikanPangkatTerakhir[0], 'skKenaikanPangkatTerakhir'),
+                pushUpload(dokumen1[0], 'dokumen1'),
+                pushUpload(dokumen2[0], 'dokumen2'),
+                pushUpload(dokumen3[0], 'dokumen3'),
+            ])
+            .then(res=>{
+                let resultData = resultFormDataTenaga()
+                resultData.files = res[0].files
+                resultData.skKenaikanPangkatTerakhir = res[1].skKenaikanPangkatTerakhir
+                resultData.dokumen1 = res[2].dokumen1
+                resultData.dokumen2 = res[3].dokumen2
+                resultData.dokumen3 = res[4].dokumen3
+                delete resultData.imgURL
+                console.log(resultData)
+                localStorage.removeItem('result-data-tenaga')
+            })
+        }
+    }, 0)
+})
+
 async function pushUpload(file, nameInput) {
     return await uploadImgToFirebase(
         rootFolderPustakawan,

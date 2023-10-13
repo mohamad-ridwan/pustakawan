@@ -1382,9 +1382,9 @@ document.getElementById('keteranganTambahan').addEventListener('change', (e) => 
 
 // CASE INPUT DATA PENGIRIM
 let dataInputPengirim = {
-    nama: '',
-    email: '',
-    telp: ''
+    namaPengirim: '',
+    emailPengirim: '',
+    telpPengirim: ''
 }
 
 function changeInputDataPengirim(elementId, nameInput) {
@@ -1392,6 +1392,8 @@ function changeInputDataPengirim(elementId, nameInput) {
     if (elem) dataInputPengirim[nameInput] = elem.value
 }
 // END CASE INPUT DATA PENGIRIM
+
+localStorage.removeItem('result-data-tenaga')
 
 // SUBMIT FORM
 async function submitForm() {
@@ -1412,14 +1414,14 @@ async function submitForm() {
     })
     .then(res=>{
         if(res === 'success'){
+            localStorage.setItem('result-data-tenaga', 'success')
             alert('Data berhasil dikirim')
-            console.log(resultFormData())
         }
     })
     .catch(err=>console.log('err-submit-form', err))
 }
 
-function resultFormData(){
+function resultFormDataTenaga(){
     const diklat = resultDataDiklat.map(item=>`${item.namaDiklat},${item.tahunDiklat},${item.jumlahJamPelatihan}`)
     const organisasi = resultDataOrganisasi.map(item=>`${item.namaOrganisasi},${item.jabatanOrganisasi}`)
     
@@ -1569,20 +1571,20 @@ function validateFormLampiranData() {
 
 function validateDataPengirim() {
     let err = {}
-    const { nama, email, telp } = dataInputPengirim
+    const { namaPengirim, emailPengirim, telpPengirim } = dataInputPengirim
     const errData = []
     for (let i = 0; i < 3; i++) {
         errData.push(`errDataP${i + 1}`)
     }
-    if (!nama.trim()) {
+    if (!namaPengirim.trim()) {
         err.errDataP1 = errText
     }
-    if (!email.trim()) {
+    if (!emailPengirim.trim()) {
         err.errDataP2 = errText
     } else if (!mailRegex.test(email)) {
         err.errDataP2 = 'Alamat email tidak valid'
     }
-    if (!telp.trim()) {
+    if (!telpPengirim.trim()) {
         err.errDataP3 = errText
     }
     removeErrInputForm(errData)

@@ -568,7 +568,7 @@
                     <span><small>Nama <span style="color: #ff0000;">*</span></small></span>
                 </label>
                 <input id="namaPengirim" type="text" class="form-control"
-                    onchange="changeInputDataPengirim('namaPengirim', 'nama')">
+                    onchange="changeInputDataPengirim('namaPengirim', 'namaPengirim')">
                 <div class="wrap-err">
                     <span id="errDataP1" class="err-text"></span>
                 </div>
@@ -578,7 +578,7 @@
                     <span><small>Email <span style="color: #ff0000;">*</span></small></span>
                 </label>
                 <input id="emailPengirim" type="email" class="form-control"
-                    onchange="changeInputDataPengirim('emailPengirim', 'email')">
+                    onchange="changeInputDataPengirim('emailPengirim', 'emailPengirim')">
                 <div class="wrap-err">
                     <span id="errDataP2" class="err-text"></span>
                 </div>
@@ -588,7 +588,7 @@
                     <span><small>Telp <span style="color: #ff0000;">*</span></small></span>
                 </label>
                 <input id="telpPengirim" type="tel" class="form-control"
-                    onchange="changeInputDataPengirim('telpPengirim', 'telp')">
+                    onchange="changeInputDataPengirim('telpPengirim', 'telpPengirim')">
                 <div class="wrap-err">
                     <span id="errDataP3" class="err-text"></span>
                 </div>
@@ -600,7 +600,7 @@
         <span id="errCaptcha" style="color: #ff0000; font-size: small;"></span>
 
         <div style="display: flex; justify-content: center;">
-            <button type="button" class="btn btn-success" style="margin-top: 2rem; width: fit-content;" onclick="submitForm()">
+            <button id="submitFormTenaga" type="button" class="btn btn-success" style="margin-top: 2rem; width: fit-content;" onclick="submitForm()">
                 Submit
             </button>
         </div>
@@ -622,6 +622,7 @@
     <!-- re captcha -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script src="/utils/form-tenaga.js"></script>
+    <script type="module" src="/utils/firebase.js"></script>
     <script src="/utils/alert.js"></script>
 </body>
 
