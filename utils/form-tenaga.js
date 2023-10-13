@@ -1581,7 +1581,7 @@ function validateDataPengirim() {
     }
     if (!emailPengirim.trim()) {
         err.errDataP2 = errText
-    } else if (!mailRegex.test(email)) {
+    } else if (!mailRegex.test(emailPengirim)) {
         err.errDataP2 = 'Alamat email tidak valid'
     }
     if (!telpPengirim.trim()) {
