@@ -44,7 +44,7 @@ async function uploadImgToFirebase(rootFolder, nameFile, FILE, nameInput) {
 }
 
 // form submit fungsional
-document.getElementById('submitFormFungsional').addEventListener('click', () => {
+document.getElementById('submitFormFungsional')?.addEventListener('click', () => {
     setTimeout(() => {
         const getLocalStorage = localStorage.getItem('result-data-fs')
         if (getLocalStorage == 'success') {
@@ -81,7 +81,7 @@ document.getElementById('submitFormFungsional').addEventListener('click', () => 
 })
 
 // form submit tenaga
-document.getElementById('submitFormTenaga').addEventListener('click', () => {
+document.getElementById('submitFormTenaga')?.addEventListener('click', () => {
     setTimeout(() => {
         const getLocalStorage = localStorage.getItem('result-data-tenaga')
         if (getLocalStorage == 'success') {
