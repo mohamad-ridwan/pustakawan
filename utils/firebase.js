@@ -20,6 +20,10 @@ const storage = getStorage(app)
 
 const rootFolderPustakawan = 'pustakawan'
 
+const GET_API_PUSTAKAWAN = 'https://pustakawanbogor.rasxmedia.com/api/pustakawan/api.php'
+const POST_API_PUSTAKAWAN = 'http://localhost/pustakawanbogor/api/pustakawan.php'
+const POST_PUBLIC_API_PUSTAKAWAN = 'https://pustakawanbogor.rasxmedia.com/api/api.php'
+
 async function uploadImgToFirebase(rootFolder, nameFile, FILE, nameInput) {
     return await new Promise((resolve, reject) => {
         const storageRef = ref(storage, `${rootFolder}/${nameFile}`)
@@ -27,7 +31,7 @@ async function uploadImgToFirebase(rootFolder, nameFile, FILE, nameInput) {
             .then((snapshot) => {
                 getDownloadURL(ref(storage, snapshot.metadata.fullPath))
                     .then(urlFile => {
-                        resolve({[nameInput]: urlFile})
+                        resolve({ [nameInput]: urlFile })
                     })
                     .catch(err => reject({
                         errMsg: 'err-download-file-firebase',
@@ -64,18 +68,23 @@ document.getElementById('submitFormFungsional')?.addEventListener('click', () =>
                 pushUpload(dokumen2[0], 'dokumen2'),
                 pushUpload(dokumen3[0], 'dokumen3'),
             ])
-            .then(res=>{
-                let resultData = resultFormData()
-                resultData.files = res[0].files
-                resultData.skPustakawanTerakhir = res[1].skPustakawanTerakhir
-                resultData.skKenaikanPangkatTerakhir = res[2].skKenaikanPangkatTerakhir
-                resultData.dokumen1 = res[3].dokumen1
-                resultData.dokumen2 = res[4].dokumen2
-                resultData.dokumen3 = res[5].dokumen3
-                delete resultData.imgURL
-                console.log(resultData)
-                localStorage.removeItem('result-data-fs')
-            })
+                .then(res => {
+                    let resultData = resultFormData()
+                    resultData.files = res[0].files
+                    resultData.skPustakawanTerakhir = res[1].skPustakawanTerakhir
+                    resultData.skKenaikanPangkatTerakhir = res[2].skKenaikanPangkatTerakhir
+                    resultData.dokumen1 = res[3].dokumen1
+                    resultData.dokumen2 = res[4].dokumen2
+                    resultData.dokumen3 = res[5].dokumen3
+                    delete resultData.imgURL
+                    console.log(resultData)
+                    postFungsionalData(resultData)
+                        .then(res => {
+                            console.log(res)
+                        })
+                        .catch(err => console.log(err))
+                    localStorage.removeItem('result-data-fs')
+                })
         }
     }, 0)
 })
@@ -99,17 +108,17 @@ document.getElementById('submitFormTenaga')?.addEventListener('click', () => {
                 pushUpload(dokumen2[0], 'dokumen2'),
                 pushUpload(dokumen3[0], 'dokumen3'),
             ])
-            .then(res=>{
-                let resultData = resultFormDataTenaga()
-                resultData.files = res[0].files
-                resultData.skKenaikanPangkatTerakhir = res[1].skKenaikanPangkatTerakhir
-                resultData.dokumen1 = res[2].dokumen1
-                resultData.dokumen2 = res[3].dokumen2
-                resultData.dokumen3 = res[4].dokumen3
-                delete resultData.imgURL
-                console.log(resultData)
-                localStorage.removeItem('result-data-tenaga')
-            })
+                .then(res => {
+                    let resultData = resultFormDataTenaga()
+                    resultData.files = res[0].files
+                    resultData.skKenaikanPangkatTerakhir = res[1].skKenaikanPangkatTerakhir
+                    resultData.dokumen1 = res[2].dokumen1
+                    resultData.dokumen2 = res[3].dokumen2
+                    resultData.dokumen3 = res[4].dokumen3
+                    delete resultData.imgURL
+                    console.log(resultData)
+                    localStorage.removeItem('result-data-tenaga')
+                })
         }
     }, 0)
 })
@@ -121,4 +130,84 @@ async function pushUpload(file, nameInput) {
         file,
         nameInput
     )
+}
+
+async function postFungsionalData(dataSubmit) {
+    try {
+        const api = await fetch(POST_API_PUSTAKAWAN, {
+            method: 'post',
+            mode: 'cors',
+            body: dataFungsionalForPostAPI(dataSubmit)
+        })
+        const data = await api.json(res => res)
+        return data
+    } catch (error) {
+        return error
+    }
+}
+
+function dataFungsionalForPostAPI(data) {
+    const {
+        nip,
+        namaLengkap,
+        tempatLahir,
+        tanggalLahir,
+        jenisKelamin,
+        nomorHP,
+        email,
+        pendidikanTerakhir,
+        jurusanBidangPendidikan,
+        pangkat,
+        tamatPangkat,
+        jabatanFungsional,
+        tamatJabatan,
+        statusJabatan,
+        instansi,
+        diklatFungsionalPustakawan,
+        dataDiklat,
+        dataKaryaTulis,
+        dataOrganisasi,
+        skPustakawanTerakhir,
+        skKenaikanPangkatTerakhir,
+        dokumen1,
+        dokumen2,
+        dokumen3,
+        keteranganTambahan,
+        namaPengirim,
+        emailPengirim,
+        telpPengirim
+    } = data
+
+    return {
+        gambar_users: 'tes',
+        nip,
+        nama_users: namaLengkap,
+        Tempat_Lahir: tempatLahir,
+        Tanggal_Lahir: tanggalLahir,
+        jenis_kelamin: jenisKelamin,
+        no_hp: nomorHP,
+        email,
+        pendidikan: pendidikanTerakhir,
+        jurusan_bidangpendidikan: jurusanBidangPendidikan,
+        pangkat,
+        tamat_pangkat: tamatPangkat,
+        jabatan_fungsional: jabatanFungsional,
+        tamat_jabatan: tamatJabatan,
+        status_jabatan: statusJabatan,
+        istansi: instansi,
+        diklat: diklatFungsionalPustakawan,
+        catatan: keteranganTambahan,
+        waktu_daftar: createDateFormat(new Date()),
+        status_dinas: 'tes',
+        dokumen_pendukung: 'tes',
+        dokumen_pendukung2: 'tes',
+        dokumen_pendukung3: 'tes',
+        role: 'fungsional',
+        pekerjaan: 'tes',
+        lokasi_instansi: 'tes',
+        judul_kti: dataKaryaTulis,
+        organisasi: dataOrganisasi,
+        sk_pustakawan: 'tes',
+        sk_pangkat: 'tes'
+    }
 }

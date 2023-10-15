@@ -1554,6 +1554,7 @@ async function submitForm() {
             if (res === 'success') {
                 localStorage.setItem('result-data-fs', 'success')
                 alert('Data berhasil dikirim')
+                console.log('data-untuk-perpusnas', resultFormData())
             }
         })
         .catch(err => console.log('err-submit-form', err))
