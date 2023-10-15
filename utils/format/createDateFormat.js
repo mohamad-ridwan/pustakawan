@@ -1,4 +1,4 @@
 function createDateFormat(date){
-    const days = dayjs(date).format('MM/DD/YYYY')
+    const days = dayjs(date).format('YYYY/MM/DD')
     return days
 }

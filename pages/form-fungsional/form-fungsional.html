@@ -344,12 +344,24 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
+                <label for="lokasi_instansi"><span>Lokasi Instansi <span style="color: #ff0000;">*</span></span></label>
+            </div>
+            <div class="right" style="display: flex; flex-direction: column; width: 800px;">
+                <select id="lokasi_instansi" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('lokasi_instansi', 'lokasi_instansi')"></select>
+                <div class="err-input">
+                    <span class="txt-err"><small id="errNmKolom16"></small></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="wrap-input-fg">
+            <div class="title-input">
                 <label for="diklatFungsional"><span>Diklat Fungsional Pustakawan <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <select id="diklatFungsional" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('diklatFungsional', 'diklatFungsionalPustakawan')"></select>
                 <div class="err-input">
-                    <span class="txt-err"><small id="errNmKolom16"></small></span>
+                    <span class="txt-err"><small id="errNmKolom17"></small></span>
                 </div>
             </div>
         </div>
@@ -703,6 +715,7 @@
     <script src="/utils/form-fungsional.js"></script>
     <script src="/utils/alert.js"></script>
     <script src="/utils/format/createDateFormat.js"></script>
+    <script src="/utils/format/createHourFormat.js"></script>
     <!-- dayjs -->
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 </body>

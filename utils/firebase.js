@@ -78,7 +78,7 @@ document.getElementById('submitFormFungsional')?.addEventListener('click', () =>
                     resultData.dokumen3 = res[5].dokumen3
                     delete resultData.imgURL
                     console.log(resultData)
-                    postFungsionalData(resultData)
+                    postFungsionalData(dataFungsionalForPostAPI(resultData), 'result-data-to-db')
                         .then(res => {
                             console.log(res)
                         })
@@ -117,6 +117,11 @@ document.getElementById('submitFormTenaga')?.addEventListener('click', () => {
                     resultData.dokumen3 = res[4].dokumen3
                     delete resultData.imgURL
                     console.log(resultData)
+                    postFungsionalData(dataTenagaForPostAPI(resultData), 'result-data-to-db-data-tenaga')
+                        .then(res => {
+                            console.log(res)
+                        })
+                        .catch(err => console.log(err))
                     localStorage.removeItem('result-data-tenaga')
                 })
         }
@@ -132,14 +137,14 @@ async function pushUpload(file, nameInput) {
     )
 }
 
-async function postFungsionalData(dataSubmit) {
+async function postFungsionalData(dataSubmit, textMsg) {
     try {
         const api = await fetch(POST_API_PUSTAKAWAN, {
-            method: 'post',
-            mode: 'cors',
-            body: dataFungsionalForPostAPI(dataSubmit)
+            method: 'POST',
+            body: JSON.stringify(dataSubmit)
         })
         const data = await api.json(res => res)
+        console.log(textMsg, dataSubmit)
         return data
     } catch (error) {
         return error
@@ -148,6 +153,7 @@ async function postFungsionalData(dataSubmit) {
 
 function dataFungsionalForPostAPI(data) {
     const {
+        files,
         nip,
         namaLengkap,
         tempatLahir,
@@ -172,6 +178,7 @@ function dataFungsionalForPostAPI(data) {
         dokumen1,
         dokumen2,
         dokumen3,
+        lokasi_instansi,
         keteranganTambahan,
         namaPengirim,
         emailPengirim,
@@ -179,9 +186,11 @@ function dataFungsionalForPostAPI(data) {
     } = data
 
     return {
-        gambar_users: 'tes',
+        gambar_users: files,
         nip,
         nama_users: namaLengkap,
+        username: namaLengkap,
+        password: nomorHP,
         Tempat_Lahir: tempatLahir,
         Tanggal_Lahir: tanggalLahir,
         jenis_kelamin: jenisKelamin,
@@ -197,17 +206,81 @@ function dataFungsionalForPostAPI(data) {
         istansi: instansi,
         diklat: diklatFungsionalPustakawan,
         catatan: keteranganTambahan,
-        waktu_daftar: createDateFormat(new Date()),
+        waktu_daftar: `${createDateFormat(new Date()).split('/').join('-')} ${createHourFormat(new Date())}`,
+        status: 'tes',
         status_dinas: 'tes',
-        dokumen_pendukung: 'tes',
-        dokumen_pendukung2: 'tes',
-        dokumen_pendukung3: 'tes',
+        dokumen_pendukung: dokumen1,
+        dokumen_pendukung2: dokumen2,
+        dokumen_pendukung3: dokumen3,
         role: 'fungsional',
         pekerjaan: 'tes',
-        lokasi_instansi: 'tes',
+        lokasi_instansi: lokasi_instansi,
         judul_kti: dataKaryaTulis,
         organisasi: dataOrganisasi,
-        sk_pustakawan: 'tes',
-        sk_pangkat: 'tes'
+        sk_pustakawan: skPustakawanTerakhir,
+        sk_pangkat: skKenaikanPangkatTerakhir
+    }
+}
+
+function dataTenagaForPostAPI(data) {
+    const {
+        files,
+        nip,
+        namaLengkap,
+        tempatLahir,
+        tanggalLahir,
+        jenisKelamin,
+        nomorHP,
+        email,
+        pendidikanTerakhir,
+        jurusanBidangPendidikan,
+        pangkat,
+        statusDinas,
+        instansi,
+        lokasi_instansi,
+        diklatFungsionalPustakawan,
+        dataDiklat,
+        dataOrganisasi,
+        skKenaikanPangkatTerakhir,
+        dokumen1,
+        dokumen2,
+        dokumen3,
+        keteranganTambahan,
+    } = data
+
+    return {
+        gambar_users: files,
+        nip,
+        nama_users: namaLengkap,
+        username: namaLengkap,
+        password: nomorHP,
+        Tempat_Lahir: tempatLahir,
+        Tanggal_Lahir: tanggalLahir,
+        jenis_kelamin: jenisKelamin,
+        no_hp: nomorHP,
+        email,
+        pendidikan: pendidikanTerakhir,
+        jurusan_bidangpendidikan: jurusanBidangPendidikan,
+        pangkat,
+        tamat_pangkat: '-',
+        jabatan_fungsional: '-',
+        tamat_jabatan: '-',
+        status_jabatan: '-',
+        istansi: instansi,
+        diklat: diklatFungsionalPustakawan,
+        catatan: keteranganTambahan,
+        waktu_daftar: `${createDateFormat(new Date()).split('/').join('-')} ${createHourFormat(new Date())}`,
+        status: 'tes',
+        status_dinas: statusDinas,
+        dokumen_pendukung: dokumen1,
+        dokumen_pendukung2: dokumen2,
+        dokumen_pendukung3: dokumen3,
+        role: 'tenaga-perpus',
+        pekerjaan: 'tes',
+        lokasi_instansi: lokasi_instansi,
+        judul_kti: '-',
+        organisasi: dataOrganisasi,
+        sk_pustakawan: '-',
+        sk_pangkat: skKenaikanPangkatTerakhir
     }
 }

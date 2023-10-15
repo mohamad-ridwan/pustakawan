@@ -66,6 +66,7 @@ const dataInputNamaKolom = {
     pangkat: 'Silahkan Pilih',
     statusDinas: 'Silahkan Pilih',
     instansi: 'Silahkan Pilih',
+    lokasi_instansi: 'Silahkan Pilih',
     diklatFungsionalPustakawan: 'Tidak Pernah'
 }
 
@@ -676,6 +677,23 @@ const dataNamaKolom = {
                 data_tokens: 'silahkan-pilih',
                 value: 'Silahkan Pilih'
             }
+        ]
+    },
+    lokasi_instansi: {
+        id: 'lokasi_instansi',
+        data: [
+            {
+                data_tokens: 'silahkan-pilih',
+                value: 'Silahkan Pilih'
+            },
+            {
+                data_tokens: 'kabupaten-bogor',
+                value: 'Kabupaten Bogor'
+            },
+            {
+                data_tokens: 'kota-bogor',
+                value: 'Kota Bogor'
+            },
         ]
     }
 }
@@ -1454,10 +1472,11 @@ function validateFormNamaKolom() {
         pangkat,
         statusDinas,
         instansi,
+        lokasi_instansi,
         diklatFungsionalPustakawan
     } = dataInputNamaKolom
     let errData = []
-    for (let i = 0; i <= 12; i++) {
+    for (let i = 0; i <= 13; i++) {
         errData.push(`errNmKolom${i}`)
         if (
             document.getElementById(`errNmKolom${i}`).id == 'errNmKolom1' &&
@@ -1511,6 +1530,9 @@ function validateFormNamaKolom() {
     }
     if (!instansi.trim() || instansi === 'Silahkan Pilih') {
         err.errNmKolom12 = errText
+    }
+    if(lokasi_instansi === 'Silahkan Pilih'){
+        err.errNmKolom13 = errText
     }
     removeErrInputForm(errData)
     if (Object.keys(err).length > 0) {
