@@ -320,11 +320,11 @@ nipElement.addEventListener('change', async (e) => {
                 }
                 document.getElementById('secGlobalLoading').style.display = 'none'
             })
-    } else if(e.target.value.length > 0) {
+    } else if (e.target.value.length > 0) {
         changeDisableInput(formControll, 'true')
         document.getElementById('errNmKolom1').innerText = 'NIP harus terdiri dari 18 Digit'
         document.getElementById('errNmKolom1').style.color = '#ff0000'
-    }else{
+    } else {
         changeDisableInput(formControll, null, true)
         document.getElementById('errNmKolom1').innerText = ''
         document.getElementById('errNmKolom1').style.color = '#ff0000'
@@ -333,13 +333,19 @@ nipElement.addEventListener('change', async (e) => {
 
 async function validateNIP(nip) {
     return await new Promise((resolve, reject) => {
-        $.post('https://pustakawan.perpusnas.go.id/validasi/nip', { nip }, (data, status, tes) => {
-            if (parseInt(data) > 0) {
-                resolve({ message: 'error', text: 'Data NIP ini telah terdaftar didatabase. Apabila ingin melihat/mengupdate data, silakan pilih menu Revisi Data.' })
-            } else {
-                resolve({ message: 'success', text: 'NIP bisa digunakan' })
-            }
-        })
+        fetch(`http://localhost/pustakawanbogor/api/pustakawan.php?nip=${nip}`)
+            .then(res => res.json())
+            .then(res => {
+                if (res.length > 0) {
+                    resolve({ message: 'error', text: 'Data NIP ini telah terdaftar didatabase. Apabila ingin melihat/mengupdate data, silakan pilih menu Revisi Data.' })
+                } else {
+                    resolve({ message: 'success', text: 'NIP bisa digunakan' })
+                }
+            })
+            .catch(err => {
+                alert('Terjadi kesalahan server. Mohon coba lagi nanti')
+                console.log(err)
+            })
     })
 }
 
@@ -1422,27 +1428,33 @@ async function submitForm() {
         validateDataPengirim(),
         validateCaptcha()
     ])
-    .then(res=>{
-        const checkValidate = res.filter(validate=>validate === undefined)
-        if(checkValidate.length > 0){
-            createAlert('Mohon lengkapi formulir Anda!.')
-            return 'failed'
-        }
-        return 'success'
-    })
-    .then(res=>{
-        if(res === 'success'){
-            localStorage.setItem('result-data-tenaga', 'success')
-            alert('Data berhasil dikirim')
-        }
-    })
-    .catch(err=>console.log('err-submit-form', err))
+        .then(res => {
+            const checkValidate = res.filter(validate => validate === undefined)
+            if (checkValidate.length > 0) {
+                createAlert('Mohon lengkapi formulir Anda!.')
+                return 'failed'
+            }
+            return 'success'
+        })
+        .then(res => {
+            if (res === 'success') {
+                validateNIP(dataInputNamaKolom.nip)
+                    .then(res => {
+                        if (res?.message == 'success') {
+                            localStorage.setItem('result-data-tenaga', 'success')
+                        }else{
+                            alert(res.text)
+                        }
+                    })
+            }
+        })
+        .catch(err => console.log('err-submit-form', err))
 }
 
-function resultFormDataTenaga(){
-    const diklat = resultDataDiklat.map(item=>`${item.namaDiklat},${item.tahunDiklat},${item.jumlahJamPelatihan}`)
-    const organisasi = resultDataOrganisasi.map(item=>`${item.namaOrganisasi},${item.jabatanOrganisasi}`)
-    
+function resultFormDataTenaga() {
+    const diklat = resultDataDiklat.map(item => `${item.namaDiklat},${item.tahunDiklat},${item.jumlahJamPelatihan}`)
+    const organisasi = resultDataOrganisasi.map(item => `${item.namaOrganisasi},${item.jabatanOrganisasi}`)
+
     const dataDiklat = diklat.join(';')
     const dataOrganisasi = organisasi.join(';')
     return {
@@ -1525,13 +1537,13 @@ function validateFormNamaKolom() {
     if (pangkat === 'Silahkan Pilih') {
         err.errNmKolom10 = errText
     }
-    if(statusDinas === 'Silahkan Pilih'){
+    if (statusDinas === 'Silahkan Pilih') {
         err.errNmKolom11 = errText
     }
     if (!instansi.trim() || instansi === 'Silahkan Pilih') {
         err.errNmKolom12 = errText
     }
-    if(lokasi_instansi === 'Silahkan Pilih'){
+    if (lokasi_instansi === 'Silahkan Pilih') {
         err.errNmKolom13 = errText
     }
     removeErrInputForm(errData)

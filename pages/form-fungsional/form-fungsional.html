@@ -17,7 +17,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet"
         type="text/css" />
     <!-- end datepicker -->
-    <title>Pusat Pengembangan Pustakawan Perpustakaan Nasional RI</title>
+    <title>Pusat Pengembangan Pustakawan Perpustakaan dan Galeri Kota Bogor</title>
 </head>
 
 <body>
@@ -36,24 +36,25 @@
     <nav class="navbar navbar-fixed-top banner-top">
         <div class="container container-banner-top">
             <div class="left">
-                <img src="../../images/logo.png" alt="">
+                <img src="../../images/logo_perpusbogor.jpg" alt="">
             </div>
             <div class="right">
                 <span style="text-align: end; margin-bottom: 0.5rem;"><strong>Hubungi Kami</strong></span>
-                <p style="text-align: end; margin: 0;">Jl. Salemba Raya 28A Jakarta Pusat 10430, Indonesia</p>
+                <p style="text-align: end; margin: 0;">Jl. Kapten Muslihat No.21, Pabaton, Bogor Tengah, 16122,
+                    Indonesia</p>
                 <div style="justify-content: flex-end; display: flex;">
                     <span style="text-align: end; margin-right: 1rem;"><small><i class="fa-solid fa-phone-flip"
-                                style="margin-right: 0.5rem;"></i>0800 1737787</small></span>
+                                style="margin-right: 0.5rem;"></i>0251 8380247</small></span>
                     <span style="text-align: end;"><small><i class="fa-solid fa-globe"
-                                style="margin-right: 0.5rem;"></i><a href="https://pustakawan.perpusnas.go.id/"
-                                target="_blank">pustakawan.perpusnas.go.id</a></small></span>
+                                style="margin-right: 0.5rem;"></i><a href="https://pustakawan.vercel.app/"
+                                target="_blank">pustakawan.vercel.app</a></small></span>
                 </div>
             </div>
         </div>
     </nav>
     <nav class="navbar navbar-fixed-top banner-top-mobile" style="justify-content: center; align-items: center;">
         <div class="container">
-            <img src="../../images/logo.png" alt="" style="margin: 0 auto;">
+            <img src="../../images/logo_perpusbogor.jpg" alt="" style="margin: 0 auto;">
         </div>
     </nav>
     <nav class="navbar navbar-fixed-top navbar-page" role="navigation" style="background-color: #023BAC;">
@@ -69,7 +70,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="../pelapor-pengajuan-mandiri/pelapor-pengajuan-mandiri.html" style="color: #fff; background-color: transparent;">Beranda</a></li>
+                    <li class="active"><a href="../pelapor-pengajuan-mandiri/pelapor-pengajuan-mandiri.html"
+                            style="color: #fff; background-color: transparent;">Beranda</a></li>
                     <!-- <li><a href="#">Link</a></li> -->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"
@@ -80,13 +82,15 @@
                                     style="color: #555; background-color: #fff;">Pilih Menu</a></li>
                             <li><a href="../pengajuan-mandiri/pengajuan-mandiri.html"
                                     style="color: #555; background-color: #fff;">Pengajuan Mandiri</a></li> -->
-                            <li><a href="../penelusuran/penelusuran.html"
+                            <!-- <li><a href="../penelusuran/penelusuran.html"
                                     style="color: #555; background-color: #fff;">Penelusuran</a>
-                            </li>
+                            </li> -->
                             <li><a href="../form-fungsional/form-fungsional.html"
                                     style="color: #555; background-color: #fff;">Form Fungsional</a></li>
-                                    <li><a href="../form-tenaga/form-tenaga.html"
-                                        style="color: #555; background-color: #fff;">Form Tenaga</a></li>
+                            <li><a href="../form-tenaga/form-tenaga.html"
+                                    style="color: #555; background-color: #fff;">Form Tenaga</a></li>
+                            <li><a href="http://localhost/pustakawanbogor/index.php" target="_blank"
+                                    style="color: #555; background-color: #fff;">Dashboard</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -124,7 +128,8 @@
                 <input id="fileClientImg" type="file" accept=".jpg, .jpeg, .png, .webp" style="display: none;">
             </div>
         </div>
-        <button id="deleteClientImg" class="btn btn-danger" style="width: fit-content; display: none;" onclick="deleteClientImg()">
+        <button id="deleteClientImg" class="btn btn-danger" style="width: fit-content; display: none;"
+            onclick="deleteClientImg()">
             Hapus Foto
         </button>
         <div class="err-input">
@@ -147,7 +152,8 @@
                 <label for="nip"><span>NIP <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <input id="nip" type="tel" class="form-control input-grup" onchange="changeTxtInputNmKolom('nip', 'nip')">
+                <input id="nip" type="tel" class="form-control input-grup"
+                    onchange="changeTxtInputNmKolom('nip', 'nip')">
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom1">NIP harus terdiri dari 18 Digit</small></span>
                 </div>
@@ -159,7 +165,8 @@
                 <label for="namaLengkap"><span>Nama Lengkap <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <input id="namaLengkap" type="text" class="form-control input-grup" onchange="changeTxtInputNmKolom('namaLengkap', 'namaLengkap')">
+                <input id="namaLengkap" type="text" class="form-control input-grup"
+                    onchange="changeTxtInputNmKolom('namaLengkap', 'namaLengkap')">
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom2"></small></span>
                 </div>
@@ -171,7 +178,8 @@
                 <label for="tempatLahir"><span>Tempat Lahir <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <input id="tempatLahir" type="text" class="form-control input-grup" onchange="changeTxtInputNmKolom('tempatLahir', 'tempatLahir')">
+                <input id="tempatLahir" type="text" class="form-control input-grup"
+                    onchange="changeTxtInputNmKolom('tempatLahir', 'tempatLahir')">
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom3"></small></span>
                 </div>
@@ -184,8 +192,10 @@
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tanggalLahirDP" class="input-group date" data-date-format="mm-dd-yyyy">
-                    <input id="tanggalLahir" class="form-control" type="text" onchange="changeTxtInputNmKolom('tanggalLahir', 'tanggalLahir')">
-                    <span class="input-group-addon" style="cursor: pointer;"><i class="glyphicon glyphicon-calendar"></i></span>
+                    <input id="tanggalLahir" class="form-control" type="text"
+                        onchange="changeTxtInputNmKolom('tanggalLahir', 'tanggalLahir')">
+                    <span class="input-group-addon" style="cursor: pointer;"><i
+                            class="glyphicon glyphicon-calendar"></i></span>
                 </div>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom4"></small></span>
@@ -198,7 +208,8 @@
                 <label for="jenisKelamin"><span>Jenis Kelamin <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="jenisKelamin" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('jenisKelamin', 'jenisKelamin')"></select>
+                <select id="jenisKelamin" class="selectpicker form-control" data-live-search="true"
+                    onchange="changeTxtInputNmKolom('jenisKelamin', 'jenisKelamin')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom5"></small></span>
                 </div>
@@ -210,7 +221,8 @@
                 <label for="nomorHp"><span>Nomor HP <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <input id="nomorHp" type="tel" class="form-control input-grup" onchange="changeTxtInputNmKolom('nomorHp', 'nomorHP')">
+                <input id="nomorHp" type="tel" class="form-control input-grup"
+                    onchange="changeTxtInputNmKolom('nomorHp', 'nomorHP')">
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom6"></small></span>
                 </div>
@@ -222,7 +234,8 @@
                 <label for="email"><span>Email <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <input id="email" type="email" class="form-control input-grup" onchange="changeTxtInputNmKolom('email', 'email')">
+                <input id="email" type="email" class="form-control input-grup"
+                    onchange="changeTxtInputNmKolom('email', 'email')">
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom7"></small></span>
                 </div>
@@ -231,10 +244,12 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="pendidikanTerakhir"><span>Pendidikan Terakhir <span style="color: #ff0000;">*</span></span></label>
+                <label for="pendidikanTerakhir"><span>Pendidikan Terakhir <span
+                            style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="pendidikanTerakhir" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('pendidikanTerakhir', 'pendidikanTerakhir')"></select>
+                <select id="pendidikanTerakhir" class="selectpicker form-control" data-live-search="true"
+                    onchange="changeTxtInputNmKolom('pendidikanTerakhir', 'pendidikanTerakhir')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom8"></small></span>
                 </div>
@@ -243,10 +258,12 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="jurusBidangPendidikan"><span>Jurusan Bidang Pendidikan <span style="color: #ff0000;">*</span></span></label>
+                <label for="jurusBidangPendidikan"><span>Jurusan Bidang Pendidikan <span
+                            style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="jurusBidangPendidikan" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('jurusBidangPendidikan', 'jurusanBidangPendidikan')"></select>
+                <select id="jurusBidangPendidikan" class="selectpicker form-control" data-live-search="true"
+                    onchange="changeTxtInputNmKolom('jurusBidangPendidikan', 'jurusanBidangPendidikan')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom9"></small></span>
                 </div>
@@ -258,7 +275,8 @@
                 <label for="pangkat"><span>Pangkat <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="pangkat" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('pangkat', 'pangkat')"></select>
+                <select id="pangkat" class="selectpicker form-control" data-live-search="true"
+                    onchange="changeTxtInputNmKolom('pangkat', 'pangkat')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom10"></small></span>
                 </div>
@@ -271,8 +289,10 @@
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tamatPangkatDP" class="input-group date" data-date-format="mm-dd-yyyy">
-                    <input id="tamatPangkat" class="form-control" type="text" onchange="changeTxtInputNmKolom('tamatPangkat', 'tamatPangkat')"/>
-                    <span class="input-group-addon" style="cursor: pointer;"><i class="glyphicon glyphicon-calendar"></i></span>
+                    <input id="tamatPangkat" class="form-control" type="text"
+                        onchange="changeTxtInputNmKolom('tamatPangkat', 'tamatPangkat')" />
+                    <span class="input-group-addon" style="cursor: pointer;"><i
+                            class="glyphicon glyphicon-calendar"></i></span>
                 </div>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom11"></small></span>
@@ -282,10 +302,12 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="jabatanFungsional"><span>Jabatan Fungsional Saat Ini <span style="color: #ff0000;">*</span></span></label>
+                <label for="jabatanFungsional"><span>Jabatan Fungsional Saat Ini <span
+                            style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="jabatanFungsional" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('jabatanFungsional', 'jabatanFungsional')"></select>
+                <select id="jabatanFungsional" class="selectpicker form-control" data-live-search="true"
+                    onchange="changeTxtInputNmKolom('jabatanFungsional', 'jabatanFungsional')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom12"></small></span>
                 </div>
@@ -298,8 +320,10 @@
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tamatJabatanDP" class="input-group date" data-date-format="mm-dd-yyyy">
-                    <input id="tamatJabatan" class="form-control" type="text" onchange="changeTxtInputNmKolom('tamatJabatan', 'tamatJabatan')"/>
-                    <span class="input-group-addon" style="cursor: pointer;"><i class="glyphicon glyphicon-calendar"></i></span>
+                    <input id="tamatJabatan" class="form-control" type="text"
+                        onchange="changeTxtInputNmKolom('tamatJabatan', 'tamatJabatan')" />
+                    <span class="input-group-addon" style="cursor: pointer;"><i
+                            class="glyphicon glyphicon-calendar"></i></span>
                 </div>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom13"></small></span>
@@ -309,10 +333,12 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="statusJabatan"><span>Status Jabatan Saat Ini <span style="color: #ff0000;">*</span></span></label>
+                <label for="statusJabatan"><span>Status Jabatan Saat Ini <span
+                            style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="statusJabatan" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('statusJabatan', 'statusJabatan')"></select>
+                <select id="statusJabatan" class="selectpicker form-control" data-live-search="true"
+                    onchange="changeTxtInputNmKolom('statusJabatan', 'statusJabatan')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom14"></small></span>
                 </div>
@@ -333,7 +359,8 @@
                     <input id="checkboxInstansi" type="checkbox" name="instansiTdKDitemukan"
                         style="margin-top: 0; margin-right: 5px; cursor: pointer; height: 1.5rem; width: 1.5rem;"
                         onchange="checkBoxInstansi('checkboxInstansi')">
-                    <label for="checkboxInstansi" style="margin: 0; font-weight: normal; cursor: pointer;">Instansi tidak
+                    <label for="checkboxInstansi" style="margin: 0; font-weight: normal; cursor: pointer;">Instansi
+                        tidak
                         ditemukan</label>
                 </div>
                 <div class="err-input">
@@ -347,7 +374,8 @@
                 <label for="lokasi_instansi"><span>Lokasi Instansi <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="lokasi_instansi" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('lokasi_instansi', 'lokasi_instansi')"></select>
+                <select id="lokasi_instansi" class="selectpicker form-control" data-live-search="true"
+                    onchange="changeTxtInputNmKolom('lokasi_instansi', 'lokasi_instansi')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom16"></small></span>
                 </div>
@@ -356,10 +384,12 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="diklatFungsional"><span>Diklat Fungsional Pustakawan <span style="color: #ff0000;">*</span></span></label>
+                <label for="diklatFungsional"><span>Diklat Fungsional Pustakawan <span
+                            style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <select id="diklatFungsional" class="selectpicker form-control" data-live-search="true" onchange="changeTxtInputNmKolom('diklatFungsional', 'diklatFungsionalPustakawan')"></select>
+                <select id="diklatFungsional" class="selectpicker form-control" data-live-search="true"
+                    onchange="changeTxtInputNmKolom('diklatFungsional', 'diklatFungsionalPustakawan')"></select>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom17"></small></span>
                 </div>
@@ -372,7 +402,8 @@
             <h4 style="margin: 3rem auto 0rem auto; text-align: center;"><strong>DIKLAT TEKNIS
                     KEPUSTAKAWAN</strong></h4>
             <div class="border-batas"></div>
-            <span style="text-align: start; font-size: 12.5px; margin-top: 2rem;"><strong>Tulis nama diklat, tahun, dan jumlah jam
+            <span style="text-align: start; font-size: 12.5px; margin-top: 2rem;"><strong>Tulis nama diklat, tahun, dan
+                    jumlah jam
                     pelatihan <span style="color: #ff0000;">*</span></strong></span>
             <h5 style="text-align: start;"><strong>Contoh:</strong></h5>
             <ul>
@@ -460,10 +491,12 @@
 
         <!-- KARYA TULIS -->
         <div style="display: flex; flex-direction: column; margin-top: 3rem;">
-            <h4 style="margin: 3rem auto 0rem auto; text-align: center;"><strong style="text-transform: uppercase;">Judul
+            <h4 style="margin: 3rem auto 0rem auto; text-align: center;"><strong
+                    style="text-transform: uppercase;">Judul
                     Karya Tulis Ilmiah (KTI) dibidang PUSDOKINFO yang pernah diterbitkan (tuliskan)</strong></h4>
             <div class="border-batas"></div>
-            <span style="text-align: start; font-size: 12.5px; margin-top: 2rem;"><strong>Tuliskan judul Karya Tulis Ilmiah (KTI) dan
+            <span style="text-align: start; font-size: 12.5px; margin-top: 2rem;"><strong>Tuliskan judul Karya Tulis
+                    Ilmiah (KTI) dan
                     tahun terbit <span style="color: #ff0000;">*</span></strong></span>
             <h5 style="text-align: start;"><strong>Contoh:</strong></h5>
             <ul>
@@ -518,8 +551,9 @@
         <div style="display: flex; flex-direction: column; margin-top: 3rem;">
             <h4 style="margin: 3rem auto 0rem auto; text-align: center;"><strong
                     style="text-transform: uppercase;">Organisasi Profesi Yang Diikuti</strong></h4>
-                    <div class="border-batas"></div>
-            <span style="text-align: start; font-size: 12.5px; margin-top: 2rem;"><strong>Tulisakan Nama Organisasi dan jabatan (pengurus
+            <div class="border-batas"></div>
+            <span style="text-align: start; font-size: 12.5px; margin-top: 2rem;"><strong>Tulisakan Nama Organisasi dan
+                    jabatan (pengurus
                     atau anggota) <span style="color: #ff0000;">*</span></strong></span>
             <h5 style="text-align: start;"><strong>Contoh:</strong></h5>
             <ul>
@@ -569,12 +603,13 @@
                 </div>
             </div>
         </div>
-        
+
         <div style="display: flex; flex-direction: column; margin-top: 3rem;">
             <h4 style="margin: 3rem auto 0rem auto; text-align: center;"><strong
                     style="text-transform: uppercase;">Lampiran Data Pendukung dan Keterangan Tambahan</strong></h4>
-                    <div class="border-batas"></div>
-            <span style="text-align: start; font-size: 12.5px; margin-top: 2rem;"><strong>Mohon lampirkan berkas pendukung untuk validasi
+            <div class="border-batas"></div>
+            <span style="text-align: start; font-size: 12.5px; margin-top: 2rem;"><strong>Mohon lampirkan berkas
+                    pendukung untuk validasi
                     data</strong></span>
             <h5 style="text-align: start;"><strong>Contoh:</strong></h5>
             <ul>
@@ -583,7 +618,8 @@
             <span style="margin: 1rem 0 2rem 0;">Lampiran dalam bentuk pdf atau gambar (png, jpeg, jpg, svg), ukuran
                 maksimal 2MB</span>
             <div>
-                <label for="pustakawanTerakhir" style="font-weight: normal;">SK Pustakawan terakhir <span style="color: #ff0000;">*</span></label>
+                <label for="pustakawanTerakhir" style="font-weight: normal;">SK Pustakawan terakhir <span
+                        style="color: #ff0000;">*</span></label>
                 <div style="display: flex;" class="input-lampiran-data">
                     <input id="pustakawanTerakhir" type="file" class="form-control"
                         accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
@@ -595,7 +631,8 @@
             </div>
             <span style="height: 2rem;"><small id="errPustakawanTerakhir" style="color: #ff0000;"></small></span>
             <div>
-                <label for="kenaikanPangkatTerakhir" style="font-weight: normal;">SK Kenaikan Pangkat Terakhir <span style="color: #ff0000;">*</span></label>
+                <label for="kenaikanPangkatTerakhir" style="font-weight: normal;">SK Kenaikan Pangkat Terakhir <span
+                        style="color: #ff0000;">*</span></label>
                 <div style="display: flex;" class="input-lampiran-data">
                     <input id="kenaikanPangkatTerakhir" type="file" class="form-control"
                         accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
@@ -607,7 +644,8 @@
             </div>
             <span style="height: 2rem;"><small id="errKenaikanPangkatTerakhir" style="color: #ff0000;"></small></span>
             <div>
-                <label for="lampiranData1" style="font-weight: normal;">Dokumen 1 <span style="color: #ff0000;">*</span></label>
+                <label for="lampiranData1" style="font-weight: normal;">Dokumen 1 <span
+                        style="color: #ff0000;">*</span></label>
                 <div style="display: flex;" class="input-lampiran-data">
                     <input id="lampiranData1" type="file" class="form-control"
                         accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
@@ -619,7 +657,8 @@
             </div>
             <span style="height: 2rem;"><small id="errLampiranData1" style="color: #ff0000;"></small></span>
             <div>
-                <label for="lampiranData2" style="font-weight: normal;">Dokumen 2 <span style="color: #ff0000;">*</span></label>
+                <label for="lampiranData2" style="font-weight: normal;">Dokumen 2 <span
+                        style="color: #ff0000;">*</span></label>
                 <div style="display: flex;" class="input-lampiran-data">
                     <input id="lampiranData2" type="file" class="form-control"
                         accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
@@ -631,7 +670,8 @@
             </div>
             <span style="height: 2rem;"><small id="errLampiranData2" style="color: #ff0000;"></small></span>
             <div>
-                <label for="lampiranData3" style="font-weight: normal;">Dokumen 3 <span style="color: #ff0000;">*</span></label>
+                <label for="lampiranData3" style="font-weight: normal;">Dokumen 3 <span
+                        style="color: #ff0000;">*</span></label>
                 <div style="display: flex;" class="input-lampiran-data">
                     <input id="lampiranData3" type="file" class="form-control"
                         accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
@@ -645,8 +685,10 @@
         </div>
         <div class="border-batas"></div>
         <div style="display: flex; flex-direction: column; margin-top: 3rem;">
-            <label for="keteranganTambahan"><small>Keterangan Tambahan <span style="color: #ff0000;">*</span></small></label>
-            <textarea name="" id="keteranganTambahan" cols="5" rows="4" class="form-control" style="resize: vertical;"></textarea>
+            <label for="keteranganTambahan"><small>Keterangan Tambahan <span
+                        style="color: #ff0000;">*</span></small></label>
+            <textarea name="" id="keteranganTambahan" cols="5" rows="4" class="form-control"
+                style="resize: vertical;"></textarea>
             <div class="wrap-err">
                 <span id="errKeteranganTambahan" class="err-text"></span>
             </div>
@@ -660,7 +702,8 @@
                 <label for="namaPengirim">
                     <span><small>Nama <span style="color: #ff0000;">*</span></small></span>
                 </label>
-                <input id="namaPengirim" type="text" class="form-control" onchange="changeInputDataPengirim('namaPengirim', 'namaPengirim')">
+                <input id="namaPengirim" type="text" class="form-control"
+                    onchange="changeInputDataPengirim('namaPengirim', 'namaPengirim')">
                 <div class="wrap-err">
                     <span id="errDataP1" class="err-text"></span>
                 </div>
@@ -669,7 +712,8 @@
                 <label for="emailPengirim">
                     <span><small>Email <span style="color: #ff0000;">*</span></small></span>
                 </label>
-                <input id="emailPengirim" type="email" class="form-control" onchange="changeInputDataPengirim('emailPengirim', 'emailPengirim')">
+                <input id="emailPengirim" type="email" class="form-control"
+                    onchange="changeInputDataPengirim('emailPengirim', 'emailPengirim')">
                 <div class="wrap-err">
                     <span id="errDataP2" class="err-text"></span>
                 </div>
@@ -678,7 +722,8 @@
                 <label for="telpPengirim">
                     <span><small>Telp <span style="color: #ff0000;">*</span></small></span>
                 </label>
-                <input id="telpPengirim" type="tel" class="form-control" onchange="changeInputDataPengirim('telpPengirim', 'telpPengirim')">
+                <input id="telpPengirim" type="tel" class="form-control"
+                    onchange="changeInputDataPengirim('telpPengirim', 'telpPengirim')">
                 <div class="wrap-err">
                     <span id="errDataP3" class="err-text"></span>
                 </div>
@@ -690,7 +735,8 @@
         <span id="errCaptcha" style="color: #ff0000; font-size: small;"></span>
 
         <div style="display: flex; justify-content: center;">
-            <button id="submitFormFungsional" type="button" class="btn btn-success" style="margin-top: 2rem; width: fit-content;" onclick="submitForm()">
+            <button id="submitFormFungsional" type="button" class="btn btn-success"
+                style="margin-top: 2rem; width: fit-content;" onclick="submitForm()">
                 Submit
             </button>
         </div>

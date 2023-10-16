@@ -1570,9 +1570,14 @@ async function submitForm() {
         })
         .then(res => {
             if (res === 'success') {
-                localStorage.setItem('result-data-fs', 'success')
-                alert('Data berhasil dikirim')
-                console.log('data-untuk-perpusnas', resultFormData())
+                validateNIP(dataInputNamaKolom.nip)
+                    .then(res => {
+                        if (res?.message == 'success') {
+                            localStorage.setItem('result-data-fs', 'success')
+                        }else{
+                            alert(res.text)
+                        }
+                    })
             }
         })
         .catch(err => console.log('err-submit-form', err))
@@ -1601,13 +1606,19 @@ const corsHeroku = 'https://cors-anywhere.herokuapp.com'
 
 async function validateNIP(nip) {
     return await new Promise((resolve, reject) => {
-        $.post('https://pustakawan.perpusnas.go.id/validasi/nip', { nip }, (data, status, tes) => {
-            if (parseInt(data) > 0) {
-                resolve({ message: 'error', text: 'Data NIP ini telah terdaftar didatabase. Apabila ingin melihat/mengupdate data, silakan pilih menu Revisi Data.' })
-            } else {
-                resolve({ message: 'success', text: 'NIP bisa digunakan' })
-            }
-        })
+        fetch(`http://localhost/pustakawanbogor/api/pustakawan.php?nip=${nip}`)
+            .then(res => res.json())
+            .then(res => {
+                if (res.length > 0) {
+                    resolve({ message: 'error', text: 'Data NIP ini telah terdaftar didatabase. Apabila ingin melihat/mengupdate data, silakan pilih menu Revisi Data.' })
+                } else {
+                    resolve({ message: 'success', text: 'NIP bisa digunakan' })
+                }
+            })
+            .catch(err => {
+                alert('Terjadi kesalahan server. Mohon coba lagi nanti')
+                console.log(err)
+            })
     })
 }
 
@@ -1702,7 +1713,7 @@ function validateFormNamaKolom() {
     if (!instansi.trim() || instansi === 'Silahkan Pilih') {
         err.errNmKolom15 = errText
     }
-    if(lokasi_instansi === 'Silahkan Pilih'){
+    if (lokasi_instansi === 'Silahkan Pilih') {
         err.errNmKolom16 = errText
     }
     removeErrInputForm(errData)

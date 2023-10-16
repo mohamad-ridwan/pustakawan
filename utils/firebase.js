@@ -20,9 +20,7 @@ const storage = getStorage(app)
 
 const rootFolderPustakawan = 'pustakawan'
 
-const GET_API_PUSTAKAWAN = 'https://pustakawanbogor.rasxmedia.com/api/pustakawan/api.php'
 const POST_API_PUSTAKAWAN = 'http://localhost/pustakawanbogor/api/pustakawan.php'
-const POST_PUBLIC_API_PUSTAKAWAN = 'https://pustakawanbogor.rasxmedia.com/api/api.php'
 
 async function uploadImgToFirebase(rootFolder, nameFile, FILE, nameInput) {
     return await new Promise((resolve, reject) => {
@@ -81,6 +79,7 @@ document.getElementById('submitFormFungsional')?.addEventListener('click', () =>
                     postFungsionalData(dataFungsionalForPostAPI(resultData), 'result-data-to-db')
                         .then(res => {
                             console.log(res)
+                            alert('Data berhasil dikirim')
                         })
                         .catch(err => console.log(err))
                     localStorage.removeItem('result-data-fs')
@@ -120,6 +119,7 @@ document.getElementById('submitFormTenaga')?.addEventListener('click', () => {
                     postFungsionalData(dataTenagaForPostAPI(resultData), 'result-data-to-db-data-tenaga')
                         .then(res => {
                             console.log(res)
+                            alert('Data berhasil dikirim')
                         })
                         .catch(err => console.log(err))
                     localStorage.removeItem('result-data-tenaga')
