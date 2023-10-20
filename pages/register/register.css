@@ -1,0 +1,9 @@
+.err-input {
+    display: flex;
+    height: auto;
+    min-height: 2rem;
+}
+
+.txt-err {
+    color: #ff0000;
+}

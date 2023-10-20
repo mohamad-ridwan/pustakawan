@@ -43,6 +43,35 @@
     background-color: #fff;
 }
 
+.icon-profile{
+    display: flex;
+    position: absolute;
+    right: 0;
+    top: 5.5px;
+}
+
+.icon-profile a{
+    display: flex;
+    border: none;
+    outline: none;
+    align-items: center;
+}
+
+/* .dropdown-profile{
+    margin-left: -85px !important;
+} */
+
+.name-mobile{
+    display: none;
+}
+.name-desktop{
+    margin-right: 5px;
+}
+
+.dropdown-profile{
+    min-width: 0 !important;
+}
+
 /* end navbar */
 
 @media screen and (max-width: 768px) {
@@ -64,5 +93,31 @@
         width: 30%;
     }
 
+    .icon-profile{
+        display: flex;
+        flex-direction: column;
+        position: static;
+    }
+
+    .icon-profile img{
+        margin-left: 15px;
+    }
+
+    .icon-profile a{
+        display: flex;
+    }
+
+    .dropdown-profile{
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    .name-mobile{
+        display: flex;
+        margin-left: 5px;
+    }
+    .name-desktop{
+        display: none;
+    }
     /* end navbar */
 }

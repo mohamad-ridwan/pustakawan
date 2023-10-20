@@ -1417,7 +1417,7 @@ function changeInputDataPengirim(elementId, nameInput) {
 }
 // END CASE INPUT DATA PENGIRIM
 
-localStorage.removeItem('result-data-tenaga')
+setLocalStorageForSubmit(REMOVE_ITEM, nmStorageTenaga)
 
 // SUBMIT FORM
 async function submitForm() {

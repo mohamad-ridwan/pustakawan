@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/images/logo_perpusbogor.jpg">
     <link rel="stylesheet" href="form-fungsional.css">
     <link rel="stylesheet" href="../../utils/alert.css">
     <link rel="stylesheet" href="../../utils/navbar.css">
@@ -69,7 +70,7 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav" style="width: 100%; position: relative;">
                     <li class="active"><a href="../pelapor-pengajuan-mandiri/pelapor-pengajuan-mandiri.html"
                             style="color: #fff; background-color: transparent;">Beranda</a></li>
                     <!-- <li><a href="#">Link</a></li> -->
@@ -93,6 +94,19 @@
                                     style="color: #555; background-color: #fff;">Dashboard</a></li>
                         </ul>
                     </li>
+                    <div class="icon-profile">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                            style="color: #fff; background: transparent;">
+                            <span class="name-desktop" id="namePFDesktop">Mohamad Ridwan Apriyadi</span>
+                            <img src="../../images/noimg.png" alt=""
+                                style="height: 40px; width: 40px; border-radius: 500px;">
+                            <span class="name-mobile" id="namePFMobile">Mohamad Ridwan Apriyadi</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-profile" role="menu">
+                            <li><a href="../../pages/login/login.html" style="color: #555; background-color: #fff;">Login</a></li>
+                            <li><a href="../../pages/register/register.html" style="color: #555; background-color: #fff;">Register</a></li>
+                        </ul>
+                    </div>
                 </ul>
             </div>
         </div>
@@ -149,13 +163,15 @@
         <!-- input nama kolom -->
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="nip"><span>NIP <span style="color: #ff0000;">*</span></span></label>
+                <label for="nip"><span>NIP/NIK <span style="color: #ff0000;">*</span></span></label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
+                <select id="nipornik" class="selectpicker form-control" data-live-search="true"
+                    onchange="changeNIPORNIK()"></select>
                 <input id="nip" type="tel" class="form-control input-grup"
-                    onchange="changeTxtInputNmKolom('nip', 'nip')">
+                    onchange="changeTxtInputNmKolom('nip', 'nip')" style="margin-top: 0.5rem;" readonly>
                 <div class="err-input">
-                    <span class="txt-err"><small id="errNmKolom1">NIP harus terdiri dari 18 Digit</small></span>
+                    <span class="txt-err"><small id="errNmKolom1"></small></span>
                 </div>
             </div>
         </div>
@@ -467,8 +483,10 @@
                         </div>
                         <div style="display: flex; flex-direction: column;">
                             <label for="tahunDiklat"><small>Tahun</small></label>
-                            <input type="text" class="form-control" id="tahunDiklat"
-                                onchange="changeInputAdd('tahunDiklat', 'tahunDiklat', 'DIKLAT')">
+                            <select id="tahunDiklat" class="selectpicker form-control" data-live-search="true"
+                                onchange="changeInputAdd('tahunDiklat', 'tahunDiklat', 'DIKLAT')"></select>
+                            <!-- <input type="text" class="form-control" id="tahunDiklat"
+                                onchange="changeInputAdd('tahunDiklat', 'tahunDiklat', 'DIKLAT')"> -->
                             <span style="height: 1.5rem;"><small id="errThDiklat"
                                     style="color: #ff0000;"></small></span>
                         </div>
@@ -532,8 +550,10 @@
                         </div>
                         <div style="display: flex; flex-direction: column;">
                             <label for="tahunTerbit"><small>Tahun Terbit</small></label>
-                            <input type="text" class="form-control" id="tahunTerbit"
-                                onchange="changeInputAdd('tahunTerbit', 'tahunTerbit', 'KARYA-TULIS-ILMIAH')">
+                            <select id="tahunTerbit" class="selectpicker form-control" data-live-search="true"
+                                onchange="changeInputAdd('tahunTerbit', 'tahunTerbit', 'KARYA-TULIS-ILMIAH')"></select>
+                            <!-- <input type="text" class="form-control" id="tahunTerbit"
+                                onchange="changeInputAdd('tahunTerbit', 'tahunTerbit', 'KARYA-TULIS-ILMIAH')"> -->
                             <span style="height: 1.5rem;"><small id="errTahunTerbit"
                                     style="color: #ff0000;"></small></span>
                         </div>
@@ -589,8 +609,10 @@
                         </div>
                         <div style="display: flex; flex-direction: column;">
                             <label for="jabatanOrganisasi"><small>Jabatan (pengurus atau anggota)</small></label>
-                            <input type="text" class="form-control" id="jabatanOrganisasi"
-                                onchange="changeInputAdd('jabatanOrganisasi', 'jabatanOrganisasi', 'ORGANISASI')">
+                            <select id="jabatanOrganisasi" class="selectpicker form-control" data-live-search="true"
+                                onchange="changeInputAdd('jabatanOrganisasi', 'jabatanOrganisasi', 'ORGANISASI')"></select>
+                            <!-- <input type="text" class="form-control" id="jabatanOrganisasi"
+                                onchange="changeInputAdd('jabatanOrganisasi', 'jabatanOrganisasi', 'ORGANISASI')"> -->
                             <span style="height: 1.5rem;"><small id="errJbtOrganisasi"
                                     style="color: #ff0000;"></small></span>
                         </div>
@@ -631,8 +653,8 @@
             </div>
             <span style="height: 2rem;"><small id="errPustakawanTerakhir" style="color: #ff0000;"></small></span>
             <div>
-                <label for="kenaikanPangkatTerakhir" style="font-weight: normal;">SK Kenaikan Pangkat Terakhir <span
-                        style="color: #ff0000;">*</span></label>
+                <label for="kenaikanPangkatTerakhir" style="font-weight: normal;">SK Kenaikan Pangkat Terakhir
+                    (Optional)</label>
                 <div style="display: flex;" class="input-lampiran-data">
                     <input id="kenaikanPangkatTerakhir" type="file" class="form-control"
                         accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
@@ -643,7 +665,7 @@
                 </div>
             </div>
             <span style="height: 2rem;"><small id="errKenaikanPangkatTerakhir" style="color: #ff0000;"></small></span>
-            <div>
+            <!-- <div>
                 <label for="lampiranData1" style="font-weight: normal;">Dokumen 1 <span
                         style="color: #ff0000;">*</span></label>
                 <div style="display: flex;" class="input-lampiran-data">
@@ -681,12 +703,11 @@
                         style="cursor: not-allowed; margin-top: 0.5rem;">Hapus</button>
                 </div>
             </div>
-            <span style="height: 2rem;"><small id="errLampiranData3" style="color: #ff0000;"></small></span>
+            <span style="height: 2rem;"><small id="errLampiranData3" style="color: #ff0000;"></small></span> -->
         </div>
         <div class="border-batas"></div>
-        <div style="display: flex; flex-direction: column; margin-top: 3rem;">
-            <label for="keteranganTambahan"><small>Keterangan Tambahan <span
-                        style="color: #ff0000;">*</span></small></label>
+        <div style="display: flex; flex-direction: column; margin-top: 3rem; margin-bottom: 3rem;">
+            <label for="keteranganTambahan"><small>Keterangan Tambahan (Optional)</small></label>
             <textarea name="" id="keteranganTambahan" cols="5" rows="4" class="form-control"
                 style="resize: vertical;"></textarea>
             <div class="wrap-err">
@@ -694,7 +715,7 @@
             </div>
         </div>
 
-        <h4 style="margin: 4rem auto 0rem auto; text-align: center;"><strong style="text-transform: uppercase;">Data
+        <!-- <h4 style="margin: 4rem auto 0rem auto; text-align: center;"><strong style="text-transform: uppercase;">Data
                 Anda Sebagai Pengirim</strong></h4>
         <div class="border-batas"></div>
         <div class="container-data-pengirim" style="margin-bottom: 3rem;">
@@ -728,7 +749,7 @@
                     <span id="errDataP3" class="err-text"></span>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpiredCallback"
             data-sitekey="6LeAY_4nAAAAAG4mEOA8_sXdkoXMSHb7MKLoqcgh"></div>
@@ -757,13 +778,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
     <!-- re captcha -->
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <script type="module" src="/utils/firebase.js"></script>
-    <script src="/utils/form-fungsional.js"></script>
-    <script src="/utils/alert.js"></script>
-    <script src="/utils/format/createDateFormat.js"></script>
-    <script src="/utils/format/createHourFormat.js"></script>
+    <!-- local storage -->
     <!-- dayjs -->
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="/utils/localStorage/localStorage.js"></script>
+    <script src="/utils/format/createDateFormat.js"></script>
+    <script src="/utils/format/createHourFormat.js"></script>
+    <script src="/utils/format/createRangeOfYears.js"></script>
+    <script src="/utils/format/changeUpdateValueSelection.js"></script>
+    <script src="/utils/api/postForm.js"></script>
+    <script src="/utils/navbar.js"></script>
+    <!-- <script type="module" src="/utils/firebase.js"></script> -->
+    <script src="/utils/alert.js"></script>
+    <script src="/utils/form-fungsional.js"></script>
 </body>
 
 </html>

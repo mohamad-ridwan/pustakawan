@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/images/logo_perpusbogor.jpg">
+    <link rel="stylesheet" href="../../utils/navbar.css">
+    <link rel="stylesheet" href="./register.css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.2/css/all.css">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" />
+    <title>Pusat Pengembangan Pustakawan Perpustakaan dan Galeri Kota Bogor</title>
+</head>
+
+<body>
+    <div class="container" style="justify-content: center;">
+        <div style="display: flex; justify-content: center;">
+            <div style="display: flex; flex-direction: column; justify-content: center; margin-top: 50px; align-items: center;">
+                <img src="../../images/perpus.png" alt="" style="max-width: 80px;">
+                <h4 style="margin-top: 30px;">Daftar Akun</h4>
+            </div>
+        </div>
+
+        <div id="loginbox" style="margin-top:20px; max-width: 368px; margin-left: auto; margin-right: auto;" class="mainbox">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="panel-title">Register</div>
+                    <div style="float:right; font-size: 80%; position: relative; top:-10px">
+                        <!-- <a href="#">Lupa kata sandi?</a> -->
+                    </div>
+                </div>
+                <div style="padding-top:30px" class="panel-body">
+                    <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+                    <form id="loginform" class="form-horizontal" role="form">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                            <input id="username" type="text" class="form-control" name="username"
+                                placeholder="username">
+                        </div>
+                        <div class="err-input">
+                            <span class="txt-err"><small id="errRegister1"></small></span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                            <input id="email" type="email" class="form-control" name="email"
+                                placeholder="email">
+                        </div>
+                        <div class="err-input">
+                            <span class="txt-err"><small id="errRegister2"></small></span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input id="password" type="password" class="form-control" name="password"
+                                placeholder="password">
+                        </div>
+                        <div class="err-input">
+                            <span class="txt-err"><small id="errRegister3"></small></span>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                            <input id="confirmPassword" type="password" class="form-control" name="confirmPassword"
+                                placeholder="confirm password">
+                        </div>
+                        <div class="err-input">
+                            <span class="txt-err"><small id="errRegister4"></small></span>
+                        </div>
+                        <div style="display: flex; width: 100%; justify-content: center; margin-bottom: 10px;">
+                            <button type="button" class="btn btn-success" style="width: 150px;" onclick="submitRegister()">Register</button>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-12 control">
+                                <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
+                                    Sudah punya akun?
+                                    <a href="../login/login.html">
+                                        Login disini
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+    <!-- cryptoJS -->
+    <script src="../../CryptoJS v3.1.2/rollups/aes.js"></script>
+    <script src="../../CryptoJS v3.1.2/rollups/hmac-sha256.js"></script>
+    <!-- end cryptoJS -->
+    <script src="/utils/jwt/createJWTToken.js"></script>
+    <script src="/utils/jwt/decodeJWT.js"></script>
+    <script src="/utils/register.js"></script>
+</body>
+
+</html>

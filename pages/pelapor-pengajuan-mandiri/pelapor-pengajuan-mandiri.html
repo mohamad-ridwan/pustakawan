@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/images/logo_perpusbogor.jpg">
     <link rel="stylesheet" href="pelapor-pengajuan-mandiri.css">
     <link rel="stylesheet" href="../../utils/navbar.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
@@ -52,7 +53,7 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav" style="width: 100%; position: relative;">
                     <li class="active"><a href="../pelapor-pengajuan-mandiri/pelapor-pengajuan-mandiri.html"
                             style="color: #fff; background-color: transparent;">Beranda</a></li>
                     <!-- <li><a href="#">Link</a></li> -->
@@ -76,6 +77,19 @@
                                     style="color: #555; background-color: #fff;">Dashboard</a></li>
                         </ul>
                     </li>
+                    <div class="icon-profile">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                            style="color: #fff; background: transparent;">
+                            <span class="name-desktop" id="namePFDesktop">Mohamad Ridwan Apriyadi</span>
+                            <img src="../../images/noimg.png" alt=""
+                                style="height: 40px; width: 40px; border-radius: 500px;">
+                            <span class="name-mobile" id="namePFMobile">Mohamad Ridwan Apriyadi</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-profile" role="menu">
+                            <li><a href="../../pages/login/login.html" style="color: #555; background-color: #fff;">Login</a></li>
+                            <li><a href="../../pages/register/register.html" style="color: #555; background-color: #fff;">Register</a></li>
+                        </ul>
+                    </div>
                 </ul>
             </div>
         </div>
@@ -142,6 +156,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+    <script src="/utils/navbar.js"></script>
 </body>
 
 </html>
