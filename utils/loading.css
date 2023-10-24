@@ -1,0 +1,33 @@
+.loading-pages {
+    display: none;
+    position: fixed;
+    z-index: 99999999999999 !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #f1f1f1;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading-spinner-pages {
+    border: 3.5px solid #f3f3f3;
+    border-radius: 500px;
+    border-top: 3.5px solid #023BAC;
+    width: 45px;
+    height: 45px;
+    -webkit-animation: spin 0.7s linear infinite; /* Safari */
+    animation: spin 0.7s linear infinite;
+  }
+  
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

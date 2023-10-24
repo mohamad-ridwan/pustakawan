@@ -18,6 +18,7 @@
   "homepage": "https://github.com/mohamad-ridwan/pustakawan#readme",
   "dependencies": {
     "dotenv": "^16.3.1",
+    "pdfmake": "^0.2.7",
     "requirejs": "^2.3.6"
   }
 }

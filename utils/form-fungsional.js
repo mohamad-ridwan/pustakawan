@@ -853,12 +853,14 @@ function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
     const btnAddCard = document.getElementsByClassName('btn-add-card')
     const dropdownMenu = document.getElementsByClassName('dropdown-menu inner selectpicker')
     if (isRemoveDisabled) {
-        removeDisabledAttr(elements, 1)
-        removeDisabledAttr(btnSelect, 0)
+        removeDisabledAttr(document.getElementsByClassName('form-control input-grup'), 1)
+        removeDisabledAttr(document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default'), 1)
+        removeDisabledAttr(document.getElementsByClassName('input-tanggal'), 0)
         removeDisabledAttr(btnAddCard, 0)
     } else if (isDisabled) {
-        addDisabledAttr(elements, isDisabled, 4)
-        addDisabledAttr(btnSelect, isDisabled, 2)
+        addDisabledAttr(document.getElementsByClassName('form-control input-grup'), isDisabled, 1)
+        addDisabledAttr(document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default'), isDisabled, 1)
+        addDisabledAttr(document.getElementsByClassName('input-tanggal'), isDisabled, 0)
         addDisabledAttr(btnAddCard, isDisabled, 0)
     }
     setTimeout(() => {
@@ -933,7 +935,7 @@ nipElement.addEventListener('change', async (e) => {
 })
 
 window.onload = () => {
-    changeDisableInput(formControll, 'true')
+    changeDisableInput(document.getElementsByClassName('form-control input-grup'), 'true')
 }
 
 function setOptionElement() {
@@ -1670,45 +1672,70 @@ function deleteFileLampiran(actionType) {
 
 localStorage.removeItem('result-data-fs')
 
+let loadingSubmit = false
+
 // submit form
 async function submitForm() {
-    await Promise.all([
-        validateFormNamaKolom(),
-        validateFormAddCard(),
-        validateFormLampiranData(),
-        // validateDataPengirim(),
-        validateCaptcha()
-    ])
-        .then(res => {
-            const checkValidate = res.filter(validate => validate === undefined)
-            if (checkValidate.length > 0) {
-                createAlert('Mohon lengkapi formulir Anda!.')
-                return 'failed'
-            }
-            return 'success'
-        })
-        .then(res => {
-            if (res === 'success') {
-                spinnerGlobalLoading('flex')
-                validateNIP(dataInputNamaKolom.nip)
-                    .then(res => {
-                        if (res?.message == 'success') {
-                            localStorage.setItem('result-data-fs', 'success')
+    if (loadingSubmit === false) {
+        await Promise.all([
+            validateFormNamaKolom(),
+            validateFormAddCard(),
+            validateFormLampiranData(),
+            // validateDataPengirim(),
+            // validateCaptcha()
+        ])
+            .then(res => {
+                const checkValidate = res.filter(validate => validate === undefined)
+                if (checkValidate.length > 0) {
+                    createAlert('Mohon lengkapi formulir Anda!.')
+                    return 'failed'
+                }
+                return 'success'
+            })
+            .then(res => {
+                if (res === 'success') {
+                    loadingSubmit = true
+                    spinnerGlobalLoading('flex')
+                    validateNIP(dataInputNamaKolom.nip ?? dataInputNamaKolom.nik, dataInputNamaKolom.nip ? 'NIP' : 'NIK')
+                        .then(res => {
+                            if (res?.message == 'success') {
+                                // localStorage.setItem('result-data-fs', 'success')
+                                return postFormDataAPI(POST_API_PUSTAKAWAN, {
+                                    method: 'POST',
+                                    body: JSON.stringify(dataFungsionalForPostAPI(resultFormData()))
+                                })
+                            } else {
+                                return {
+                                    text: res.text,
+                                    message: 'error'
+                                }
+                            }
+                        })
+                        .then(res => {
+                            if (res?.message == 'error') {
+                                alert(res.text)
+                                spinnerGlobalLoading('none')
+                                loadingSubmit = false
+                            } else if (res?.message == 'Data yang diperlukan tidak lengkap.') {
+                                alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                                spinnerGlobalLoading('none')
+                                loadingSubmit = false
+                            } else {
+                                alert('Data berhasil ditambah')
+                                spinnerGlobalLoading('none')
+                                loadingSubmit = false
+                            }
+                        })
+                        .catch(err => {
+                            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                            console.log(err)
+                            loadingSubmit = false
                             spinnerGlobalLoading('none')
-                        } else {
-                            alert(res.text)
-                            spinnerGlobalLoading('none')
-                        }
-                    })
-            }
-        })
-        .catch(err => console.log('err-submit-form', err))
-        console.log(dataFungsionalForPostAPI(resultFormData()))
-        // await postFormDataAPI(dataFungsionalForPostAPI(resultFormData()))
-        // .then(res=>{
-        //     console.log(res)
-        // })
-        // .catch(err=>console.log(err))
+                        })
+                }
+            })
+            .catch(err => console.log('err-submit-form', err))
+    }
 }
 
 function resultFormData() {
@@ -1766,9 +1793,9 @@ function dataFungsionalForPostAPI(data) {
     } = data
 
     return {
-        gambar_users: 'tes.jpg',
-        nip,
-        nik,
+        gambar_users: files.name,
+        nip: nip ?? 'null',
+        nik: nik ?? 'null',
         nama_users: namaLengkap,
         username: namaLengkap,
         password: nomorHP,
@@ -1786,20 +1813,20 @@ function dataFungsionalForPostAPI(data) {
         status_jabatan: statusJabatan,
         istansi: instansi,
         diklat: diklatFungsionalPustakawan,
-        catatan: keteranganTambahan,
+        catatan: keteranganTambahan.trim() ? keteranganTambahan : 'null',
         waktu_daftar: `${createDateFormat(new Date()).split('/').join('-')} ${createHourFormat(new Date())}`,
-        status: 'tes',
-        status_dinas: 'tes',
-        dokumen_pendukung: 'tes.jpg',
-        dokumen_pendukung2: 'tes.jpg',
-        dokumen_pendukung3: 'tes.jpg',
-        role: 'fungsional',
-        pekerjaan: 'tes',
+        status: 'null',
+        status_dinas: 'null',
+        dokumen_pendukung: 'null',
+        dokumen_pendukung2: 'null',
+        dokumen_pendukung3: 'null',
+        role: 'Users',
+        pekerjaan: 'null',
         lokasi_instansi: lokasi_instansi,
         judul_kti: dataKaryaTulis,
         organisasi: dataOrganisasi,
-        sk_pustakawan: skPustakawanTerakhir[0],
-        sk_pangkat: 'tes.jpg'
+        sk_pustakawan: skPustakawanTerakhir[0].name,
+        sk_pangkat: skKenaikanPangkatTerakhir ? skKenaikanPangkatTerakhir[0]?.name : 'null'
     }
 }
 

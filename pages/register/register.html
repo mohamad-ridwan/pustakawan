@@ -19,13 +19,15 @@
 <body>
     <div class="container" style="justify-content: center;">
         <div style="display: flex; justify-content: center;">
-            <div style="display: flex; flex-direction: column; justify-content: center; margin-top: 50px; align-items: center;">
+            <div
+                style="display: flex; flex-direction: column; justify-content: center; margin-top: 50px; align-items: center;">
                 <img src="../../images/perpus.png" alt="" style="max-width: 80px;">
                 <h4 style="margin-top: 30px;">Daftar Akun</h4>
             </div>
         </div>
 
-        <div id="loginbox" style="margin-top:20px; max-width: 368px; margin-left: auto; margin-right: auto;" class="mainbox">
+        <div id="loginbox" style="margin-top:20px; max-width: 368px; margin-left: auto; margin-right: auto;"
+            class="mainbox">
             <div class="panel panel-info">
                 <div class="panel-heading">
                     <div class="panel-title">Register</div>
@@ -46,8 +48,7 @@
                         </div>
                         <div class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                            <input id="email" type="email" class="form-control" name="email"
-                                placeholder="email">
+                            <input id="email" type="email" class="form-control" name="email" placeholder="email">
                         </div>
                         <div class="err-input">
                             <span class="txt-err"><small id="errRegister2"></small></span>
@@ -69,7 +70,8 @@
                             <span class="txt-err"><small id="errRegister4"></small></span>
                         </div>
                         <div style="display: flex; width: 100%; justify-content: center; margin-bottom: 10px;">
-                            <button type="button" class="btn btn-success" style="width: 150px;" onclick="submitRegister()">Register</button>
+                            <button id="submit" type="button" class="btn btn-success" style="width: 150px;"
+                                onclick="submitRegister()">Register</button>
                         </div>
                         <div class="form-group">
                             <div class="col-md-12 control">
@@ -94,8 +96,14 @@
     <script src="../../CryptoJS v3.1.2/rollups/aes.js"></script>
     <script src="../../CryptoJS v3.1.2/rollups/hmac-sha256.js"></script>
     <!-- end cryptoJS -->
+    <!-- emailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js">
+    </script>
+    <!-- end emailJS -->
     <script src="/utils/jwt/createJWTToken.js"></script>
     <script src="/utils/jwt/decodeJWT.js"></script>
+    <script src="/utils/api/postForm.js"></script>
+    <script src="/utils/emailJS/send.js"></script>
     <script src="/utils/register.js"></script>
 </body>
 

@@ -90,6 +90,16 @@
                                     style="color: #555; background-color: #fff;">Form Fungsional</a></li>
                             <li><a href="../form-tenaga/form-tenaga.html"
                                     style="color: #555; background-color: #fff;">Form Tenaga</a></li>
+                            <li><a href="../grafik-daerah/grafik-daerah.html"
+                                    style="color: #555; background-color: #fff;">Grafik Daerah</a></li>
+                            <li><a href="../grafik-pendidikan/grafik-pendidikan.html"
+                                    style="color: #555; background-color: #fff;">Grafik Pendidikan</a></li>
+                            <li><a href="../grafik-jabatan/grafik-jabatan.html"
+                                    style="color: #555; background-color: #fff;">Grafik Jabatan</a></li>
+                            <li><a href="../grafik-pangkat/grafik-pangkat.html"
+                                    style="color: #555; background-color: #fff;">Grafik Pangkat</a></li>
+                            <li><a href="../terbitan-direktoripustakawan/terbitan-direktoripustakawan.html"
+                                    style="color: #555; background-color: #fff;">Direktori Tenaga Perpustakaan</a></li>
                             <li><a href="http://localhost/pustakawanbogor/index.php" target="_blank"
                                     style="color: #555; background-color: #fff;">Dashboard</a></li>
                         </ul>
@@ -103,8 +113,10 @@
                             <span class="name-mobile" id="namePFMobile">Mohamad Ridwan Apriyadi</span>
                         </a>
                         <ul class="dropdown-menu dropdown-profile" role="menu">
-                            <li><a href="../../pages/login/login.html" style="color: #555; background-color: #fff;">Login</a></li>
-                            <li><a href="../../pages/register/register.html" style="color: #555; background-color: #fff;">Register</a></li>
+                            <li><a href="../../pages/login/login.html"
+                                    style="color: #555; background-color: #fff;">Login</a></li>
+                            <li><a href="../../pages/register/register.html"
+                                    style="color: #555; background-color: #fff;">Register</a></li>
                         </ul>
                     </div>
                 </ul>
@@ -208,7 +220,7 @@
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tanggalLahirDP" class="input-group date" data-date-format="mm-dd-yyyy">
-                    <input id="tanggalLahir" class="form-control" type="text"
+                    <input id="tanggalLahir" class="form-control input-tanggal" type="text"
                         onchange="changeTxtInputNmKolom('tanggalLahir', 'tanggalLahir')">
                     <span class="input-group-addon" style="cursor: pointer;"><i
                             class="glyphicon glyphicon-calendar"></i></span>
@@ -305,7 +317,7 @@
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tamatPangkatDP" class="input-group date" data-date-format="mm-dd-yyyy">
-                    <input id="tamatPangkat" class="form-control" type="text"
+                    <input id="tamatPangkat" class="form-control input-tanggal" type="text"
                         onchange="changeTxtInputNmKolom('tamatPangkat', 'tamatPangkat')" />
                     <span class="input-group-addon" style="cursor: pointer;"><i
                             class="glyphicon glyphicon-calendar"></i></span>
@@ -336,7 +348,7 @@
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tamatJabatanDP" class="input-group date" data-date-format="mm-dd-yyyy">
-                    <input id="tamatJabatan" class="form-control" type="text"
+                    <input id="tamatJabatan" class="form-control input-tanggal" type="text"
                         onchange="changeTxtInputNmKolom('tamatJabatan', 'tamatJabatan')" />
                     <span class="input-group-addon" style="cursor: pointer;"><i
                             class="glyphicon glyphicon-calendar"></i></span>
@@ -369,7 +381,7 @@
                     <select id="instansi" class="selectpicker form-control" data-live-search="true"
                         onchange="onSelectionFromAPI('instansi', 'instansi')"></select>
                 </div>
-                <input type="text" id="textInstansi" class="form-control" style="display: none;"
+                <input type="text" id="textInstansi" class="form-control input-grup" style="display: none;"
                     placeholder="Ketik nama instansi" onchange="changeTxtInputNmKolom('textInstansi', 'instansi')">
                 <div style="display: flex; align-items: center; margin-top: 1rem;">
                     <input id="checkboxInstansi" type="checkbox" name="instansiTdKDitemukan"
@@ -643,7 +655,7 @@
                 <label for="pustakawanTerakhir" style="font-weight: normal;">SK Pustakawan terakhir <span
                         style="color: #ff0000;">*</span></label>
                 <div style="display: flex;" class="input-lampiran-data">
-                    <input id="pustakawanTerakhir" type="file" class="form-control"
+                    <input id="pustakawanTerakhir" type="file" class="form-control input-grup"
                         accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
                         style="margin-right: 1rem; margin-top: 0.5rem;">
                     <button id="deletePustakawanTerakhir" type="button" class="btn btn-secondary"
@@ -656,7 +668,7 @@
                 <label for="kenaikanPangkatTerakhir" style="font-weight: normal;">SK Kenaikan Pangkat Terakhir
                     (Optional)</label>
                 <div style="display: flex;" class="input-lampiran-data">
-                    <input id="kenaikanPangkatTerakhir" type="file" class="form-control"
+                    <input id="kenaikanPangkatTerakhir" type="file" class="form-control input-grup"
                         accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
                         style="margin-right: 1rem; margin-top: 0.5rem;">
                     <button id="deleteKenaikanPangkat" type="button" class="btn btn-secondary"

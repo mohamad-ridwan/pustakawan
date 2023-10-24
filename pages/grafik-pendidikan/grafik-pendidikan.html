@@ -5,11 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/images/logo_perpusbogor.jpg">
-    <link rel="stylesheet" href="pelapor-pengajuan-mandiri.css">
     <link rel="stylesheet" href="../../utils/navbar.css">
+    <link rel="stylesheet" href="grafik-pendidikan.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet"
         href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
+    <!-- font awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.2/css/all.css">
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css" />
     <title>Pusat Pengembangan Pustakawan Perpustakaan dan Galeri Kota Bogor</title>
@@ -108,67 +109,29 @@
     </nav>
     <!-- end navbar -->
 
-    <div class="container wrap-pelapor-pengajuan">
+    <div class="container wrap-grafik-pendidikan">
         <div class="title">
-            <h3>Pelapor Pengajuan Mandiri</h3>
+            <h4><strong id="tileGrafik"></strong></h4>
+            <!-- <h5><strong>Pengajuan Data Baru</strong></h5>
+            <p>Data bersifat pengajuan, data dapat ditolak jika tidak melampirkan dokumen pendukung</p> -->
             <span class="border-bottom"></span>
         </div>
-        <div class="row" style="margin-top: 3rem;">
-            <!-- <div class="col-sm-6 col-md-5">
-                <div class="thumbnail">
-                    <div class="caption">
-                        <div class="thumb-icon">
-                            <i class="fa-solid fa-file-pen"></i>
-                        </div>
-                        <h3><strong>Revisi Data</strong></h3>
-                        <p><strong>Penelusuran Data Tenaga Perpustakaan</strong>. Menelusuri dan mengajukan perubahan
-                            data pada data
-                            tenaga perpustakaan.</p>
-                        <div style="display: flex; justify-content: flex-end;">
-                            <p><a href="../penelusuran/penelusuran.html" class="btn btn-primary" role="button">Lihat</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-            <div class="col-sm-6 col-md-5">
-                <div class="thumbnail">
-                    <div class="caption">
-                        <div class="thumb-icon">
-                            <i class="fa-solid fa-file-lines"></i>
-                        </div>
-                        <h3><strong>Formulir Fungsional Pustakawan</strong></h3>
-                        <p><strong>Pengajuan data baru untuk fungsional pustakawan</strong>. Data bersifat pengajuan,
-                            data dapat ditolak jika tidak melampirkan dokumen pendukung.</p>
-                        <div style="display: flex; justify-content: flex-end;">
-                            <p><a href="../form-fungsional/form-fungsional.html" class="btn btn-primary"
-                                    role="button">Lihat</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-md-5">
-                <div class="thumbnail">
-                    <div class="caption">
-                        <div class="thumb-icon">
-                            <i class="fa-solid fa-file-lines"></i>
-                        </div>
-                        <h3><strong>Formulir Tenaga Perpustakaan</strong></h3>
-                        <p><strong>Pengajuan data baru untuk tenaga perpustakaan</strong>. Data bersifat pengajuan, data
-                            dapat ditolak jika tidak melampirkan dokumen pendukung.</p>
-                        <div style="display: flex; justify-content: flex-end;">
-                            <p><a href="../form-tenaga/form-tenaga.html" class="btn btn-primary" role="button">Lihat</a>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+        <canvas id="grafikPendidikan" style="margin-top: 50px;"></canvas>
+
+        <table id="tableGrafik" class="" style="margin-top: 50px;">
+
+        </table>
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
-    <script src="/utils/navbar.js"></script>
+    <!-- ChartJS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <!-- end ChartJS -->
+    <script src="/utils/api/postForm.js"></script>
+    <script type="module" src="/utils/grafik-pendidikan.js"></script>
 </body>
 
 </html>

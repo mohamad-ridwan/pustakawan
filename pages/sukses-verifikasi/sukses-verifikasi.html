@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="/images/logo_perpusbogor.jpg">
     <link rel="stylesheet" href="/utils/loading.css">
-    <link rel="stylesheet" href="verifikasi.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet"
         href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
@@ -27,36 +26,37 @@
         <div style="display: flex; justify-content: center;">
             <div style="display: flex; flex-direction: column; justify-content: center; margin-top: 50px; align-items: center;">
                 <img src="../../images/perpus.png" alt="" style="max-width: 80px;">
-                <h4 style="margin-top: 30px;">Verifikasi Akun</h4>
+                <h4 style="margin-top: 30px;">Telah diverifikasi</h4>
             </div>
         </div>
 
         <div id="loginbox" style="margin-top:20px; max-width: 368px; margin-left: auto; margin-right: auto;" class="mainbox">
             <div class="panel panel-info">
                 <div class="panel-heading">
-                    <div class="panel-title">Verifikasi</div>
+                    <div class="panel-title">Selesai verifikasi</div>
                     <div style="float:right; font-size: 80%; position: relative; top:-10px">
                         <!-- <a href="#">Lupa kata sandi?</a> -->
                     </div>
                 </div>
                 <div style="padding-top:30px" class="panel-body">
                     <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
-                    <div id="loginform" class="form-horizontal" role="form">
-                        <div style="display: flex; flex-direction: column; text-align: center;">
-                            <p>kami kirimkan kode Anda ke email <strong id="emailUser"></strong></p>
+                    <form id="loginform" class="form-horizontal" role="form">
+                        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <i class="fa-solid fa-circle-check" style="font-size: 45px; color: #5cb85c;"></i>
+                            <p style="text-align: center; margin-top: 15px;">Akun anda telah terverifikasi</p>
                         </div>
-                        <div style="margin-bottom: 0px" class="input-group">
+                        <!-- <div style="margin-bottom: 0px" class="input-group">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-wrench"></i></span>
                             <input id="kode" type="text" maxlength="4" class="form-control" name="kode" value=""
                                 placeholder="4 digit kode">
                         </div>
                         <div class="err-input">
                             <span class="txt-err"><small id="errVerif"></small></span>
-                        </div>
+                        </div> -->
                         <div style="display: flex; width: 100%; justify-content: center; margin-bottom: 10px; margin-top: 20px;">
-                            <button id="submitVerif" type="button" class="btn btn-success" style="width: 150px;">Verifikasi</button>
+                            <a href="../login/login.html" type="a" class="btn btn-success" style="width: 150px;">Login</a>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <div class="col-md-12 control">
                                 <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%">
                                     Sudah punya akun?
@@ -65,8 +65,8 @@
                                     </a>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        </div> -->
+                    </form>
                 </div>
             </div>
         </div>
@@ -75,12 +75,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
     <script src="/utils/api/postForm.js"></script>
     <script src="/utils/jwt/decodeJWT.js"></script>
-    <script src="/utils/format/createDateFormat.js"></script>
-    <script src="/utils/format/createHourFormat.js"></script>
-    <script src="/utils/verifikasi.js"></script>
+    <script src="/utils/sukses-verifikasi.js"></script>
 </body>
 
 </html>
