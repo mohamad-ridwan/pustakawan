@@ -98,6 +98,8 @@
                                     style="color: #555; background-color: #fff;">Grafik Jabatan</a></li>
                             <li><a href="../grafik-pangkat/grafik-pangkat.html"
                                     style="color: #555; background-color: #fff;">Grafik Pangkat</a></li>
+                            <li><a href="../grafik-jenis-instansi/grafik-jenis-instansi.html"
+                                    style="color: #555; background-color: #fff;">Grafik Jenis Instansi</a></li>
                             <li><a href="../terbitan-direktoripustakawan/terbitan-direktoripustakawan.html"
                                     style="color: #555; background-color: #fff;">Direktori Tenaga Perpustakaan</a></li>
                             <li><a href="http://localhost/pustakawanbogor/index.php" target="_blank"
@@ -175,11 +177,13 @@
         <!-- input nama kolom -->
         <div class="wrap-input-fg">
             <div class="title-input">
-                <label for="nip"><span>NIP (abaikan jika tidak ada)</label>
+                <label for="nip"><span>NIP/NIK</label>
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
-                <input id="nip" type="tel" class="form-control input-grup"
-                    onchange="changeTxtInputNmKolom('nip', 'nip')">
+                <select id="nipornik" class="selectpicker form-control" data-live-search="true"
+                    onchange="changeNIPORNIK()"></select>
+                <input id="nip" type="tel" class="form-control input-grup" style="margin-top: 0.5rem;"
+                    onchange="changeTxtInputNmKolom('nip', 'nip')" readonly>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom1"></small></span>
                 </div>
@@ -218,7 +222,7 @@
             </div>
             <div class="right" style="display: flex; flex-direction: column; width: 800px;">
                 <div id="tanggalLahirDP" class="input-group date" data-date-format="mm-dd-yyyy">
-                    <input id="tanggalLahir" class="form-control" type="text"
+                    <input id="tanggalLahir" class="form-control input-tanggal" type="text"
                         onchange="changeTxtInputNmKolom('tanggalLahir', 'tanggalLahir')" />
                     <span class="input-group-addon" style="cursor: pointer;"><i
                             class="glyphicon glyphicon-calendar"></i></span>
@@ -363,6 +367,19 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
+                <label for="jenis_instansi"><span>Jenis Instansi <span style="color: #ff0000;">*</span></span></label>
+            </div>
+            <div class="right" style="display: flex; flex-direction: column; width: 800px;">
+                <select id="jenis_instansi" class="selectpicker form-control" data-live-search="true"
+                    onchange="changeTxtInputNmKolom('jenis_instansi', 'jenis_instansi')"></select>
+                <div class="err-input">
+                    <span class="txt-err"><small id="errNmKolom14"></small></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="wrap-input-fg">
+            <div class="title-input">
                 <label for="diklatFungsional"><span>Diklat Fungsional Pustakawan <span
                             style="color: #ff0000;">*</span></span></label>
             </div>
@@ -370,7 +387,7 @@
                 <select id="diklatFungsional" class="selectpicker form-control" data-live-search="true"
                     onchange="changeTxtInputNmKolom('diklatFungsional', 'diklatFungsionalPustakawan')"></select>
                 <div class="err-input">
-                    <span class="txt-err"><small id="errNmKolom14"></small></span>
+                    <span class="txt-err"><small id="errNmKolom15"></small></span>
                 </div>
             </div>
         </div>
@@ -445,8 +462,10 @@
                         </div>
                         <div style="display: flex; flex-direction: column;">
                             <label for="tahunDiklat"><small>Tahun</small></label>
-                            <input type="text" class="form-control" id="tahunDiklat"
-                                onchange="changeInputAdd('tahunDiklat', 'tahunDiklat', 'DIKLAT')">
+                            <select id="tahunDiklat" class="selectpicker form-control" data-live-search="true"
+                                onchange="changeInputAdd('tahunDiklat', 'tahunDiklat', 'DIKLAT')"></select>
+                            <!-- <input type="text" class="form-control" id="tahunDiklat"
+                                onchange="changeInputAdd('tahunDiklat', 'tahunDiklat', 'DIKLAT')"> -->
                             <span style="height: 1.5rem;"><small id="errThDiklat"
                                     style="color: #ff0000;"></small></span>
                         </div>
@@ -509,8 +528,10 @@
                         </div>
                         <div style="display: flex; flex-direction: column;">
                             <label for="jabatanOrganisasi"><small>Jabatan (pengurus atau anggota)</small></label>
-                            <input type="text" class="form-control" id="jabatanOrganisasi"
-                                onchange="changeInputAdd('jabatanOrganisasi', 'jabatanOrganisasi', 'ORGANISASI')">
+                            <select id="jabatanOrganisasi" class="selectpicker form-control" data-live-search="true"
+                                onchange="changeInputAdd('jabatanOrganisasi', 'jabatanOrganisasi', 'ORGANISASI')"></select>
+                            <!-- <input type="text" class="form-control" id="jabatanOrganisasi"
+                                onchange="changeInputAdd('jabatanOrganisasi', 'jabatanOrganisasi', 'ORGANISASI')"> -->
                             <span style="height: 1.5rem;"><small id="errJbtOrganisasi"
                                     style="color: #ff0000;"></small></span>
                         </div>
@@ -543,7 +564,7 @@
                 <label for="kenaikanPangkatTerakhir" style="font-weight: normal;">SK Kenaikan Pangkat Terakhir <span
                         style="color: #ff0000;">*</span></label>
                 <div style="display: flex;" class="input-lampiran-data">
-                    <input id="kenaikanPangkatTerakhir" type="file" class="form-control"
+                    <input id="kenaikanPangkatTerakhir" type="file" class="form-control input-grup"
                         accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
                         style="margin-right: 1rem; margin-top: 0.5rem;">
                     <button id="deleteKenaikanPangkat" type="button" class="btn btn-secondary"
@@ -552,7 +573,7 @@
                 </div>
             </div>
             <span style="height: 2rem;"><small id="errKenaikanPangkatTerakhir" style="color: #ff0000;"></small></span>
-            <div>
+            <!-- <div>
                 <label for="lampiranData1" style="font-weight: normal;">Dokumen 1 <span
                         style="color: #ff0000;">*</span></label>
                 <div style="display: flex;" class="input-lampiran-data">
@@ -590,12 +611,11 @@
                         style="cursor: not-allowed; margin-top: 0.5rem;">Hapus</button>
                 </div>
             </div>
-            <span style="height: 2rem;"><small id="errLampiranData3" style="color: #ff0000;"></small></span>
+            <span style="height: 2rem;"><small id="errLampiranData3" style="color: #ff0000;"></small></span> -->
         </div>
         <div class="border-batas"></div>
         <div style="display: flex; flex-direction: column; margin-top: 3rem;">
-            <label for="keteranganTambahan"><small>Keterangan Tambahan <span
-                        style="color: #ff0000;">*</span></small></label>
+            <label for="keteranganTambahan"><small>Keterangan Tambahan (Optional)</small></label>
             <textarea name="" id="keteranganTambahan" cols="5" rows="4" class="form-control"
                 style="resize: vertical;"></textarea>
             <div class="wrap-err">
@@ -603,7 +623,7 @@
             </div>
         </div>
 
-        <h4 style="margin: 4rem auto 0rem auto; text-align: center;"><strong style="text-transform: uppercase;">Data
+        <!-- <h4 style="margin: 4rem auto 0rem auto; text-align: center;"><strong style="text-transform: uppercase;">Data
                 Anda Sebagai Pengirim</strong></h4>
         <div class="border-batas"></div>
         <div class="container-data-pengirim" style="margin-bottom: 3rem;">
@@ -637,11 +657,11 @@
                     <span id="errDataP3" class="err-text"></span>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpiredCallback"
+        <!-- <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpiredCallback"
             data-sitekey="6LeAY_4nAAAAAG4mEOA8_sXdkoXMSHb7MKLoqcgh"></div>
-        <span id="errCaptcha" style="color: #ff0000; font-size: small;"></span>
+        <span id="errCaptcha" style="color: #ff0000; font-size: small;"></span> -->
 
         <div style="display: flex; justify-content: center;">
             <button id="submitFormTenaga" type="button" class="btn btn-success"
@@ -672,6 +692,9 @@
     <script src="/utils/localStorage/localStorage.js"></script>
     <script src="/utils/format/createDateFormat.js"></script>
     <script src="/utils/format/createHourFormat.js"></script>
+    <script src="/utils/format/createRangeOfYears.js"></script>
+    <script src="/utils/format/changeUpdateValueSelection.js"></script>
+    <script src="/utils/api/postForm.js"></script>
     <!-- <script type="module" src="/utils/firebase.js"></script> -->
     <script src="/utils/alert.js"></script>
     <script src="/utils/navbar.js"></script>

@@ -29,7 +29,7 @@ getSekolah()
                 value: item.sekolah
             }))
             loadCreateSelect('instansi', data)
-            removeDropdownMenu(5)
+            removeDropdownMenu(6)
             const newData = [
                 {
                     data_tokens: 'silahkan-pilih',
@@ -38,7 +38,7 @@ getSekolah()
                 ...data
             ]
             setTimeout(() => {
-                createMenuDropdown(newData, 5, 'instansi')
+                createMenuDropdown(newData, 6, 'instansi')
                 spinnerGlobalLoading('none')
             }, 500);
         }
@@ -54,7 +54,8 @@ let imgData = {
 }
 const dataInputNamaKolom = {
     ...imgData,
-    nip: '',
+    nip: null,
+    nik: null,
     namaLengkap: '',
     tempatLahir: '',
     tanggalLahir: '',
@@ -67,6 +68,7 @@ const dataInputNamaKolom = {
     statusDinas: 'Silahkan Pilih',
     instansi: 'Silahkan Pilih',
     lokasi_instansi: 'Silahkan Pilih',
+    jenis_instansi: 'Silahkan Pilih',
     diklatFungsionalPustakawan: 'Tidak Pernah'
 }
 
@@ -202,13 +204,46 @@ function changeLocalClientImg(imgBlobUrl) {
 }
 // END CASE FOR INPUT IMG PROFILE
 
+let optionNIPORNIK = null
+
 // CASE FOR INPUT NAMA KOLOM
 // change input text nama kolom
 function changeTxtInputNmKolom(elementId, nameInput) {
     const elem = document.getElementById(elementId)
     if (elem) {
-        dataInputNamaKolom[nameInput] = elem.value
+        if (elementId == 'nip' && optionNIPORNIK == 'NIP') {
+            dataInputNamaKolom['nip'] = elem.value
+            dataInputNamaKolom['nik'] = null
+        } else if (elementId == 'nip' && optionNIPORNIK == 'NIK') {
+            dataInputNamaKolom['nik'] = elem.value
+            dataInputNamaKolom['nip'] = null
+        } else {
+            dataInputNamaKolom[nameInput] = elem.value
+        }
     }
+}
+
+function changeNIPORNIK() {
+    const elem = document.getElementById('nipornik')
+    if (elem && elem.value !== 'Silahkan Pilih') {
+        optionNIPORNIK = elem.value
+        document.getElementById('nip').removeAttribute('readonly')
+        if (elem.value === 'NIP') {
+            document.getElementById('errNmKolom1').innerText = 'NIP harus terdiri dari 18 Digit'
+            document.getElementById('errNmKolom1').style.color = '#ff0000'
+            changeDisableInput(formControll, 'true')
+        } else {
+            document.getElementById('errNmKolom1').innerText = 'NIK harus terdiri dari 16 Digit'
+            document.getElementById('errNmKolom1').style.color = '#ff0000'
+            changeDisableInput(formControll, 'true')
+        }
+    } else {
+        document.getElementById('nip').setAttribute('readonly', 'true')
+        document.getElementById('errNmKolom1').innerText = 'harus diisi'
+        document.getElementById('errNmKolom1').style.color = '#ff0000'
+        changeDisableInput(formControll, 'true')
+    }
+    document.getElementById('nip').value = ''
 }
 
 const nipElement = document.getElementById('nip')
@@ -219,12 +254,17 @@ const nomorHPElement = document.getElementById('nomorHp')
 function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
     ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop", "focusout"].forEach(function (event) {
         textbox.addEventListener(event, function (e) {
-            if (inputTYPE === 'NIP' && this.value.length > 18) {
+            if (inputTYPE === 'NIP' && optionNIPORNIK === 'NIP' && this.value.length > 18) {
                 this.setCustomValidity('Maksimal NIP 18 digit');
                 this.reportValidity();
                 this.value = this.oldValue;
                 this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
                 return
+            } else if (inputTYPE === 'NIP' && optionNIPORNIK === 'NIK' && this.value.length > 16) {
+                this.setCustomValidity('Maksimal NIK 16 digit');
+                this.reportValidity();
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
             }
             if (inputFilter(this.value)) {
                 // Accepted value
@@ -251,7 +291,7 @@ function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
 }
 
 setInputFilter(nipElement, (value) => phoneRegex.test(value), "Harus berupa angka", 'NIP');
-setInputFilter(phoneElement, (value) => phoneRegex.test(value), "Harus berupa angka");
+// setInputFilter(phoneElement, (value) => phoneRegex.test(value), "Harus berupa angka");
 setInputFilter(nomorHPElement, (value) => phoneRegex.test(value), "Harus berupa angka");
 
 const formControll = document.getElementsByClassName('form-control')
@@ -263,22 +303,20 @@ function changeDisableInput(elements, isDisabled, isRemoveDisabled) {
     const btnAddCard = document.getElementsByClassName('btn-add-card')
     const dropdownMenu = document.getElementsByClassName('dropdown-menu inner selectpicker')
     if (isRemoveDisabled) {
-        removeDisabledAttr(elements, 1)
-        removeDisabledAttr(btnSelect, 0)
+        removeDisabledAttr(document.getElementsByClassName('form-control input-grup'), 1)
+        removeDisabledAttr(document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default'), 1)
+        removeDisabledAttr(document.getElementsByClassName('input-tanggal'), 0)
         removeDisabledAttr(btnAddCard, 0)
     } else if (isDisabled) {
-        addDisabledAttr(elements, isDisabled, 1)
-        addDisabledAttr(btnSelect, isDisabled, 0)
+        addDisabledAttr(document.getElementsByClassName('form-control input-grup'), isDisabled, 1)
+        addDisabledAttr(document.getElementsByClassName('btn dropdown-toggle selectpicker btn-default'), isDisabled, 1)
+        addDisabledAttr(document.getElementsByClassName('input-tanggal'), isDisabled, 0)
         addDisabledAttr(btnAddCard, isDisabled, 0)
     }
     setTimeout(() => {
         removeClassDisabled(disabledEl)
-        setTimeout(() => {
-            removeClassDisabled(btnDisabled)
-            setTimeout(() => {
-                removeDisabledOfMenu(dropdownMenu)
-            }, 500);
-        }, 500);
+        removeClassDisabled(btnDisabled)
+        removeDisabledOfMenu(dropdownMenu)
     }, 1500);
 }
 
@@ -304,11 +342,15 @@ function removeDisabledOfMenu(element) {
     }
 }
 
+window.onload = () => {
+    changeDisableInput(document.getElementsByClassName('form-control input-grup'), 'true')
+}
+
 // cek nip apakah sudah ada di db
 nipElement.addEventListener('change', async (e) => {
-    if (e.target.value.length === 18) {
+    if (optionNIPORNIK === 'NIP' && e.target.value.length === 18) {
         document.getElementById('secGlobalLoading').style.display = 'flex'
-        await validateNIP(e.target.value)
+        await validateNIP(e.target.value, optionNIPORNIK)
             .then(res => {
                 document.getElementById('errNmKolom1').innerText = res.text
                 if (res.message === 'error') {
@@ -320,33 +362,89 @@ nipElement.addEventListener('change', async (e) => {
                 }
                 document.getElementById('secGlobalLoading').style.display = 'none'
             })
-    } else if (e.target.value.length > 0) {
+    } else if (optionNIPORNIK === 'NIK' && e.target.value.length === 16) {
+        document.getElementById('secGlobalLoading').style.display = 'flex'
+        await validateNIP(e.target.value, optionNIPORNIK)
+            .then(res => {
+                document.getElementById('errNmKolom1').innerText = res.text
+                if (res.message === 'error') {
+                    document.getElementById('errNmKolom1').style.color = '#ff0000'
+                    changeDisableInput(formControll, 'true')
+                } else {
+                    document.getElementById('errNmKolom1').style.color = '#46923c'
+                    changeDisableInput(formControll, null, true)
+                }
+                document.getElementById('secGlobalLoading').style.display = 'none'
+            })
+    } else if (optionNIPORNIK === 'NIP') {
         changeDisableInput(formControll, 'true')
         document.getElementById('errNmKolom1').innerText = 'NIP harus terdiri dari 18 Digit'
         document.getElementById('errNmKolom1').style.color = '#ff0000'
-    } else {
-        changeDisableInput(formControll, null, true)
-        document.getElementById('errNmKolom1').innerText = ''
+    } else if (optionNIPORNIK === 'NIK') {
+        changeDisableInput(formControll, 'true')
+        document.getElementById('errNmKolom1').innerText = 'NIK harus terdiri dari 16 Digit'
         document.getElementById('errNmKolom1').style.color = '#ff0000'
     }
 })
 
-async function validateNIP(nip) {
+async function validateNIP(value, actionTYPE) {
     return await new Promise((resolve, reject) => {
-        fetch(`http://localhost/pustakawanbogor/api/pustakawan.php?nip=${nip}`)
+        fetch(`http://localhost/pustakawanbogor/api/pustakawan.php`)
             .then(res => res.json())
             .then(res => {
+                const data = filtersNIPORNIK(res, actionTYPE, value)
                 if (res.length > 0) {
-                    resolve({ message: 'error', text: 'Data NIP ini telah terdaftar didatabase. Apabila ingin melihat/mengupdate data, silakan pilih menu Revisi Data.' })
-                } else {
+                    if (data.type == 'NIP') {
+                        if (data.value) {
+                            resolve({ message: 'error', text: 'Data NIP ini telah terdaftar didatabase. Apabila ingin melihat/mengupdate data, silakan pilih menu Revisi Data.' })
+                        } else {
+                            resolve({ message: 'success', text: 'NIP bisa digunakan' })
+                        }
+                    } else if (data.type == 'NIK') {
+                        if (data.value) {
+                            resolve({ message: 'error', text: 'Data NIK ini telah terdaftar didatabase. Apabila ingin melihat/mengupdate data, silakan pilih menu Revisi Data.' })
+                        } else {
+                            resolve({ message: 'success', text: 'NIK bisa digunakan' })
+                        }
+                    }
+                } {
                     resolve({ message: 'success', text: 'NIP bisa digunakan' })
                 }
             })
             .catch(err => {
                 alert('Terjadi kesalahan server. Mohon coba lagi nanti')
                 console.log(err)
+                spinnerGlobalLoading('none')
             })
     })
+}
+
+function filtersNIPORNIK(data, actionTYPE, value) {
+    if (actionTYPE === 'NIP') {
+        const cekNIP = data.find(item => item.nip === value)
+        if (cekNIP) {
+            return {
+                type: 'NIP',
+                value: true
+            }
+        }
+        return {
+            type: 'NIP',
+            value: false
+        }
+    } else {
+        const cekNIK = data.find(item => item.nik === value)
+        if (cekNIK) {
+            return {
+                type: 'NIK',
+                value: true
+            }
+        }
+        return {
+            type: 'NIK',
+            value: false
+        }
+    }
 }
 
 // datepicker
@@ -676,6 +774,23 @@ const dataNamaKolom = {
             },
         ]
     },
+    nipornik: {
+        id: 'nipornik',
+        data: [
+            {
+                data_tokens: 'silahkan-pilih',
+                value: 'Silahkan Pilih'
+            },
+            {
+                data_tokens: 'nip',
+                value: 'NIP'
+            },
+            {
+                data_tokens: 'nik',
+                value: 'NIK'
+            },
+        ]
+    },
     instansi: {
         id: 'instansi',
         data: [
@@ -699,6 +814,56 @@ const dataNamaKolom = {
             {
                 data_tokens: 'kota-bogor',
                 value: 'Kota Bogor'
+            },
+            {
+                data_tokens: 'kota-depok',
+                value: 'Kota Depok'
+            },
+        ]
+    },
+    jenis_instansi:{
+        id: 'jenis_instansi',
+        data: [
+            {
+                data_tokens: 'silahkan-pilih',
+                value: 'Silahkan Pilih'
+            },
+            {
+                data_tokens: 'perpustakaan-sekolah',
+                value: 'PERPUSTAKAAN SEKOLAH'
+            },
+            {
+                data_tokens: 'perpustakaan-perguruan-tinggi',
+                value: 'PERPUSTAKAAN PERGURUAN TINGGI'
+            },
+            {
+                data_tokens: 'perpustakaan-umum',
+                value: 'PERPUSTAKAAN UMUM'
+            },
+            {
+                data_tokens: 'perpustakaan-khusus',
+                value: 'PERPUSTAKAAN KHUSUS'
+            },
+        ]
+    },
+    tahunDiklat: {
+        id: 'tahunDiklat',
+        data: createRangeOfYears()
+    },
+    jabatanOrganisasi: {
+        id: 'jabatanOrganisasi',
+        data: [
+            {
+                data_tokens: 'silahkan-pilih',
+                value: 'Silahkan Pilih'
+            },
+            {
+                data_tokens: 'pengurus',
+                value: 'Pengurus'
+            },
+            {
+                data_tokens: 'anggota',
+                value: 'Anggota'
             },
         ]
     }
@@ -937,7 +1102,7 @@ const btnSubmitDiklat = document.getElementById('btnSubmitDiklat')
 
 let inputDataAddDiklat = {
     namaDiklat: '',
-    tahunDiklat: '',
+    tahunDiklat: 'Silahkan Pilih',
     jumlahJamPelatihan: ''
 }
 
@@ -953,11 +1118,12 @@ function clickAddDiklat() {
     btnSubmitDiklat.innerText = 'Tambah'
     inputDataAddDiklat = {
         namaDiklat: '',
-        tahunDiklat: '',
+        tahunDiklat: 'Silahkan Pilih',
         jumlahJamPelatihan: ''
     }
     removeValueInput('namaDiklat')
-    removeValueInput('tahunDiklat')
+    // removeValueInput('tahunDiklat')
+    removeValueSelection('tahunDiklat', 10, 'Silahkan Pilih')
     removeValueInput('jumlahJamPelatihan')
     removeErrModalInput('errNmDiklat')
     removeErrModalInput('errThDiklat')
@@ -979,15 +1145,15 @@ function prosesTambahDiklat() {
         })
         inputDataAddDiklat = {
             namaDiklat: '',
-            tahunDiklat: '',
+            tahunDiklat: 'Silahkan Pilih',
             jumlahJamPelatihan: ''
         }
-        removeValueInput('namaDiklat')
-        removeValueInput('tahunDiklat')
-        removeValueInput('jumlahJamPelatihan')
-        removeErrModalInput('errNmDiklat')
-        removeErrModalInput('errThDiklat')
-        removeErrModalInput('errJmDiklat')
+        // removeValueInput('namaDiklat')
+        // removeValueInput('tahunDiklat')
+        // removeValueInput('jumlahJamPelatihan')
+        // removeErrModalInput('errNmDiklat')
+        // removeErrModalInput('errThDiklat')
+        // removeErrModalInput('errJmDiklat')
     } else {
         btnSubmitDiklat.removeAttribute('data-dismiss')
     }
@@ -1028,6 +1194,7 @@ function updateDiklat(index) {
         tahunDiklat: document.getElementById('tahunDiklat').value = findData.tahunDiklat,
         jumlahJamPelatihan: document.getElementById('jumlahJamPelatihan').value = findData.jumlahJamPelatihan
     }
+    updateValueSelection('tahunDiklat', 10, findData.tahunDiklat)
 }
 
 function updateInputDiklat() {
@@ -1050,12 +1217,12 @@ function updateInputDiklat() {
         }
         inputDataAddDiklat = {
             namaDiklat: '',
-            tahunDiklat: '',
+            tahunDiklat: 'Silahkan Pilih',
             jumlahJamPelatihan: ''
         }
-        removeValueInput('namaDiklat')
-        removeValueInput('tahunDiklat')
-        removeValueInput('jumlahJamPelatihan')
+        // removeValueInput('namaDiklat')
+        // removeValueInput('tahunDiklat')
+        // removeValueInput('jumlahJamPelatihan')
     } else {
         btnSubmitDiklat.removeAttribute('data-dismiss')
     }
@@ -1063,6 +1230,11 @@ function updateInputDiklat() {
 // END DIKLAT
 
 // ORGANISASI
+let inputDataOrganisasi = {
+    namaOrganisasi: '',
+    jabatanOrganisasi: 'Silahkan Pilih'
+}
+
 const titleAddOrganisasi = document.getElementById('titleAddOrganisasi')
 const btnSubmitOrganisasi = document.getElementById('btnSubmitOrganisasi')
 
@@ -1079,10 +1251,11 @@ function clickAddOrganisasi() {
     btnSubmitOrganisasi.setAttribute('onclick', 'prosesTambahOrganisasi()')
     btnSubmitOrganisasi.innerText = 'Tambah'
     removeValueInput('namaOrganisasi')
-    removeValueInput('jabatanOrganisasi')
+    // removeValueInput('jabatanOrganisasi')
+    removeValueSelection('jabatanOrganisasi', 11, 'Silahkan Pilih')
     inputDataOrganisasi = {
         namaOrganisasi: '',
-        jabatanOrganisasi: ''
+        jabatanOrganisasi: 'Silahkan Pilih'
     }
     removeErrModalInput('errNmOrganisasi')
     removeErrModalInput('errJbtOrganisasi')
@@ -1101,10 +1274,10 @@ function prosesTambahOrganisasi() {
         })
         inputDataOrganisasi = {
             namaOrganisasi: '',
-            jabatanOrganisasi: ''
+            jabatanOrganisasi: 'Silahkan Pilih'
         }
-        removeValueInput('namaOrganisasi')
-        removeValueInput('jabatanOrganisasi')
+        // removeValueInput('namaOrganisasi')
+        // removeValueInput('jabatanOrganisasi')
     } else {
         btnSubmitOrganisasi.removeAttribute('data-dismiss')
     }
@@ -1142,6 +1315,7 @@ function updateCardOrganisasi(index) {
     }
     removeErrModalInput('errNmOrganisasi')
     removeErrModalInput('errJbtOrganisasi')
+    updateValueSelection('jabatanOrganisasi', 11, findData.jabatanOrganisasi)
 }
 
 function submitUpdtOrganisasi() {
@@ -1163,10 +1337,10 @@ function submitUpdtOrganisasi() {
         }
         inputDataOrganisasi = {
             namaOrganisasi: '',
-            jabatanOrganisasi: ''
+            jabatanOrganisasi: 'Silahkan Pilih'
         }
-        removeValueInput('namaOrganisasi')
-        removeValueInput('jabatanOrganisasi')
+        // removeValueInput('namaOrganisasi')
+        // removeValueInput('jabatanOrganisasi')
     } else {
         btnSubmitOrganisasi.removeAttribute('data-dismiss')
     }
@@ -1183,7 +1357,7 @@ function validateFormAddDiklat() {
     if (!namaDiklat.trim()) {
         err.errNmDiklat = errText
     }
-    if (!tahunDiklat.trim()) {
+    if (tahunDiklat == 'Silahkan Pilih') {
         err.errThDiklat = errText
     }
     if (!jumlahJamPelatihan.trim()) {
@@ -1192,7 +1366,7 @@ function validateFormAddDiklat() {
     if (namaDiklat.length > 0) {
         removeErrModalInput('errNmDiklat')
     }
-    if (tahunDiklat.length > 0) {
+    if (tahunDiklat !== 'Silahkan Pilih') {
         removeErrModalInput('errThDiklat')
     }
     if (jumlahJamPelatihan.length > 0) {
@@ -1212,13 +1386,13 @@ function validateFormAddOrganisasi() {
     if (!namaOrganisasi.trim()) {
         err.errNmOrganisasi = errText
     }
-    if (!jabatanOrganisasi.trim()) {
+    if (jabatanOrganisasi == 'Silahkan Pilih') {
         err.errJbtOrganisasi = errText
     }
     if (namaOrganisasi.length > 0) {
         removeErrModalInput('errNmOrganisasi')
     }
-    if (jabatanOrganisasi.length > 0) {
+    if (jabatanOrganisasi !== 'Silahkan Pilih') {
         removeErrModalInput('errJbtOrganisasi')
     }
     if (Object.keys(err).length > 0) {
@@ -1276,35 +1450,35 @@ inputKenaikanPangkatTerakhir.addEventListener('change', (e) => {
     )
 })
 // Dokumen 1
-inputLampiranData1.addEventListener('change', (e) => {
-    const files = e.target.files
-    changeFilesLampiranGroup(
-        files,
-        'dokumen1',
-        inputLampiranData1,
-        deleteLampiranData1
-    )
-})
+// inputLampiranData1.addEventListener('change', (e) => {
+//     const files = e.target.files
+//     changeFilesLampiranGroup(
+//         files,
+//         'dokumen1',
+//         inputLampiranData1,
+//         deleteLampiranData1
+//     )
+// })
 // Dokumen 2
-inputLampiranData2.addEventListener('change', (e) => {
-    const files = e.target.files
-    changeFilesLampiranGroup(
-        files,
-        'dokumen2',
-        inputLampiranData2,
-        deleteLampiranData2
-    )
-})
+// inputLampiranData2.addEventListener('change', (e) => {
+//     const files = e.target.files
+//     changeFilesLampiranGroup(
+//         files,
+//         'dokumen2',
+//         inputLampiranData2,
+//         deleteLampiranData2
+//     )
+// })
 // Dokumen 3
-inputLampiranData3.addEventListener('change', (e) => {
-    const files = e.target.files
-    changeFilesLampiranGroup(
-        files,
-        'dokumen3',
-        inputLampiranData3,
-        deleteLampiranData3
-    )
-})
+// inputLampiranData3.addEventListener('change', (e) => {
+//     const files = e.target.files
+//     changeFilesLampiranGroup(
+//         files,
+//         'dokumen3',
+//         inputLampiranData3,
+//         deleteLampiranData3
+//     )
+// })
 
 function changeFilesLampiranGroup(
     files,
@@ -1419,14 +1593,16 @@ function changeInputDataPengirim(elementId, nameInput) {
 
 setLocalStorageForSubmit(REMOVE_ITEM, nmStorageTenaga)
 
+let loadingSubmit = false
+
 // SUBMIT FORM
 async function submitForm() {
     await Promise.all([
         validateFormNamaKolom(),
         validateFormAddCard(),
         validateFormLampiranData(),
-        validateDataPengirim(),
-        validateCaptcha()
+        // validateDataPengirim(),
+        // validateCaptcha()
     ])
         .then(res => {
             const checkValidate = res.filter(validate => validate === undefined)
@@ -1438,14 +1614,46 @@ async function submitForm() {
         })
         .then(res => {
             if (res === 'success') {
-                validateNIP(dataInputNamaKolom.nip)
-                    .then(res => {
-                        if (res?.message == 'success') {
-                            localStorage.setItem('result-data-tenaga', 'success')
-                        }else{
-                            alert(res.text)
-                        }
-                    })
+                if (res === 'success') {
+                    loadingSubmit = true
+                    spinnerGlobalLoading('flex')
+                    validateNIP(dataInputNamaKolom.nip ?? dataInputNamaKolom.nik, dataInputNamaKolom.nip ? 'NIP' : 'NIK')
+                        .then(res => {
+                            if (res?.message == 'success') {
+                                // localStorage.setItem('result-data-fs', 'success')
+                                return postFormDataAPI(POST_API_PUSTAKAWAN, {
+                                    method: 'POST',
+                                    body: JSON.stringify(dataTenagaForPost(resultFormDataTenaga()))
+                                })
+                            } else {
+                                return {
+                                    text: res.text,
+                                    message: 'error'
+                                }
+                            }
+                        })
+                        .then(res => {
+                            if (res?.message == 'error') {
+                                alert(res.text)
+                                spinnerGlobalLoading('none')
+                                loadingSubmit = false
+                            } else if (res?.message == 'Data yang diperlukan tidak lengkap.') {
+                                alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                                spinnerGlobalLoading('none')
+                                loadingSubmit = false
+                            } else {
+                                alert('Data berhasil ditambah')
+                                spinnerGlobalLoading('none')
+                                loadingSubmit = false
+                            }
+                        })
+                        .catch(err => {
+                            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                            console.log(err)
+                            loadingSubmit = false
+                            spinnerGlobalLoading('none')
+                        })
+                }
             }
         })
         .catch(err => console.log('err-submit-form', err))
@@ -1467,12 +1675,11 @@ function resultFormDataTenaga() {
     }
 }
 
-function validateFormNamaKolom() {
-    let err = {}
+function dataTenagaForPost(data) {
     const {
         files,
-        imgURL,
         nip,
+        nik,
         namaLengkap,
         tempatLahir,
         tanggalLahir,
@@ -1485,10 +1692,80 @@ function validateFormNamaKolom() {
         statusDinas,
         instansi,
         lokasi_instansi,
+        jenis_instansi,
+        diklatFungsionalPustakawan,
+        dataDiklat,
+        dataOrganisasi,
+        skKenaikanPangkatTerakhir,
+        dokumen1,
+        dokumen2,
+        dokumen3,
+        keteranganTambahan,
+    } = data
+
+    return {
+        gambar_users: files.name,
+        nip: nip ?? 'null',
+        nik: nik ?? 'null',
+        nama_users: namaLengkap,
+        username: namaLengkap,
+        password: nomorHP,
+        Tempat_Lahir: tempatLahir,
+        Tanggal_Lahir: `${createDateFormat(new Date(tanggalLahir)).split('/').join('-')}`,
+        jenis_kelamin: jenisKelamin,
+        no_hp: nomorHP,
+        email,
+        pendidikan: pendidikanTerakhir,
+        jurusan_bidangpendidikan: jurusanBidangPendidikan,
+        pangkat,
+        tamat_pangkat: 'null',
+        jabatan_fungsional: 'null',
+        tamat_jabatan: 'null',
+        status_jabatan: 'null',
+        istansi: instansi,
+        diklat: diklatFungsionalPustakawan,
+        catatan: keteranganTambahan.trim() ? keteranganTambahan : 'null',
+        waktu_daftar: `${createDateFormat(new Date()).split('/').join('-')} ${createHourFormat(new Date())}`,
+        status: '-',
+        status_dinas: statusDinas,
+        dokumen_pendukung: 'null',
+        dokumen_pendukung2: 'null',
+        dokumen_pendukung3: 'null',
+        role: 'Users',
+        pekerjaan: 'null',
+        lokasi_instansi: lokasi_instansi,
+        jenis_instansi,
+        judul_kti: 'null',
+        organisasi: dataOrganisasi,
+        sk_pustakawan: 'null',
+        sk_pangkat: skKenaikanPangkatTerakhir ? skKenaikanPangkatTerakhir[0]?.name : 'null'
+    }
+}
+
+function validateFormNamaKolom() {
+    let err = {}
+    const {
+        files,
+        imgURL,
+        nip,
+        nik,
+        namaLengkap,
+        tempatLahir,
+        tanggalLahir,
+        jenisKelamin,
+        nomorHP,
+        email,
+        pendidikanTerakhir,
+        jurusanBidangPendidikan,
+        pangkat,
+        statusDinas,
+        instansi,
+        jenis_instansi,
+        lokasi_instansi,
         diklatFungsionalPustakawan
     } = dataInputNamaKolom
     let errData = []
-    for (let i = 0; i <= 13; i++) {
+    for (let i = 0; i <= 14; i++) {
         errData.push(`errNmKolom${i}`)
         if (
             document.getElementById(`errNmKolom${i}`).id == 'errNmKolom1' &&
@@ -1502,8 +1779,22 @@ function validateFormNamaKolom() {
     if (!files) {
         err.errNmKolom0 = errText
     }
-    if (nip.length > 0 && nip.length < 18) {
+    if(nip == null && nik == null){
+        err.errNmKolom1 = errText
+        document.getElementById('errNmKolom1').style.color = '#ff0000'
+    }
+    if (optionNIPORNIK == 'NIP' && nip == null || optionNIPORNIK == 'NIP' && !nip.trim()) {
+        err.errNmKolom1 = errText
+        document.getElementById('errNmKolom1').style.color = '#ff0000'
+    } else if (optionNIPORNIK == 'NIP' && nip.length !== 18) {
         err.errNmKolom1 = 'NIP harus terdiri dari 18 Digit'
+        document.getElementById('errNmKolom1').style.color = '#ff0000'
+    }
+    if (optionNIPORNIK == 'NIK' && nik == null || optionNIPORNIK == 'NIK' && !nik.trim()) {
+        err.errNmKolom1 = errText
+        document.getElementById('errNmKolom1').style.color = '#ff0000'
+    } else if (optionNIPORNIK == 'NIK' && nik.length !== 16) {
+        err.errNmKolom1 = 'NIK harus terdiri dari 16 Digit'
         document.getElementById('errNmKolom1').style.color = '#ff0000'
     }
     if (!namaLengkap.trim()) {
@@ -1546,6 +1837,9 @@ function validateFormNamaKolom() {
     if (lokasi_instansi === 'Silahkan Pilih') {
         err.errNmKolom13 = errText
     }
+    if (jenis_instansi === 'Silahkan Pilih') {
+        err.errNmKolom14 = errText
+    }
     removeErrInputForm(errData)
     if (Object.keys(err).length > 0) {
         Object.entries(err).forEach(err => document.getElementById(err[0]).innerText = err[1])
@@ -1573,7 +1867,7 @@ function validateFormAddCard() {
 
 function validateFormLampiranData() {
     let err = {}
-    const errData = ['errKenaikanPangkatTerakhir', 'errLampiranData1', 'errLampiranData2', 'errLampiranData3', 'errKeteranganTambahan']
+    const errData = ['errKenaikanPangkatTerakhir']
     const {
         skKenaikanPangkatTerakhir,
         dokumen1,
@@ -1583,18 +1877,15 @@ function validateFormLampiranData() {
     if (!skKenaikanPangkatTerakhir) {
         err.errKenaikanPangkatTerakhir = errText
     }
-    if (!dokumen1) {
-        err.errLampiranData1 = errText
-    }
-    if (!dokumen2) {
-        err.errLampiranData2 = errText
-    }
-    if (!dokumen3) {
-        err.errLampiranData3 = errText
-    }
-    if (!dataKeteranganTambahan.trim()) {
-        err.errKeteranganTambahan = errText
-    }
+    // if (!dokumen1) {
+    //     err.errLampiranData1 = errText
+    // }
+    // if (!dokumen2) {
+    //     err.errLampiranData2 = errText
+    // }
+    // if (!dokumen3) {
+    //     err.errLampiranData3 = errText
+    // }
     removeErrInputForm(errData)
     if (Object.keys(err).length > 0) {
         Object.entries(err).forEach(err => document.getElementById(err[0]).innerText = err[1])

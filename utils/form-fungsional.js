@@ -71,6 +71,7 @@ const dataInputNamaKolom = {
     statusJabatan: 'Silahkan Pilih',
     instansi: 'Silahkan Pilih',
     lokasi_instansi: 'Silahkan Pilih',
+    jenis_instansi: 'Silahkan Pilih',
     diklatFungsionalPustakawan: 'Tidak Pernah'
 }
 
@@ -673,28 +674,41 @@ const dataNamaKolom = {
                 value: 'Silahkan Pilih'
             },
             {
-                data_tokens: 'bogor-selatan',
-                value: 'Bogor Selatan'
+                data_tokens: 'kabupaten-bogor',
+                value: 'Kabupaten Bogor'
             },
             {
-                data_tokens: 'bogor-timur',
-                value: 'Bogor Timur'
+                data_tokens: 'kota-bogor',
+                value: 'Kota Bogor'
             },
             {
-                data_tokens: 'bogor-utara',
-                value: 'Bogor Utara'
+                data_tokens: 'kota-depok',
+                value: 'Kota Depok'
+            }
+        ]
+    },
+    jenis_instansi:{
+        id: 'jenis_instansi',
+        data: [
+            {
+                data_tokens: 'silahkan-pilih',
+                value: 'Silahkan Pilih'
             },
             {
-                data_tokens: 'bogor-tengah',
-                value: 'Bogor Tengah'
+                data_tokens: 'perpustakaan-sekolah',
+                value: 'PERPUSTAKAAN SEKOLAH'
             },
             {
-                data_tokens: 'bogor-barat',
-                value: 'Bogor Barat'
+                data_tokens: 'perpustakaan-perguruan-tinggi',
+                value: 'PERPUSTAKAAN PERGURUAN TINGGI'
             },
             {
-                data_tokens: 'tanah-sareal',
-                value: 'Tanah Sareal'
+                data_tokens: 'perpustakaan-umum',
+                value: 'PERPUSTAKAAN UMUM'
+            },
+            {
+                data_tokens: 'perpustakaan-khusus',
+                value: 'PERPUSTAKAAN KHUSUS'
             },
         ]
     },
@@ -811,7 +825,7 @@ function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
                 this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
                 return
             } else if (inputTYPE === 'NIP' && optionNIPORNIK === 'NIK' && this.value.length > 16) {
-                this.setCustomValidity('Maksimal NIP 16 digit');
+                this.setCustomValidity('Maksimal NIK 16 digit');
                 this.reportValidity();
                 this.value = this.oldValue;
                 this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
@@ -970,7 +984,7 @@ function clickAddDiklat() {
     }
     removeValueInput('namaDiklat')
     // removeValueInput('tahunDiklat')
-    removeValueSelection('tahunDiklat', 10, 'Silahkan Pilih')
+    removeValueSelection('tahunDiklat', 11, 'Silahkan Pilih')
     removeValueInput('jumlahJamPelatihan')
     removeErrModalInput('errNmDiklat')
     removeErrModalInput('errThDiklat')
@@ -1006,7 +1020,7 @@ function prosesTambahDiklat() {
         })
         inputDataAddDiklat = {
             namaDiklat: '',
-            tahunDiklat: '',
+            tahunDiklat: 'Silahkan Pilih',
             jumlahJamPelatihan: ''
         }
         // removeValueInput('namaDiklat')
@@ -1191,7 +1205,7 @@ function updateDiklat(index) {
         tahunDiklat: document.getElementById('tahunDiklat').value = findData.tahunDiklat,
         jumlahJamPelatihan: document.getElementById('jumlahJamPelatihan').value = findData.jumlahJamPelatihan
     }
-    updateValueSelection('tahunDiklat', 10, findData.tahunDiklat)
+    updateValueSelection('tahunDiklat', 11, findData.tahunDiklat)
 }
 
 function updateInputDiklat() {
@@ -1214,7 +1228,7 @@ function updateInputDiklat() {
         }
         inputDataAddDiklat = {
             namaDiklat: '',
-            tahunDiklat: '',
+            tahunDiklat: 'Silahkan Pilih',
             jumlahJamPelatihan: ''
         }
         // removeValueInput('namaDiklat')
@@ -1243,7 +1257,7 @@ function clickAddKarya() {
     btnSubmitKarya.innerText = 'Tambah'
     removeValueInput('judulBuku')
     // removeValueInput('tahunTerbit')
-    removeValueSelection('tahunTerbit', 11, 'Silahkan Pilih')
+    removeValueSelection('tahunTerbit', 12, 'Silahkan Pilih')
     inputDataKaryaTulis = {
         judulBuku: '',
         tahunTerbit: 'Silahkan Pilih'
@@ -1375,7 +1389,7 @@ function clickAddOrganisasi() {
     btnSubmitOrganisasi.innerText = 'Tambah'
     removeValueInput('namaOrganisasi')
     // removeValueInput('jabatanOrganisasi')
-    removeValueSelection('jabatanOrganisasi', 12, 'Silahkan Pilih')
+    removeValueSelection('jabatanOrganisasi', 13, 'Silahkan Pilih')
     inputDataOrganisasi = {
         namaOrganisasi: '',
         jabatanOrganisasi: 'Silahkan Pilih'
@@ -1438,7 +1452,7 @@ function updateCardOrganisasi(index) {
     }
     removeErrModalInput('errNmOrganisasi')
     removeErrModalInput('errJbtOrganisasi')
-    updateValueSelection('jabatanOrganisasi', 12, findData.jabatanOrganisasi)
+    updateValueSelection('jabatanOrganisasi', 13, findData.jabatanOrganisasi)
 }
 
 function submitUpdtOrganisasi() {
@@ -1734,7 +1748,10 @@ async function submitForm() {
                         })
                 }
             })
-            .catch(err => console.log('err-submit-form', err))
+            .catch(err => {
+                console.log('err-submit-form', err)
+                loadingSubmit = false
+            })
     }
 }
 
@@ -1786,6 +1803,7 @@ function dataFungsionalForPostAPI(data) {
         dokumen2,
         dokumen3,
         lokasi_instansi,
+        jenis_instansi,
         keteranganTambahan,
         namaPengirim,
         emailPengirim,
@@ -1823,6 +1841,7 @@ function dataFungsionalForPostAPI(data) {
         role: 'Users',
         pekerjaan: 'null',
         lokasi_instansi: lokasi_instansi,
+        jenis_instansi,
         judul_kti: dataKaryaTulis,
         organisasi: dataOrganisasi,
         sk_pustakawan: skPustakawanTerakhir[0].name,
@@ -1914,10 +1933,11 @@ function validateFormNamaKolom() {
         statusJabatan,
         instansi,
         lokasi_instansi,
+        jenis_instansi,
         diklatFungsionalPustakawan,
     } = dataInputNamaKolom
     let errData = []
-    for (let i = 0; i <= 16; i++) {
+    for (let i = 0; i <= 17; i++) {
         errData.push(`errNmKolom${i}`)
         if (
             document.getElementById(`errNmKolom${i}`).id == 'errNmKolom1' &&
@@ -1930,6 +1950,10 @@ function validateFormNamaKolom() {
 
     if (!files) {
         err.errNmKolom0 = errText
+    }
+    if(nip == null && nik == null){
+        err.errNmKolom1 = errText
+        document.getElementById('errNmKolom1').style.color = '#ff0000'
     }
     if (optionNIPORNIK == 'NIP' && nip == null || optionNIPORNIK == 'NIP' && !nip.trim()) {
         err.errNmKolom1 = errText
@@ -1993,6 +2017,9 @@ function validateFormNamaKolom() {
     }
     if (lokasi_instansi === 'Silahkan Pilih') {
         err.errNmKolom16 = errText
+    }
+    if(jenis_instansi === 'Silahkan Pilih'){
+        err.errNmKolom17 = errText
     }
     removeErrInputForm(errData)
     if (Object.keys(err).length > 0) {

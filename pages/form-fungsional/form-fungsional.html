@@ -98,6 +98,8 @@
                                     style="color: #555; background-color: #fff;">Grafik Jabatan</a></li>
                             <li><a href="../grafik-pangkat/grafik-pangkat.html"
                                     style="color: #555; background-color: #fff;">Grafik Pangkat</a></li>
+                            <li><a href="../grafik-jenis-instansi/grafik-jenis-instansi.html"
+                                    style="color: #555; background-color: #fff;">Grafik Jenis Instansi</a></li>
                             <li><a href="../terbitan-direktoripustakawan/terbitan-direktoripustakawan.html"
                                     style="color: #555; background-color: #fff;">Direktori Tenaga Perpustakaan</a></li>
                             <li><a href="http://localhost/pustakawanbogor/index.php" target="_blank"
@@ -412,6 +414,19 @@
 
         <div class="wrap-input-fg">
             <div class="title-input">
+                <label for="jenis_instansi"><span>Jenis Instansi <span style="color: #ff0000;">*</span></span></label>
+            </div>
+            <div class="right" style="display: flex; flex-direction: column; width: 800px;">
+                <select id="jenis_instansi" class="selectpicker form-control" data-live-search="true"
+                    onchange="changeTxtInputNmKolom('jenis_instansi', 'jenis_instansi')"></select>
+                <div class="err-input">
+                    <span class="txt-err"><small id="errNmKolom17"></small></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="wrap-input-fg">
+            <div class="title-input">
                 <label for="diklatFungsional"><span>Diklat Fungsional Pustakawan <span
                             style="color: #ff0000;">*</span></span></label>
             </div>
@@ -419,7 +434,7 @@
                 <select id="diklatFungsional" class="selectpicker form-control" data-live-search="true"
                     onchange="changeTxtInputNmKolom('diklatFungsional', 'diklatFungsionalPustakawan')"></select>
                 <div class="err-input">
-                    <span class="txt-err"><small id="errNmKolom17"></small></span>
+                    <span class="txt-err"><small id="errNmKolom18"></small></span>
                 </div>
             </div>
         </div>
@@ -763,9 +778,9 @@
             </div>
         </div> -->
 
-        <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpiredCallback"
+        <!-- <div class="g-recaptcha" data-callback="recaptchaCallback" data-expired-callback="recaptchaExpiredCallback"
             data-sitekey="6LeAY_4nAAAAAG4mEOA8_sXdkoXMSHb7MKLoqcgh"></div>
-        <span id="errCaptcha" style="color: #ff0000; font-size: small;"></span>
+        <span id="errCaptcha" style="color: #ff0000; font-size: small;"></span> -->
 
         <div style="display: flex; justify-content: center;">
             <button id="submitFormFungsional" type="button" class="btn btn-success"
