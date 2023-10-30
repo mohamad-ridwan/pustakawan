@@ -4,19 +4,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="generate-pdf.css">
     <title>Pusat Pengembangan Pustakawan Perpustakaan dan Galeri Kota Bogor</title>
 </head>
 
 <body>
-    <h1>
-        Lihat pada tab yang memunculkan file PDF.
-    </h1>
+    <div class="wrap">
+        <h1 style="margin-bottom: 5rem;">Sedang mengunduh file Direktori</h1>
+        <div class="loader"></div>
+    </div>
+    <div id="myChart" style="width:100%; max-width:600px; height:500px;">
+    </div>
+    <div id="chartEducation" style="width:100%; max-width:600px; height:300px;">
+    </div>
+    <div id="chartGender" style="width:100%; max-width:600px; height:150px;">
+    </div>
+    <div id="chartAge" style="width:100%; max-width:600px; min-height: 300px; max-height:500px;">
+    </div>
+    <img id="imgProfile" src="/images/noimg.png" alt="" style="width: 15%; object-fit: cover;">
+
+    <!-- <canvas id="tesGrafik" style="opacity: 0;"></canvas> -->
+
     <!-- script pdfmake from node modules -->
     <!-- <script src='/node_modules/pdfmake/build/pdfmake.min.js'></script>
     <script src='/node_modules/pdfmake/build/vfs_fonts.js'></script> -->
     <!-- end script pdfmake from node modules -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js" integrity="sha512-a9NgEEK7tsCvABL7KqtUTQjl69z7091EVPpw5KxPlZ93T141ffe1woLtbXTX+r2/8TtTvRX/v4zTL2UlMUPgwg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js" integrity="sha512-pAoMgvsSBQTe8P3og+SAnjILwnti03Kz92V3Mxm0WOtHuA482QeldNM5wEdnKwjOnQ/X11IM6Dn3nbmvOz365g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- pdf make -->
+    
+    <!-- chart google -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <!-- end chart google -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"
+        integrity="sha512-a9NgEEK7tsCvABL7KqtUTQjl69z7091EVPpw5KxPlZ93T141ffe1woLtbXTX+r2/8TtTvRX/v4zTL2UlMUPgwg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"
+        integrity="sha512-pAoMgvsSBQTe8P3og+SAnjILwnti03Kz92V3Mxm0WOtHuA482QeldNM5wEdnKwjOnQ/X11IM6Dn3nbmvOz365g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- end pdf make -->
     <script src="/utils/api/postForm.js"></script>
     <script src="/utils/pdf/createPDF.js"></script>
     <script src="/utils/generate-pdf.js"></script>

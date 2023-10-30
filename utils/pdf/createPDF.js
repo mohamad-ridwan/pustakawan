@@ -32,5 +32,5 @@ let docDefinition = {
 // pdfMake.createPdf(dd).download()
 
 function openTabPDF(docDefinition) {
-    pdfMake.createPdf(docDefinition).open()
+    pdfMake.createPdf(docDefinition).download()
 }
