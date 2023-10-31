@@ -32,5 +32,7 @@ let docDefinition = {
 // pdfMake.createPdf(dd).download()
 
 function openTabPDF(docDefinition) {
-    pdfMake.createPdf(docDefinition).download()
+    pdfMake.createPdf(docDefinition).download(`Direktori ${paramsURL.get('dataDaerah')}-${new Date().getFullYear()}`, (res)=>{
+        window.close()
+    })
 }

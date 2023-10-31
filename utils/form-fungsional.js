@@ -1735,9 +1735,10 @@ async function submitForm() {
                                 spinnerGlobalLoading('none')
                                 loadingSubmit = false
                             } else {
-                                alert('Data berhasil ditambah')
+                                alert('Data berhasil ditambah.\nSilahkan Login dengan Ketentuan "password" adalah "tanggal lahir" yang anda cantumkan.')
                                 spinnerGlobalLoading('none')
                                 loadingSubmit = false
+                                window.location.reload()
                             }
                         })
                         .catch(err => {
@@ -1815,8 +1816,8 @@ function dataFungsionalForPostAPI(data) {
         nip: nip ?? 'null',
         nik: nik ?? 'null',
         nama_users: namaLengkap,
-        username: namaLengkap,
-        password: nomorHP,
+        username: nip !== null || nip?.length > 0 ? nip : nik,
+        password: `${createDateFormat(new Date(tanggalLahir)).split('/').join('-')}`,
         Tempat_Lahir: tempatLahir,
         Tanggal_Lahir: `${createDateFormat(new Date(tanggalLahir)).split('/').join('-')}`,
         jenis_kelamin: jenisKelamin,

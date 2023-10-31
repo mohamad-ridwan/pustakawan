@@ -1642,9 +1642,10 @@ async function submitForm() {
                                 spinnerGlobalLoading('none')
                                 loadingSubmit = false
                             } else {
-                                alert('Data berhasil ditambah')
+                                alert('Data berhasil ditambah.\nSilahkan Login dengan Ketentuan "password" adalah "tanggal lahir" yang anda cantumkan.')
                                 spinnerGlobalLoading('none')
                                 loadingSubmit = false
+                                window.location.reload()
                             }
                         })
                         .catch(err => {
@@ -1708,8 +1709,8 @@ function dataTenagaForPost(data) {
         nip: nip ?? 'null',
         nik: nik ?? 'null',
         nama_users: namaLengkap,
-        username: namaLengkap,
-        password: nomorHP,
+        username: nip !== null || nip?.length > 0 ? nip : nik,
+        password: `${createDateFormat(new Date(tanggalLahir)).split('/').join('-')}`,
         Tempat_Lahir: tempatLahir,
         Tanggal_Lahir: `${createDateFormat(new Date(tanggalLahir)).split('/').join('-')}`,
         jenis_kelamin: jenisKelamin,
@@ -1726,7 +1727,7 @@ function dataTenagaForPost(data) {
         diklat: diklatFungsionalPustakawan,
         catatan: keteranganTambahan.trim() ? keteranganTambahan : 'null',
         waktu_daftar: `${createDateFormat(new Date()).split('/').join('-')} ${createHourFormat(new Date())}`,
-        status: '-',
+        status: 'null',
         status_dinas: statusDinas,
         dokumen_pendukung: 'null',
         dokumen_pendukung2: 'null',

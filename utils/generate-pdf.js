@@ -370,9 +370,6 @@ if (params?.get('dataDaerah')) {
                                 }, 0)
                                 setTimeout(() => {
                                     openTabPDF(docDefinition)
-                                    setTimeout(() => {
-                                        window.close()
-                                    }, 1500);
                                 }, 50);
                             })
                         // end tabel data tenaga pustakawan
