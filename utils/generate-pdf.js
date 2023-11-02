@@ -48,7 +48,7 @@ if (params?.get('dataDaerah')) {
                         const data_tenaga_pustakawan = daerahKota.filter(user => user.status_dinas !== 'null')
 
                         const getData_FUNGSIONAL_PUSTAKAWAN = data_fungsional_pustakawan.map((user, index) => [createTextPDF(`${index + 1}.`, false, fontTable), createTextPDF(user.nama_users, false, fontTable), createTextPDF(user.jabatan_fungsional, false, fontTable), createTextPDF(user.istansi, false, fontTable), createTextPDF(user.jenis_instansi, false, fontTable)])
-                        const getData_TENAGA_PUSTAKAWAN = data_tenaga_pustakawan.map((user, index) => [createTextPDF(`${getData_FUNGSIONAL_PUSTAKAWAN.length + 1}.`, false, fontTable), createTextPDF(user.nama_users, false, fontTable), createTextPDF(user.status_dinas, false, fontTable), createTextPDF(user.istansi, false, fontTable), createTextPDF(user.jenis_instansi, false, fontTable)])
+                        const getData_TENAGA_PUSTAKAWAN = data_tenaga_pustakawan.map((user, index) => [createTextPDF(`${getData_FUNGSIONAL_PUSTAKAWAN.length + (index + 1)}.`, false, fontTable), createTextPDF(user.nama_users, false, fontTable), createTextPDF(user.status_dinas, false, fontTable), createTextPDF(user.istansi, false, fontTable), createTextPDF(user.jenis_instansi, false, fontTable)])
 
                         // title jumlah pustakawan
                         docDefinition.content.push({ text: `Jumlah Pustakawan dari (${params.get('dataDaerah')}): ${daerahKota.length}`, margin: [0, 10, 0, 10] })
