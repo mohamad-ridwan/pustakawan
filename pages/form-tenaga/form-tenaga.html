@@ -156,6 +156,9 @@
                 <input id="fileClientImg" type="file" accept=".jpg, .jpeg, .png, .webp" style="display: none;">
             </div>
         </div>
+        <div>
+            <p style="text-align: start;"><small><strong>Format foto berupa (png, jpeg, jpg)</strong></small></p>
+        </div>
         <button id="deleteClientImg" class="btn btn-danger" style="width: fit-content; display: none;"
             onclick="deleteClientImg()">
             Hapus Foto
@@ -338,13 +341,18 @@
                 </div>
                 <input type="text" id="textInstansi" class="form-control" style="display: none;"
                     placeholder="Ketik nama instansi" onchange="changeTxtInputNmKolom('textInstansi', 'instansi')">
-                <div style="display: flex; align-items: center; margin-top: 1rem;">
-                    <input id="checkboxInstansi" type="checkbox" name="instansiTdKDitemukan"
-                        style="margin-top: 0; margin-right: 5px; cursor: pointer; height: 1.5rem; width: 1.5rem;"
-                        onchange="checkBoxInstansi('checkboxInstansi')">
-                    <label for="checkboxInstansi" style="margin: 0; font-weight: normal; cursor: pointer;">Instansi
-                        tidak
-                        ditemukan</label>
+                <div style="display: flex; flex-wrap: wrap; align-items: center; margin-top: 1rem;">
+                    <div style="display: flex; align-items: center;">
+                        <input id="checkboxInstansi" type="checkbox" name="instansiTdKDitemukan"
+                            style="margin-top: 0; margin-right: 5px; cursor: pointer; height: 1.5rem; width: 1.5rem;"
+                            onchange="checkBoxInstansi('checkboxInstansi')">
+                        <label for="checkboxInstansi" style="margin: 0; font-weight: normal; cursor: pointer;">Instansi
+                            tidak
+                            ditemukan.</label>
+                    </div>
+                    <p id="errDataInstansi"
+                        style="display: none; text-align: start; margin: 0 0 0 5px; color: #ff0000;"><small>Tidak dapat
+                            menemukan data Instansi, silahkan klik box untuk mengisi</small></p>
                 </div>
                 <div class="err-input">
                     <span class="txt-err"><small id="errNmKolom12"></small></span>
@@ -558,14 +566,14 @@
                 <li>Fotocopy sertifikat diklat teknis perpustakaan (jika ada).</li>
                 <li>Fotocopy kenaikan pangkat terakhir (untuk PNS).</li>
             </ul>
-            <span style="margin: 1rem 0 2rem 0;">Lampiran dalam bentuk pdf atau gambar (png, jpeg, jpg, svg), ukuran
+            <span style="margin: 1rem 0 2rem 0;">Lampiran dalam bentuk pdf atau gambar (png, jpeg, jpg), ukuran
                 maksimal 2MB</span>
             <div>
                 <label for="kenaikanPangkatTerakhir" style="font-weight: normal;">SK Kenaikan Pangkat Terakhir <span
                         style="color: #ff0000;">*</span></label>
                 <div style="display: flex;" class="input-lampiran-data">
                     <input id="kenaikanPangkatTerakhir" type="file" class="form-control input-grup"
-                        accept="image/jpeg,image/png,image/jpg,image/svg,image/svg+xml,application/pdf"
+                        accept="image/jpeg,image/png,image/jpg,application/pdf"
                         style="margin-right: 1rem; margin-top: 0.5rem;">
                     <button id="deleteKenaikanPangkat" type="button" class="btn btn-secondary"
                         onclick="deleteFileLampiran('SK_KENAIKAN_PANGKAT_TERAKHIR')"
@@ -695,10 +703,10 @@
     <script src="/utils/format/createRangeOfYears.js"></script>
     <script src="/utils/format/changeUpdateValueSelection.js"></script>
     <script src="/utils/api/postForm.js"></script>
-    <!-- <script type="module" src="/utils/firebase.js"></script> -->
     <script src="/utils/alert.js"></script>
     <script src="/utils/navbar.js"></script>
     <script src="/utils/form-tenaga.js"></script>
+    <script type="module" src="/utils/firebase.js"></script>
 </body>
 
 </html>

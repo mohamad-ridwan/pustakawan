@@ -299,78 +299,84 @@ if (params?.get('dataDaerah')) {
                                 docDefinition.content.push(createTextPDF('DIREKTORI TENAGA PERPUSTAKAAN', true, 12, undefined, 'before', undefined, undefined, 'center', [0, 0, 0, 20], undefined))
                                 profilePustakawan.layout = 'noBorders'
                                 let indexPer3 = 0
-                                daerahKota.forEach((user, index) => {
-                                    if(indexPer3 === 3){
-                                        indexPer3 = 0
-                                    }
-                                    indexPer3 = indexPer3 + 1
-                                    profilePustakawan.table.body.push(
-                                        [
-                                            createTextPDF(index + 1, true, fontTable, undefined, undefined, undefined, 1, undefined, undefined, 0.9),
-                                            {}
-                                        ],
-                                        [
-                                            {
-                                                image: getBase64Image(document.getElementById('imgProfile')),
-                                                width: 60
-                                            },
-                                            {}
-                                            // createTextPDF(`: `, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                        ],
-                                        [
-                                            createTextPDF('Nama', true, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                            createTextPDF(`: ${user.nama_users}`, true, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                        ],
-                                        [
-                                            createTextPDF('Tahun Lahir', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                            createTextPDF(`: ${user.Tanggal_Lahir.split('-')[0]}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                        ],
-                                        [
-                                            createTextPDF('Jenis Kelamin', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                            createTextPDF(`: ${user.jenis_kelamin}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                        ],
-                                        [
-                                            createTextPDF('Pendidikan', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                            createTextPDF(`: ${user.pendidikan}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                        ],
-                                        [
-                                            createTextPDF('Bidang', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                            createTextPDF(`: ${user.jurusan_bidangpendidikan
-                                                }`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                        ],
-                                        [
-                                            createTextPDF('Pangkat', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                            createTextPDF(`: ${user.jurusan_bidangpendidikan
-                                                }`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                        ],
-                                        [
-                                            createTextPDF('Jabatan/Status Kedinasan', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                            createTextPDF(`: ${user.jabatan_fungsional !== 'null' ? user.jabatan_fungsional : user.status_dinas}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                        ],
-                                        [
-                                            createTextPDF('Nama Instansi', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                            createTextPDF(`: ${user.istansi}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                        ],
-                                        [
-                                            createTextPDF('Jenis Instansi', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                            createTextPDF(`: ${user.jenis_instansi}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                        ],
-                                        [
-                                            createTextPDF('Email', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                            createTextPDF(`: ${user.email}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                        ],
-                                        [
-                                            { text: '' },
-                                            { text: '', margin: [0, 0, 0, 20], pageBreak: indexPer3 === 3 ? 'before': undefined }
-                                        ]
-                                    )
+                                loopGetImgProfile(daerahKota, () => {
+                                    daerahKota.forEach((user, index) => {
+                                        if (indexPer3 === 3) {
+                                            indexPer3 = 0
+                                        }
+                                        indexPer3 = indexPer3 + 1
+                                        profilePustakawan.table.body.push(
+                                            [
+                                                createTextPDF(index + 1, true, fontTable, undefined, undefined, undefined, 1, undefined, undefined, 0.9),
+                                                {}
+                                            ],
+                                            [
+                                                {
+                                                    image: document.getElementById(`profileImg${index + 1}`).getAttribute('src'),
+                                                    width: 60,
+                                                    height: 60,
+                                                    fit: [70, 70]
+                                                },
+                                                {}
+                                                // createTextPDF(`: `, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                            ],
+                                            [
+                                                createTextPDF('Nama', true, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                createTextPDF(`: ${user.nama_users}`, true, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                            ],
+                                            [
+                                                createTextPDF('Tahun Lahir', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                createTextPDF(`: ${user.Tanggal_Lahir.split('-')[0]}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                            ],
+                                            [
+                                                createTextPDF('Jenis Kelamin', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                createTextPDF(`: ${user.jenis_kelamin}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                            ],
+                                            [
+                                                createTextPDF('Pendidikan', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                createTextPDF(`: ${user.pendidikan}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                            ],
+                                            [
+                                                createTextPDF('Bidang', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                createTextPDF(`: ${user.jurusan_bidangpendidikan
+                                                    }`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                            ],
+                                            [
+                                                createTextPDF('Pangkat', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                createTextPDF(`: ${user.jurusan_bidangpendidikan
+                                                    }`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                            ],
+                                            [
+                                                createTextPDF('Jabatan/Status Kedinasan', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                createTextPDF(`: ${user.jabatan_fungsional !== 'null' ? user.jabatan_fungsional : user.status_dinas}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                            ],
+                                            [
+                                                createTextPDF('Nama Instansi', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                createTextPDF(`: ${user.istansi}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                            ],
+                                            [
+                                                createTextPDF('Jenis Instansi', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                createTextPDF(`: ${user.jenis_instansi}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                            ],
+                                            [
+                                                createTextPDF('Email', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                createTextPDF(`: ${user.email}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                            ],
+                                            [
+                                                { text: '' },
+                                                { text: '', margin: [0, 0, 0, 20], pageBreak: indexPer3 === 3 && (index + 1) !== daerahKota.length ? 'before' : undefined }
+                                            ]
+                                        )
+                                    })
+
+                                    setTimeout(() => {
+                                        docDefinition.content.push(profilePustakawan)
+                                    }, 0);
+
+                                    setTimeout(() => {
+                                        openTabPDF(docDefinition)
+                                    }, 50);
                                 })
-                                setTimeout(() => {
-                                    docDefinition.content.push(profilePustakawan)
-                                }, 0)
-                                setTimeout(() => {
-                                    openTabPDF(docDefinition)
-                                }, 50);
                             })
                         // end tabel data tenaga pustakawan
                     } else {
@@ -382,8 +388,9 @@ if (params?.get('dataDaerah')) {
         .catch(err => {
             alert('terjadi kesalahan server.\nmohon coba beberapa saat lagi')
             console.log(err)
+            window.close()
         })
-}else{
+} else {
     alert('invalid query')
     window.close()
 }
@@ -634,14 +641,91 @@ function generateTextCalculation(data, totalDataPustakawan, nameTitle) {
     return generateText
 }
 
-function getBase64Image(img) {
-    let canvas = document.createElement('canvas')
-    canvas.width = img.width
-    canvas.height = img.height
-    let ctx = canvas.getContext('2d')
-    ctx.drawImage(img, 0, 0)
-    let dataURL = canvas.toDataURL('image/jpeg')
-    return dataURL
+// fetch(`${window.location.origin}/images/noimg.png`)
+//     .then(res => res.blob())
+//     .then(res => {
+//         let reader = new FileReader()
+//         reader.onload = function () {
+//             console.log(this.result)
+//         }
+//         reader.readAsDataURL(res)
+//     })
+
+const corsHeroku = 'https://cors-anywhere.herokuapp.com'
+
+let idxProfileImg = 0
+
+async function fetchImageProfile(img) {
+    return await new Promise(resolve =>
+        setTimeout(() => {
+            fetch(img)
+                .then(res => res.blob())
+                .then(res => {
+                    let reader = new FileReader()
+                    reader.onload = function (result) {
+                        idxProfileImg = idxProfileImg + 1
+                        const url = result.srcElement.result
+                        let createImg = new Image()
+                        createImg.src = url
+                        createImg.style.width = '15%'
+                        createImg.style.maxHeight = '50px'
+                        createImg.style.objectFit = 'cover'
+                        createImg.setAttribute('id', `profileImg${idxProfileImg}`)
+                        document.getElementById('wrapImgProfile').appendChild(createImg)
+                        resolve(url)
+                    }
+                    reader.readAsDataURL(res)
+                })
+        }, 1000)
+    )
+}
+
+async function loopGetImgProfile(data, cb) {
+    let count = 0
+    for (user of data) {
+        await fetchImageProfile(user.gambar_users.includes('https://firebasestorage.googleapis.com') ? user.gambar_users : `${window.location.origin}/images/noimg.png`)
+        count = count + 1
+        setTimeout(() => {
+            if (count === data.length) {
+                cb()
+            }
+        }, 1000);
+    }
+}
+
+async function getBase64Image(img, index) {
+    return await new Promise((resolve, reject) => {
+        fetch(img.includes('https://firebasestorage.googleapis.com') ? img : `${window.location.origin}/${img}`)
+            .then(res => res.blob())
+            .then(res => {
+                let reader = new FileReader()
+                reader.onload = function (result) {
+                    idxProfileImg = idxProfileImg + 1
+                    const url = result.srcElement.result
+                    resolve(url)
+                    let createImg = new Image()
+                    createImg.src = url
+                    createImg.style.width = '15%'
+                    createImg.style.objectFit = 'cover'
+                    createImg.setAttribute('id', `profileImg${idxProfileImg}`)
+                    document.getElementById('wrapImgProfile').appendChild(createImg)
+                }
+                reader.readAsDataURL(res)
+            })
+        // let createImg = new Image()
+        // createImg.src = img
+        // createImg.style.width = '15%'
+        // createImg.style.objectFit = 'cover'
+        // createImg.onload = () => {
+        //     let canvas = document.createElement('canvas')
+        //     canvas.width = createImg.width
+        //     canvas.height = createImg.height
+        //     let ctx = canvas.getContext('2d')
+        //     ctx.drawImage(createImg, 0, 0)
+        //     let dataURL = canvas.toDataURL(img)
+        //     resolve(dataURL)
+        // }
+    })
 }
 
 async function makeHTML2Canvas(elementId) {

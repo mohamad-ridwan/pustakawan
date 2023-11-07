@@ -28,7 +28,7 @@ postFormDataAPI(POST_API_PUSTAKAWAN, {
                         <p>Direktori Tenaga Perpustakaan dari masing-masing Daerah Kota.</p>
                         <div style="display: flex; justify-content: flex-end;">
                             <p><a href="${window.location.origin}/pages/generate-pdf/generate-pdf.html?dataDaerah=${user.lokasi_instansi}" target="_blank" class="btn btn-primary"
-                                    role="button">Lihat</a></p>
+                                    role="button">Unduh</a></p>
                         </div>
                     </div>
                 </div>

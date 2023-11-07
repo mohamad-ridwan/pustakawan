@@ -8,7 +8,7 @@
     <title>Pusat Pengembangan Pustakawan Perpustakaan dan Galeri Kota Bogor</title>
 </head>
 
-<body>
+<body style="overflow-y: hidden;">
     <div class="wrap">
         <h1 style="margin-bottom: 5rem;">Sedang mengunduh file Direktori</h1>
         <div class="loader"></div>
@@ -22,6 +22,7 @@
     <div id="chartAge" style="width:100%; max-width:600px; min-height: 300px; max-height:500px;">
     </div>
     <img id="imgProfile" src="/images/noimg.png" alt="" style="width: 15%; object-fit: cover;">
+    <div id="wrapImgProfile"></div>
 
     <!-- <canvas id="tesGrafik" style="opacity: 0;"></canvas> -->
 
@@ -42,6 +43,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"
         integrity="sha512-pAoMgvsSBQTe8P3og+SAnjILwnti03Kz92V3Mxm0WOtHuA482QeldNM5wEdnKwjOnQ/X11IM6Dn3nbmvOz365g=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.js" integrity="sha512-tEqLjoRgU47rrCeCRKlUjDeDD7IbMCf/dpcedUG6pXUCZOweBDCg8+8H+XdiTNptUU+TK18r5DPKZFKxLPSWsg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js.map"></script>
     <!-- end pdf make -->
     <script src="/utils/api/postForm.js"></script>
     <script src="/utils/pdf/createPDF.js"></script>

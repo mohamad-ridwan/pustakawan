@@ -21,6 +21,10 @@ function spinnerGlobalLoading(display) {
     globalLoading.style.display = display
 }
 
+function errDataInstansi(display){
+    document.getElementById('errDataInstansi').style.display = display
+}
+
 getSekolah()
     .then(res => {
         if (res?.dataSekolah?.length > 0) {
@@ -40,11 +44,18 @@ getSekolah()
             setTimeout(() => {
                 createMenuDropdown(newData, 7, 'instansi')
                 spinnerGlobalLoading('none')
+                errDataInstansi('none')
             }, 500);
+        } else {
+            spinnerGlobalLoading('none')
+            console.log(res)
+            errDataInstansi('flex')
         }
     })
     .catch(err => {
         console.log('error data sekolah', err)
+        spinnerGlobalLoading('none')
+        errDataInstansi('flex')
     })
 
 // DATA INPUT NAMA KOLOM
@@ -305,14 +316,13 @@ elemImgFile.addEventListener('change', (e) => {
 function validateImgExt(file) {
     const getTypeFile = file[0].type.split('/')[1]
     if (!getTypeFile || getTypeFile.length === 0) {
-        alert('File Harus berupa .jpg/.jpeg/.png/.webp')
+        alert('File Harus berupa .jpg /.jpeg /.png')
         return
     }
     if (
         getTypeFile.toLowerCase() === 'jpg' ||
         getTypeFile.toLowerCase() === 'jpeg' ||
-        getTypeFile.toLowerCase() === 'png' ||
-        getTypeFile.toLowerCase() === 'webp'
+        getTypeFile.toLowerCase() === 'png'
     ) {
         onLoadingClientImg('flex', true)
         createImgToWebp(file[0])
@@ -331,7 +341,7 @@ function validateImgExt(file) {
             })
             .catch(err => console.log(err))
     } else {
-        alert('File Harus berupa .jpg/.jpeg/.png/.webp')
+        alert('File Harus berupa .jpg /.jpeg /.png')
     }
 }
 
@@ -359,7 +369,7 @@ async function createImgToWebp(file) {
             canvas.height = newImg.height
             ctx?.drawImage(newImg, 0, 0)
             // convert canvas
-            let webpImage = canvas.toDataURL('image/webp', 1)
+            let webpImage = canvas.toDataURL('image/jpeg', 1)
             let img = new Image()
             img.src = webpImage
             newSrc = img.src
@@ -687,7 +697,7 @@ const dataNamaKolom = {
             }
         ]
     },
-    jenis_instansi:{
+    jenis_instansi: {
         id: 'jenis_instansi',
         data: [
             {
@@ -911,7 +921,7 @@ function removeDisabledOfMenu(element) {
 nipElement.addEventListener('change', async (e) => {
     if (optionNIPORNIK === 'NIP' && e.target.value.length === 18) {
         document.getElementById('secGlobalLoading').style.display = 'flex'
-        await validateNIP(e.target.value, optionNIPORNIK)
+        await validateNIPFungsional(e.target.value, optionNIPORNIK)
             .then(res => {
                 document.getElementById('errNmKolom1').innerText = res.text
                 if (res.message === 'error') {
@@ -925,7 +935,7 @@ nipElement.addEventListener('change', async (e) => {
             })
     } else if (optionNIPORNIK === 'NIK' && e.target.value.length === 16) {
         document.getElementById('secGlobalLoading').style.display = 'flex'
-        await validateNIP(e.target.value, optionNIPORNIK)
+        await validateNIPFungsional(e.target.value, optionNIPORNIK)
             .then(res => {
                 document.getElementById('errNmKolom1').innerText = res.text
                 if (res.message === 'error') {
@@ -1613,7 +1623,7 @@ function changeFilesLampiranGroup(
             }
         }
     } else if (files[0]) {
-        alert('File Harus berupa .pdf/.jpg/.jpeg/.png/.svg')
+        alert('File Harus berupa .pdf /.jpg /.jpeg /.png')
         if (inputLampiranData[propertyData]?.[0]?.name) {
             element.files = inputLampiranData[propertyData]
         } else {
@@ -1633,8 +1643,6 @@ function validateLampiranFile(files) {
         getTypeFile.toLowerCase() === 'jpg' ||
         getTypeFile.toLowerCase() === 'jpeg' ||
         getTypeFile.toLowerCase() === 'png' ||
-        getTypeFile.toLowerCase() === 'svg' ||
-        getTypeFile.toLowerCase() === 'svg+xml' ||
         getTypeFile.toLowerCase() === 'pdf'
     ) {
         return 'success'
@@ -1684,14 +1692,14 @@ function deleteFileLampiran(actionType) {
     }
 }
 
-localStorage.removeItem('result-data-fs')
+setLocalStorageForSubmit(REMOVE_ITEM, nmStorageFungsional)
 
 let loadingSubmit = false
 
 // submit form
-async function submitForm() {
+function submitForm() {
     if (loadingSubmit === false) {
-        await Promise.all([
+        Promise.all([
             validateFormNamaKolom(),
             validateFormAddCard(),
             validateFormLampiranData(),
@@ -1710,43 +1718,11 @@ async function submitForm() {
                 if (res === 'success') {
                     loadingSubmit = true
                     spinnerGlobalLoading('flex')
-                    validateNIP(dataInputNamaKolom.nip ?? dataInputNamaKolom.nik, dataInputNamaKolom.nip ? 'NIP' : 'NIK')
-                        .then(res => {
-                            if (res?.message == 'success') {
-                                // localStorage.setItem('result-data-fs', 'success')
-                                return postFormDataAPI(POST_API_PUSTAKAWAN, {
-                                    method: 'POST',
-                                    body: JSON.stringify(dataFungsionalForPostAPI(resultFormData()))
-                                })
-                            } else {
-                                return {
-                                    text: res.text,
-                                    message: 'error'
-                                }
-                            }
-                        })
-                        .then(res => {
-                            if (res?.message == 'error') {
-                                alert(res.text)
-                                spinnerGlobalLoading('none')
-                                loadingSubmit = false
-                            } else if (res?.message == 'Data yang diperlukan tidak lengkap.') {
-                                alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
-                                spinnerGlobalLoading('none')
-                                loadingSubmit = false
-                            } else {
-                                alert('Data berhasil ditambah.\nSilahkan Login dengan Ketentuan "password" adalah "tanggal lahir" yang anda cantumkan.')
-                                spinnerGlobalLoading('none')
-                                loadingSubmit = false
-                                window.location.reload()
-                            }
-                        })
-                        .catch(err => {
-                            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
-                            console.log(err)
-                            loadingSubmit = false
-                            spinnerGlobalLoading('none')
-                        })
+                    setLocalStorageForSubmit(SET_ITEM, nmStorageFungsional, defaultValueStgSubmit)
+                } else {
+                    spinnerGlobalLoading('none')
+                    loadingSubmit = false
+                    console.log(res)
                 }
             })
             .catch(err => {
@@ -1812,7 +1788,7 @@ function dataFungsionalForPostAPI(data) {
     } = data
 
     return {
-        gambar_users: files.name,
+        gambar_users: files,
         nip: nip ?? 'null',
         nik: nik ?? 'null',
         nama_users: namaLengkap,
@@ -1845,14 +1821,14 @@ function dataFungsionalForPostAPI(data) {
         jenis_instansi,
         judul_kti: dataKaryaTulis,
         organisasi: dataOrganisasi,
-        sk_pustakawan: skPustakawanTerakhir[0].name,
-        sk_pangkat: skKenaikanPangkatTerakhir ? skKenaikanPangkatTerakhir[0]?.name : 'null'
+        sk_pustakawan: skPustakawanTerakhir,
+        sk_pangkat: skKenaikanPangkatTerakhir ? skKenaikanPangkatTerakhir : 'null'
     }
 }
 
 const corsHeroku = 'https://cors-anywhere.herokuapp.com'
 
-async function validateNIP(value, actionTYPE) {
+async function validateNIPFungsional(value, actionTYPE) {
     return await new Promise((resolve, reject) => {
         fetch(`http://localhost/pustakawanbogor/api/pustakawan.php`)
             .then(res => res.json())
@@ -1873,7 +1849,7 @@ async function validateNIP(value, actionTYPE) {
                         }
                     }
                 } {
-                    resolve({ message: 'success', text: 'NIP bisa digunakan' })
+                    resolve({ message: 'success', text: `${actionTYPE} bisa digunakan` })
                 }
             })
             .catch(err => {
@@ -1952,7 +1928,7 @@ function validateFormNamaKolom() {
     if (!files) {
         err.errNmKolom0 = errText
     }
-    if(nip == null && nik == null){
+    if (nip == null && nik == null) {
         err.errNmKolom1 = errText
         document.getElementById('errNmKolom1').style.color = '#ff0000'
     }
@@ -2019,7 +1995,7 @@ function validateFormNamaKolom() {
     if (lokasi_instansi === 'Silahkan Pilih') {
         err.errNmKolom16 = errText
     }
-    if(jenis_instansi === 'Silahkan Pilih'){
+    if (jenis_instansi === 'Silahkan Pilih') {
         err.errNmKolom17 = errText
     }
     removeErrInputForm(errData)
