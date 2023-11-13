@@ -7,6 +7,7 @@
     <link rel="icon" type="image/x-icon" href="/images/logo_perpusbogor.jpg">
     <link rel="stylesheet" href="pelapor-pengajuan-mandiri.css">
     <link rel="stylesheet" href="../../utils/navbar.css">
+    <link rel="stylesheet" href="../../utils/modal.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet"
         href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
@@ -16,6 +17,37 @@
 </head>
 
 <body>
+    <!-- modal search pengajuan revisi -->
+    <!-- Modal -->
+    <div class="modal fade" id="modalRevisi" tabindex="-1" role="dialog" aria-labelledby="modalRevisiPustakawan"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="modalRevisiPustakawan">Pengajuan Revisi Data Pustakawan</h4>
+                </div>
+                <div class="modal-body">
+                    <h4>Cari berdasarkan <strong>NIP / NIK</strong></h4>
+                    <p>Untuk melakukan pengajuan, silahkan cari data Anda.</p>
+                    <select id="selectSearchRevisi" class="selectpicker form-control" data-live-search="true" onchange="changeSelectOptRevisi()">
+                        <option data-tokens="silahkan-pilih" value="Silahkan Pilih">Silahkan Pilih</option>
+                        <option data-tokens="NIP" value="NIP">NIP</option>
+                        <option data-tokens="NIK" value="NIK">NIK</option>
+                    </select>
+                    <input id="searchRevisi" type="tel" class="form-control" style="margin-top: 1rem;" disabled>
+                    <p style="color: #ff0000; text-align: start;"><small id="errSearch"></small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                    <button id="submitSearch" type="button" class="btn btn-primary">Cari</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end modal search pengajuan revisi -->
+
     <!-- navbar -->
     <nav class="navbar navbar-fixed-top banner-top">
         <div class="container container-banner-top">
@@ -88,6 +120,9 @@
                             <li><a href="http://localhost/pustakawanbogor/page/login.php" target="_blank"
                                     style="color: #555; background-color: #fff;">Dashboard</a></li>
                         </ul>
+                    </li>
+                    <li><a href="#" data-toggle="modal" data-target="#modalRevisi"
+                            style="color: #fff; background-color: transparent;">Pengajuan Revisi Pustakawan</a>
                     </li>
                     <!-- <div class="icon-profile">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"
@@ -170,7 +205,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/js/bootstrap-select.min.js"></script>
+    <!-- cryptoJS -->
+    <script src="../../CryptoJS v3.1.2/rollups/aes.js"></script>
+    <script src="../../CryptoJS v3.1.2/rollups/hmac-sha256.js"></script>
+    <!-- end cryptoJS -->
+    <script src="/utils/jwt/createJWTToken.js"></script>
     <script src="/utils/navbar.js"></script>
+    <script src="/utils/pengajuan-revisi.js"></script>
 </body>
 
 </html>

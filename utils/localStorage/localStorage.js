@@ -1,5 +1,7 @@
 const nmStorageFungsional = 'result-data-fs'
 const nmStorageTenaga = 'result-data-tenaga'
+const nmStorageRevisiTenaga = 'result-revisi-data-tenaga'
+const nmStorageRevisiFungsional = 'result-revisi-data-fs'
 
 const defaultValueStgSubmit = 'success'
 const SET_ITEM = 'SET_ITEM'

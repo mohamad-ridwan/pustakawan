@@ -2,6 +2,72 @@ const mailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 // const phoneRegex = /[^0-9.]/g
 const phoneRegex = /^\d*$/
 
+// prev data fungsional
+let prevDataPustakawan = {
+    nip: null,
+    nik: null,
+    imgURL: '',
+    sk_pustakawan: null,
+    sk_pangkat: null,
+    nama_users: '',
+    email: '',
+    no_hp: '',
+    username: ''
+}
+
+let currentExpQuery = null
+
+window.onload = () => {
+    setTimeout(async () => {
+        const params = new URLSearchParams(window.location.search)
+        if (!params.get('id')) {
+            alert('Query tidak valid')
+            setTimeout(() => {
+                window.location.replace(window.location.origin)
+            }, 0);
+        } else {
+            const decode = await decodeJWT(params.get('id'))
+            const {
+                id,
+                exp
+            } = decode
+            currentExpQuery = exp
+            if (id && exp && validateExpToken(exp)) {
+                postFormDataAPI(POST_API_PUSTAKAWAN)
+                    .then(res => {
+                        if (res?.length > 0) {
+                            const findData = res.find(user => user.id == id)
+                            if (!findData) {
+                                alert('Tidak dapat ditemukan data Pustakawan pada query id tersebut.')
+                                setTimeout(() => {
+                                    window.location.replace(window.location.origin)
+                                }, 0)
+                            } else {
+                                setUpdtToForm(findData)
+                                return
+                            }
+                        } else {
+                            alert('Tidak dapat menemukan data Pustakawan yang terdaftar.\nSilahkan lakukan pendaftaran melalui Form Fungsional/Tenaga.')
+                            setTimeout(() => {
+                                window.location.replace(window.location.origin)
+                            }, 0);
+                        }
+                    })
+                    .catch(err => {
+                        alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                        setTimeout(() => {
+                            window.location.replace(window.location.origin)
+                        }, 0)
+                    })
+            } else {
+                alert('Akses tidak valid atau Akses revisi Anda telah berakhir!.\nSilahkan inputkan kembali.')
+                window.location.replace(window.location.origin)
+            }
+        }
+    }, 500);
+    // changeDisableInput(document.getElementsByClassName('form-control input-grup'), 'true')
+}
+
 const globalLoading = document.getElementById('secGlobalLoading')
 
 // fetch data instansi sekolah/mahasiswa
@@ -21,7 +87,7 @@ function spinnerGlobalLoading(display) {
     globalLoading.style.display = display
 }
 
-function errDataInstansi(display){
+function errDataInstansi(display) {
     document.getElementById('errDataInstansi').style.display = display
 }
 
@@ -83,7 +149,9 @@ const dataInputNamaKolom = {
     instansi: 'Silahkan Pilih',
     lokasi_instansi: 'Silahkan Pilih',
     jenis_instansi: 'Silahkan Pilih',
-    diklatFungsionalPustakawan: 'Tidak Pernah'
+    diklatFungsionalPustakawan: 'Tidak Pernah',
+    pekerjaan: 'Fungsional Pustakawan',
+    status: 'Pending'
 }
 
 // function loadCreateSelect(elementId, data) {
@@ -865,7 +933,7 @@ function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
 }
 
 setInputFilter(nipElement, (value) => phoneRegex.test(value), "Harus berupa angka", 'NIP');
-// setInputFilter(phoneElement, (value) => phoneRegex.test(value), "Harus berupa angka");
+setInputFilter(phoneElement, (value) => phoneRegex.test(value), "Harus berupa angka");
 setInputFilter(nomorHPElement, (value) => phoneRegex.test(value), "Harus berupa angka");
 
 const formControll = document.getElementsByClassName('form-control')
@@ -958,9 +1026,9 @@ nipElement.addEventListener('change', async (e) => {
     }
 })
 
-window.onload = () => {
-    changeDisableInput(document.getElementsByClassName('form-control input-grup'), 'true')
-}
+// window.onload = () => {
+//     changeDisableInput(document.getElementsByClassName('form-control input-grup'), 'true')
+// }
 
 function setOptionElement() {
     Object.entries(dataNamaKolom).forEach(item => loadCreateSelect(item[1].id, item[1].data))
@@ -1614,6 +1682,11 @@ function changeFilesLampiranGroup(
         if (validateSizeLampiranFiles(files)) {
             inputLampiranData[propertyData] = files
             changeStyleBtnDeleteFile(btnDeleteElement, 'pointer', 'btn btn-danger')
+            if (propertyData == 'skPustakawanTerakhir') {
+                document.getElementById('prevFileSKPustakawan').style.display = 'none'
+            } else if (propertyData == 'skKenaikanPangkatTerakhir' && prevDataPustakawan.sk_pangkat !== 'null') {
+                document.getElementById('prevFilePangkat').style.display = 'none'
+            }
         } else {
             alert('Maaf, tidak bisa input file dengan ukuran lebih dari 2MB')
             if (inputLampiranData[propertyData]?.[0]?.name) {
@@ -1673,10 +1746,14 @@ function deleteFileLampiran(actionType) {
         inputPustakawanTerakhir.value = null
         inputLampiranData.skPustakawanTerakhir = null
         changeStyleBtnDeleteFile(deletePustakawanTerakhir, 'not-allowed', 'btn btn-secondary')
+        document.getElementById('prevFileSKPustakawan').style.display = 'flex'
     } else if (actionType === 'SK_KENAIKAN_PANGKAT_TERAKHIR') {
         inputKenaikanPangkatTerakhir.value = null
         inputLampiranData.skKenaikanPangkatTerakhir = null
         changeStyleBtnDeleteFile(deleteKenaikanPangkat, 'not-allowed', 'btn btn-secondary')
+        if(prevDataPustakawan.sk_pangkat !== 'null'){
+            document.getElementById('prevFilePangkat').style.display = 'flex'
+        }
     } else if (actionType === 'DOKUMEN_1') {
         inputLampiranData1.value = null
         inputLampiranData.dokumen1 = null
@@ -1697,39 +1774,49 @@ setLocalStorageForSubmit(REMOVE_ITEM, nmStorageFungsional)
 let loadingSubmit = false
 
 // submit form
-function submitForm() {
-    if (loadingSubmit === false) {
-        Promise.all([
-            validateFormNamaKolom(),
-            validateFormAddCard(),
-            validateFormLampiranData(),
-            // validateDataPengirim(),
-            // validateCaptcha()
-        ])
-            .then(res => {
-                const checkValidate = res.filter(validate => validate === undefined)
-                if (checkValidate.length > 0) {
-                    createAlert('Mohon lengkapi formulir Anda!.')
-                    return 'failed'
-                }
-                return 'success'
-            })
-            .then(res => {
-                if (res === 'success') {
-                    loadingSubmit = true
-                    spinnerGlobalLoading('flex')
-                    setLocalStorageForSubmit(SET_ITEM, nmStorageFungsional, defaultValueStgSubmit)
-                } else {
-                    spinnerGlobalLoading('none')
-                    loadingSubmit = false
-                    console.log(res)
-                }
-            })
-            .catch(err => {
-                console.log('err-submit-form', err)
-                loadingSubmit = false
-            })
-    }
+// function submitForm() {
+    // if (currentExpQuery && !validateExpToken(currentExpQuery)) {
+    //     alert('Akses revisi Anda telah berakhir.\nSilahkan input kembali.')
+    //     window.location.replace(window.location.origin)
+    //     return
+    // }
+    // if (loadingSubmit === false) {
+    //     Promise.all([
+    //         validateFormNamaKolom(),
+    //         validateFormAddCard(),
+    //         // validateFormLampiranData(),
+    //         validateDataPengirim(),
+    //         // validateCaptcha()
+    //     ])
+    //         .then(res => {
+    //             const checkValidate = res.filter(validate => validate === undefined)
+    //             if (checkValidate.length > 0) {
+    //                 createAlert('Mohon lengkapi formulir Anda!.')
+    //                 return 'failed'
+    //             }
+    //             return 'success'
+    //         })
+    //         .then(res => {
+    //             if (res === 'success' && window.confirm('Ingin mengajukan revisi data?')) {
+    //                 loadingSubmit = true
+    //                 spinnerGlobalLoading('flex')
+    //                 setLocalStorageForSubmit(SET_ITEM, nmStorageRevisiFungsional, defaultValueStgSubmit)
+    //             } else {
+    //                 spinnerGlobalLoading('none')
+    //                 loadingSubmit = false
+    //                 console.log(res)
+    //             }
+    //         })
+    //         .catch(err => {
+    //             console.log('err-submit-form', err)
+    //             loadingSubmit = false
+    //         })
+    // }
+// }
+
+function validateExpToken(expToken) {
+    const cekExp = (new Date()).valueOf() < (new Date(expToken)).valueOf()
+    return cekExp
 }
 
 function resultFormData() {
@@ -1784,11 +1871,13 @@ function dataFungsionalForPostAPI(data) {
         keteranganTambahan,
         namaPengirim,
         emailPengirim,
-        telpPengirim
+        telpPengirim,
+        pekerjaan,
+        status
     } = data
 
     return {
-        gambar_users: files,
+        gambar_users: dataInputNamaKolom.files ?? prevDataPustakawan.imgURL,
         nip: nip ?? 'null',
         nik: nik ?? 'null',
         nama_users: namaLengkap,
@@ -1808,22 +1897,22 @@ function dataFungsionalForPostAPI(data) {
         status_jabatan: statusJabatan,
         istansi: instansi,
         diklat: diklatFungsionalPustakawan,
-        catatan: dataKeteranganTambahan.trim() ? dataKeteranganTambahan : 'null',
+        catatan: keteranganTambahan.trim() ? keteranganTambahan : 'null',
         waktu_daftar: `${createDateFormat(new Date()).split('/').join('-')} ${createHourFormat(new Date())}`,
-        status: 'Pending',
+        status: status,
         status_dinas: 'null',
         dokumen_pendukung: 'null',
         dokumen_pendukung2: 'null',
         dokumen_pendukung3: 'null',
         role: 'Users',
-        pekerjaan: 'Fungsional Pustakawan',
+        pekerjaan: pekerjaan,
         lokasi_instansi: lokasi_instansi,
         jenis_instansi,
         data_diklat: dataDiklat,
         judul_kti: dataKaryaTulis,
         organisasi: dataOrganisasi,
-        sk_pustakawan: skPustakawanTerakhir,
-        sk_pangkat: skKenaikanPangkatTerakhir ? skKenaikanPangkatTerakhir : 'null'
+        sk_pustakawan: skPustakawanTerakhir ?? prevDataPustakawan.sk_pustakawan,
+        sk_pangkat: skKenaikanPangkatTerakhir ? skKenaikanPangkatTerakhir : prevDataPustakawan.sk_pangkat ?? 'null'
     }
 }
 
@@ -1831,8 +1920,7 @@ const corsHeroku = 'https://cors-anywhere.herokuapp.com'
 
 async function validateNIPFungsional(value, actionTYPE) {
     return await new Promise((resolve, reject) => {
-        fetch(`http://localhost/pustakawanbogor/api/pustakawan.php`)
-            .then(res => res.json())
+        postFormDataAPI(POST_API_PUSTAKAWAN)
             .then(res => {
                 const data = filtersNIPORNIK(res, actionTYPE, value)
                 if (res.length > 0) {
@@ -1863,11 +1951,17 @@ async function validateNIPFungsional(value, actionTYPE) {
 
 function filtersNIPORNIK(data, actionTYPE, value) {
     if (actionTYPE === 'NIP') {
-        const cekNIP = data.find(item => item.nip === value)
-        if (cekNIP) {
+        if (value !== prevDataPustakawan.nip) {
+            const cekNIP = data.find(item => item.nip === value)
+            if (cekNIP) {
+                return {
+                    type: 'NIP',
+                    value: true
+                }
+            }
             return {
                 type: 'NIP',
-                value: true
+                value: false
             }
         }
         return {
@@ -1875,11 +1969,17 @@ function filtersNIPORNIK(data, actionTYPE, value) {
             value: false
         }
     } else {
-        const cekNIK = data.find(item => item.nik === value)
-        if (cekNIK) {
+        if (value !== prevDataPustakawan.nik) {
+            const cekNIK = data.find(item => item.nik === value)
+            if (cekNIK) {
+                return {
+                    type: 'NIK',
+                    value: true
+                }
+            }
             return {
                 type: 'NIK',
-                value: true
+                value: false
             }
         }
         return {
@@ -1926,7 +2026,7 @@ function validateFormNamaKolom() {
         }
     }
 
-    if (!files) {
+    if (imgURL !== prevDataPustakawan.imgURL && !files) {
         err.errNmKolom0 = errText
     }
     if (nip == null && nik == null) {
@@ -2106,4 +2206,276 @@ function validateCaptcha() {
 
 function removeErrInputForm(data) {
     data.forEach(elementId => document.getElementById(elementId).innerText = '')
+}
+
+let prevDataDiklat = []
+let prevDataJudulKaryaTulis = []
+let prevDataOrganisasi = []
+
+function setUpdtToForm(data) {
+    const {
+        gambar_users,
+        nip,
+        nik,
+        nama_users,
+        Tempat_Lahir,
+        Tanggal_Lahir,
+        jenis_kelamin,
+        no_hp,
+        email,
+        pendidikan,
+        jurusan_bidangpendidikan,
+        pangkat,
+        tamat_pangkat,
+        jabatan_fungsional,
+        tamat_jabatan,
+        status_jabatan,
+        status_dinas,
+        istansi,
+        lokasi_instansi,
+        jenis_instansi,
+        diklat,
+        data_diklat,
+        judul_kti,
+        organisasi,
+        sk_pustakawan,
+        sk_pangkat,
+        catatan,
+        pekerjaan,
+        status
+    } = data
+    prevDataPustakawan.nip = nip
+    prevDataPustakawan.nik = nik
+    optionNIPORNIK = nip !== 'null' ? 'NIP' : 'NIK'
+    prevDataPustakawan.username= nip !== 'null' ? nip : nik
+
+    imgData.imgURL = gambar_users
+    prevDataPustakawan.imgURL = gambar_users
+    dataInputNamaKolom.imgURL = gambar_users
+    if (nip == 'null') {
+        dataInputNamaKolom.nik = nik
+    } else if (nik == 'null') {
+        dataInputNamaKolom.nip = nip
+    }
+    dataInputNamaKolom.namaLengkap = nama_users
+    dataInputNamaKolom.tempatLahir = Tempat_Lahir
+    dataInputNamaKolom.tanggalLahir = Tanggal_Lahir
+    dataInputNamaKolom.jenisKelamin = jenis_kelamin
+    dataInputNamaKolom.nomorHP = no_hp
+    dataInputNamaKolom.email = email
+    dataInputNamaKolom.pendidikanTerakhir = pendidikan
+    dataInputNamaKolom.jurusanBidangPendidikan = jurusan_bidangpendidikan
+    dataInputNamaKolom.pangkat = pangkat
+    dataInputNamaKolom.tamatPangkat = tamat_pangkat
+    dataInputNamaKolom.jabatanFungsional = jabatan_fungsional
+    dataInputNamaKolom.tamatJabatan = tamat_jabatan
+    dataInputNamaKolom.statusJabatan = status_jabatan
+    dataInputNamaKolom.instansi = istansi
+    dataInputNamaKolom.lokasi_instansi = lokasi_instansi
+    dataInputNamaKolom.jenis_instansi = jenis_instansi
+    dataInputNamaKolom.diklatFungsionalPustakawan = diklat
+    dataInputNamaKolom.pekerjaan = pekerjaan
+    dataInputNamaKolom.status = status
+
+    setUpdtDataDiklat(data_diklat)
+    setUpdtDataJudulKaryaTulis(judul_kti)
+    setUpdtDataOrganisasi(organisasi)
+
+    inputLampiranData.skPustakawanTerakhir = sk_pustakawan
+    inputLampiranData.skKenaikanPangkatTerakhir = sk_pangkat
+    prevDataPustakawan.sk_pustakawan = sk_pustakawan
+    prevDataPustakawan.sk_pangkat = sk_pangkat
+    prevDataPustakawan.nama_users = nama_users
+    prevDataPustakawan.email = email
+    prevDataPustakawan.no_hp = no_hp
+
+    dataKeteranganTambahan = catatan
+
+    setUpdtToFormHTML()
+}
+
+function setUpdtDataDiklat(text) {
+    if (text.includes(';')) {
+        const arrText = text.split(';')
+        arrText.forEach(item => {
+            inputDataAddDiklat.namaDiklat = item.split(',')[0]
+            inputDataAddDiklat.tahunDiklat = item.split(',')[1]
+            inputDataAddDiklat.jumlahJamPelatihan = item.split(',')[2]
+            prevDataDiklat.push(inputDataAddDiklat)
+            inputDataAddDiklat = {
+                namaDiklat: '',
+                tahunDiklat: '',
+                jumlahJamPelatihan: ''
+            }
+        })
+    } else {
+        inputDataAddDiklat.namaDiklat = text.split(',')[0]
+        inputDataAddDiklat.tahunDiklat = text.split(',')[1]
+        inputDataAddDiklat.jumlahJamPelatihan = text.split(',')[2]
+        prevDataDiklat.push(inputDataAddDiklat)
+        inputDataAddDiklat = {
+            namaDiklat: '',
+            tahunDiklat: '',
+            jumlahJamPelatihan: ''
+        }
+    }
+}
+
+function setUpdtDataJudulKaryaTulis(text) {
+    if (text.includes(';')) {
+        const arrText = text.split(';')
+        arrText.forEach(item => {
+            inputDataKaryaTulis.judulBuku = item.split(',')[0]
+            inputDataKaryaTulis.tahunTerbit = item.split(',')[1]
+            prevDataJudulKaryaTulis.push(inputDataKaryaTulis)
+            inputDataKaryaTulis = {
+                judulBuku: '',
+                tahunTerbit: '',
+            }
+        })
+    } else {
+        inputDataKaryaTulis.judulBuku = text.split(',')[0]
+        inputDataKaryaTulis.tahunTerbit = text.split(',')[1]
+        prevDataJudulKaryaTulis.push(inputDataKaryaTulis)
+        inputDataKaryaTulis = {
+            judulBuku: '',
+            tahunTerbit: '',
+        }
+    }
+}
+
+function setUpdtDataOrganisasi(text) {
+    if (text.includes(';')) {
+        const arrText = text.split(';')
+        arrText.forEach(item => {
+            inputDataOrganisasi.namaOrganisasi = item.split(',')[0]
+            inputDataOrganisasi.jabatanOrganisasi = item.split(',')[1]
+            prevDataOrganisasi.push(inputDataOrganisasi)
+            inputDataOrganisasi = {
+                namaOrganisasi: '',
+                jabatanOrganisasi: ''
+            }
+        })
+    } else {
+        inputDataOrganisasi.namaOrganisasi = text.split(',')[0]
+        inputDataOrganisasi.jabatanOrganisasi = text.split(',')[1]
+        prevDataOrganisasi.push(inputDataOrganisasi)
+        inputDataOrganisasi = {
+            namaOrganisasi: '',
+            jabatanOrganisasi: ''
+        }
+    }
+}
+
+function setUpdtToFormHTML() {
+    const {
+        namaLengkap,
+        imgURL,
+        nip,
+        nik,
+        tempatLahir,
+        tanggalLahir,
+        nomorHP,
+        email,
+        jenisKelamin,
+        pendidikanTerakhir,
+        jurusanBidangPendidikan,
+        pangkat,
+        tamatPangkat,
+        jabatanFungsional,
+        tamatJabatan,
+        statusJabatan,
+        instansi,
+        lokasi_instansi,
+        jenis_instansi,
+        diklatFungsionalPustakawan
+    } = dataInputNamaKolom
+
+    document.getElementById('titleUserName').innerText = namaLengkap
+    document.getElementById('clientImg').src = imgURL
+    if (`${nip}` !== 'null') {
+        setUpdateInputForm('nip', nip)
+    }
+    if (`${nik}` !== 'null') {
+        setUpdateInputForm('nip', nik)
+    }
+    setUpdateInputForm('namaLengkap', namaLengkap)
+    setUpdateInputForm('tempatLahir', tempatLahir)
+    setUpdateInputForm('tanggalLahir', setNormalTgl(tanggalLahir))
+    setUpdateInputForm('nomorHp', nomorHP)
+    setUpdateInputForm('email', email)
+    setUpdateInputForm('tamatPangkat', setNormalTgl(tamatPangkat))
+    setUpdateInputForm('tamatJabatan', setNormalTgl(tamatJabatan))
+    setUpdtOptions(0, nip !== null ? 'NIP' : 'NIK')
+    setUpdtOptions(1, jenisKelamin)
+    setUpdtOptions(2, pendidikanTerakhir)
+    setUpdtOptions(3, jurusanBidangPendidikan)
+    setUpdtOptions(4, pangkat)
+    setUpdtOptions(5, jabatanFungsional)
+    setUpdtOptions(6, statusJabatan)
+    setUpdtOptions(7, instansi)
+    setUpdtOptions(8, lokasi_instansi)
+    setUpdtOptions(9, jenis_instansi)
+    setUpdtOptions(10, diklatFungsionalPustakawan)
+
+    prevDataDiklat.forEach(item => {
+        inputDataAddDiklat.namaDiklat = item.namaDiklat
+        inputDataAddDiklat.tahunDiklat = item.tahunDiklat
+        inputDataAddDiklat.jumlahJamPelatihan = item.jumlahJamPelatihan
+        prosesTambahDiklat()
+    })
+
+    prevDataJudulKaryaTulis.forEach(item => {
+        inputDataKaryaTulis.judulBuku = item.judulBuku
+        inputDataKaryaTulis.tahunTerbit = item.tahunTerbit
+        prosesTambahKarya()
+    })
+
+    prevDataOrganisasi.forEach(item => {
+        inputDataOrganisasi.namaOrganisasi = item.namaOrganisasi
+        inputDataOrganisasi.jabatanOrganisasi = item.jabatanOrganisasi
+        prosesTambahOrganisasi()
+    })
+
+    document.getElementById('btnPrevFilePustakawan').setAttribute('href', inputLampiranData.skPustakawanTerakhir)
+    if (inputLampiranData.skKenaikanPangkatTerakhir !== 'null') {
+        document.getElementById('btnPrevFilePangkat').setAttribute('href', inputLampiranData.skKenaikanPangkatTerakhir)
+    } else {
+        document.getElementById('prevFilePangkat').style.display = 'none'
+    }
+
+    setUpdateInputForm('keteranganTambahan', dataKeteranganTambahan)
+}
+
+function setUpdateInputForm(elementId, value) {
+    document.getElementById(elementId).value = value
+}
+
+function setNormalTgl(tgl) {
+    const splitTgl = tgl.split('-')
+    return `${splitTgl[1]}-${splitTgl[2]}-${splitTgl[0]}`
+}
+
+function setUpdtOptions(idxElem, value) {
+    const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')[idxElem]
+    const buttonName = document.getElementsByClassName('filter-option pull-left')[idxElem]
+    const selectpicker = document.getElementsByClassName('selectpicker form-control')[idxElem]
+    if (elem) {
+        const childrens = elem.children
+        childrens[0].removeAttribute('class')
+        for (let i = 0; i < childrens.length; i++) {
+            const thisValue = childrens[i].lastElementChild.firstElementChild.innerText
+            if (thisValue == value) {
+                currentIdx = i
+                childrens[i].setAttribute('class', 'selected active')
+            }
+        }
+
+        if (buttonName) {
+            buttonName.innerText = value
+        }
+        if (selectpicker) {
+            selectpicker.value = value
+        }
+    }
 }

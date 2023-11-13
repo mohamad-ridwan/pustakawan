@@ -64,7 +64,7 @@ document.getElementById('submitFormFungsional')?.addEventListener('click', () =>
                 dokumen3
             } = dataFungsionalForPostAPI(resultFormData())
 
-            validateNIPFungsional(nip !== 'null' && nip !== null ? nip : nik, nip  !== 'null' && nip !== null ? 'NIP' : 'NIK')
+            validateNIPFungsional(nip !== 'null' && nip !== null ? nip : nik, nip !== 'null' && nip !== null ? 'NIP' : 'NIK')
                 .then(res => {
                     if (res?.message == 'success') {
                         // dataFungsionalForPostAPI(resultFormData())
@@ -135,6 +135,11 @@ document.getElementById('submitFormFungsional')?.addEventListener('click', () =>
                                             console.log(err)
                                         })
                                 })
+                                .catch(err => {
+                                    alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                                    console.log(err)
+                                    loadingSubmitFungsional = false
+                                })
                         }
                     } else {
                         spinnerGlobalLoading('none')
@@ -186,7 +191,7 @@ document.getElementById('submitFormTenaga')?.addEventListener('click', () => {
                 // dokumen3
             } = dataTenagaForPost(resultFormDataTenaga())
 
-            validateNIPTenaga(nip !== 'null' && nip !== null ? nip : nik, nip  !== 'null' && nip !== null ? 'NIP' : 'NIK')
+            validateNIPTenaga(nip !== 'null' && nip !== null ? nip : nik, nip !== 'null' && nip !== null ? 'NIP' : 'NIK')
                 .then(res => {
                     if (res?.message == 'success') {
                         // localStorage.setItem('result-data-fs', 'success')
@@ -224,6 +229,11 @@ document.getElementById('submitFormTenaga')?.addEventListener('click', () => {
                                         alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
                                     })
                             })
+                            .catch(err => {
+                                alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                                console.log(err)
+                                loadingSubmitTenaga = false
+                            })
                     } else {
                         spinnerGlobalLoading('none')
                         loadingSubmitTenaga = false
@@ -257,6 +267,330 @@ document.getElementById('submitFormTenaga')?.addEventListener('click', () => {
     }, 0)
 })
 
+let loadingSubmitRevisiTenaga = false
+
+let currentTokenClient = null
+
+// form submit revisi tenaga
+let updateFirebaseRevisiTenaga = {
+    gambar_users: null,
+    sk_pangkat: null
+}
+document.getElementById('submitFormRevisiTenaga')?.addEventListener('click', () => {
+    setTimeout(() => {
+        const getLocalStorage = localStorage.getItem(nmStorageRevisiTenaga)
+        if (getLocalStorage == 'success' && loadingSubmitRevisiTenaga === false) {
+            loadingSubmitRevisiTenaga = true
+            const {
+                nip,
+                nik,
+                gambar_users,
+                sk_pangkat
+            } = dataRevisiTenagaForPost(resultFormDataRevisiTenaga())
+
+            const {
+                namaPengirim,
+                emailPengirim,
+                telpPengirim
+            } = dataInputPengirim
+
+            generateTokenClient()
+            const resultJWTToken = createJWTToken(headerJWTToken, { tokenClient: currentTokenClient })
+            const dataToken = resultDataToken(resultJWTToken)
+            const dataFormBody = createReqBody(dataToken)
+            const {
+                token,
+                tokenClient,
+                exp
+            } = dataToken
+
+            validateNIPRevisiTenaga(nip !== 'null' ? nip : nik, optionNIPORNIK)
+                .then(res => {
+                    if (res?.message == 'success') {
+                        Promise.all([
+                            gambar_users?.name ? pushUpload(gambar_users, 'gambar_users') : { gambar_users },
+                            sk_pangkat?.length === 1 ? pushUpload(sk_pangkat[0], 'sk_pangkat') : { sk_pangkat }
+                        ])
+                            .then(res => {
+                                updateFirebaseRevisiTenaga.gambar_users = res[0].gambar_users
+                                updateFirebaseRevisiTenaga.sk_pangkat = res[1].sk_pangkat
+                                return postFormDataAPI(`${POST_VERIFIKASI}token=${tokenClient}&exp=${exp}&tokenClient=${token}`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded'
+                                    },
+                                    body: dataFormBody
+                                })
+                            })
+                            .then(res => sendDataToEmail(
+                                SERVICE_ID_PUSTAKAWAN_2,
+                                TEMPLATE_ID_PUSTAKAWAN_2,
+                                {
+                                    to_email: emailPengirim,
+                                    tokenClient
+                                },
+                                PUBLIC_KEY_PUSTAKAWAN_2
+                            ))
+                            .then(res => {
+                                document.getElementById('deskVerifikasi').innerHTML = `Kami mengirimkan kode verifikasi melalui "<strong>${emailPengirim}</strong>".`
+                                document.getElementById('btnModalVerifikasi').click()
+                            })
+                            .catch(err => {
+                                alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                                console.log(err)
+                                loadingSubmitRevisiTenaga = false
+                                spinnerGlobalLoading('none')
+                            })
+                    } else {
+                        spinnerGlobalLoading('none')
+                        loadingSubmitRevisiTenaga = false
+                        console.log(res)
+                        alert(res?.text)
+                    }
+                })
+                .catch(err => {
+                    alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                    console.log(err)
+                    loadingSubmitRevisiTenaga = false
+                    spinnerGlobalLoading('none')
+                })
+        }
+    }, 0);
+})
+
+// submit verifikasi tenaga
+document.getElementById('submitVerifikasi')?.addEventListener('click', () => {
+    if (currentExpQuery && validateExpToken(currentExpQuery)) {
+        verifikasiRevisiTenaga()
+        return
+    }
+    alert('Akses revisi Anda telah berakhir.\nSilahkan input kembali.')
+    setTimeout(() => {
+        window.location.replace(window.location.origin)
+    }, 0)
+})
+function verifikasiRevisiTenaga() {
+    document.getElementById('submitVerifikasi').setAttribute('disabled', 'true')
+    const value = document.getElementById('inputVerifikasi').value
+    postFormDataAPI(GET_VERIFIKASI)
+        .then(res => {
+            if (res?.length > 0) {
+                const findData = res.find(data => data.tokenClient == value && validateExpToken(data.exp))
+                if (findData) {
+                    sendResultRevisiTenagaToMail()
+                } else {
+                    alert('Token tidak valid')
+                    document.getElementById('submitVerifikasi').removeAttribute('disabled')
+                }
+            } else {
+                alert('Token tidak valid.\nSilahkan melakukan pengajuan ulang.')
+                loadingSubmitRevisiTenaga = false
+                spinnerGlobalLoading('none')
+                document.getElementById('closeModal').click()
+                document.getElementById('submitVerifikasi').removeAttribute('disabled')
+            }
+        })
+        .catch(err => {
+            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+            console.log(err)
+            loadingSubmitRevisiTenaga = false
+            spinnerGlobalLoading('none')
+            document.getElementById('submitVerifikasi').removeAttribute('disabled')
+        })
+}
+document.getElementById('closeModal')?.addEventListener('click', () => {
+    setLocalStorageForSubmit(REMOVE_ITEM, nmStorageRevisiTenaga)
+    loadingSubmitRevisiTenaga = false
+    spinnerGlobalLoading('none')
+    loadingSubmit = false
+    document.getElementById('inputVerifikasi').value = ''
+    document.getElementById('submitVerifikasi').removeAttribute('disabled')
+})
+// end form submit revisi tenaga
+
+// form submit revisi fungsional
+let loadingSubmitRevisiFs = false
+document.getElementById('submitRevisiFungsional')?.addEventListener('click', () => {
+    if (currentExpQuery && !validateExpToken(currentExpQuery)) {
+        alert('Akses revisi Anda telah berakhir.\nSilahkan input kembali.')
+        window.location.replace(window.location.origin)
+        return
+    }
+    if (loadingSubmitRevisiFs === false) {
+        Promise.all([
+            validateFormNamaKolom(),
+            validateFormAddCard(),
+            // validateFormLampiranData(),
+            validateDataPengirim(),
+            // validateCaptcha()
+        ])
+            .then(res => {
+                const checkValidate = res.filter(validate => validate === undefined)
+                if (checkValidate.length > 0) {
+                    createAlert('Mohon lengkapi formulir Anda!.')
+                    return 'failed'
+                }
+                return 'success'
+            })
+            .then(res => {
+                if (res === 'success' && window.confirm('Ingin mengajukan revisi data?')) {
+                    loadingSubmitRevisiFs = true
+                    spinnerGlobalLoading('flex')
+                    prosesSubmitRevisiFS()
+                    // setLocalStorageForSubmit(SET_ITEM, nmStorageRevisiFungsional, defaultValueStgSubmit)
+                } else {
+                    spinnerGlobalLoading('none')
+                    loadingSubmitRevisiFs = false
+                    console.log(res)
+                }
+            })
+            .catch(err => {
+                console.log('err-submit-form', err)
+                loadingSubmitRevisiFs = false
+            })
+    }
+})
+
+let updateFirebaseRevisiFS = {
+    gambar_users: null,
+    sk_pustakawan: null,
+    sk_pangkat: null
+}
+
+function prosesSubmitRevisiFS() {
+    const {
+        nip,
+        nik,
+        gambar_users,
+        sk_pangkat,
+        sk_pustakawan
+    } = dataFungsionalForPostAPI(resultFormData())
+
+    const {
+        namaPengirim,
+        emailPengirim,
+        telpPengirim
+    } = dataInputPengirim
+
+    generateTokenClient()
+
+    const resultJWTToken = createJWTToken(headerJWTToken, { tokenClient: currentTokenClient })
+    const dataToken = resultDataToken(resultJWTToken)
+    const dataFormBody = createReqBody(dataToken)
+    const {
+        token,
+        tokenClient,
+        exp
+    } = dataToken
+
+    validateNIPFungsional(nip !== 'null' ? nip : nik, optionNIPORNIK)
+        .then(res => {
+            if (res?.message == 'success') {
+                Promise.all([
+                    gambar_users?.name ? pushUpload(gambar_users, 'gambar_users') : { gambar_users },
+                    sk_pustakawan?.length === 1 ? pushUpload(sk_pustakawan[0], 'sk_pustakawan') : { sk_pustakawan },
+                    sk_pangkat?.length === 1 ? pushUpload(sk_pangkat[0], 'sk_pangkat') : { sk_pangkat },
+                ])
+                    .then(res => {
+                        updateFirebaseRevisiFS.gambar_users = res[0].gambar_users
+                        updateFirebaseRevisiFS.sk_pustakawan = res[1].sk_pustakawan
+                        updateFirebaseRevisiFS.sk_pangkat = res[2].sk_pangkat
+                        return postFormDataAPI(`${POST_VERIFIKASI}token=${tokenClient}&exp=${exp}&tokenClient=${token}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: dataFormBody
+                        })
+                    })
+                    .then(res => sendDataToEmail(
+                        SERVICE_ID_PUSTAKAWAN_2,
+                        TEMPLATE_ID_PUSTAKAWAN_2,
+                        {
+                            to_email: emailPengirim,
+                            tokenClient
+                        },
+                        PUBLIC_KEY_PUSTAKAWAN_2
+                    ))
+                    .then(res => {
+                        document.getElementById('deskVerifikasi').innerHTML = `Kami mengirimkan kode verifikasi melalui "<strong>${emailPengirim}</strong>".`
+                        document.getElementById('btnModalVerifikasi').click()
+                    })
+                    .catch(err => {
+                        alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                        console.log(err)
+                        loadingSubmitRevisiFs = false
+                        spinnerGlobalLoading('none')
+                    })
+            } else {
+                spinnerGlobalLoading('none')
+                loadingSubmitRevisiFs = false
+                console.log(res)
+                alert(res?.text)
+            }
+        })
+        .catch(err => {
+            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+            console.log(err)
+            loadingSubmitRevisiFs = false
+            spinnerGlobalLoading('none')
+        })
+}
+
+// submit verifikasi fungsional
+document.getElementById('submitVerifikasiRevisiFS')?.addEventListener('click', () => {
+    if (currentExpQuery && validateExpToken(currentExpQuery)) {
+        verifikasiRevisiFungsional()
+        return
+    }
+    alert('Akses revisi Anda telah berakhir.\nSilahkan input kembali.')
+    setTimeout(() => {
+        window.location.replace(window.location.origin)
+    }, 0)
+})
+
+function verifikasiRevisiFungsional() {
+    document.getElementById('submitVerifikasiRevisiFS').setAttribute('disabled', 'true')
+    const value = document.getElementById('inputVerifikasi').value
+    postFormDataAPI(GET_VERIFIKASI)
+        .then(res => {
+            if (res?.length > 0) {
+                const findData = res.find(data => data.tokenClient == value && validateExpToken(data.exp))
+                if (findData) {
+                    sendResultRevisiFungsionalToMail()
+                } else {
+                    alert('Token tidak valid')
+                    document.getElementById('submitVerifikasiRevisiFS').removeAttribute('disabled')
+                }
+            } else {
+                alert('Token tidak valid.\nSilahkan melakukan pengajuan ulang.')
+                loadingSubmitRevisiFs = false
+                spinnerGlobalLoading('none')
+                document.getElementById('closeModalVerifikasiRevisiFS').click()
+                document.getElementById('submitVerifikasiRevisiFS').removeAttribute('disabled')
+            }
+        })
+        .catch(err => {
+            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+            console.log(err)
+            loadingSubmitRevisiFs = false
+            spinnerGlobalLoading('none')
+            document.getElementById('submitVerifikasiRevisiFS').removeAttribute('disabled')
+        })
+}
+document.getElementById('closeModalVerifikasiRevisiFS')?.addEventListener('click', () => {
+    loadingSubmitRevisiFs = false
+    spinnerGlobalLoading('none')
+    document.getElementById('inputVerifikasi').value = ''
+    document.getElementById('submitVerifikasiRevisiFS').removeAttribute('disabled')
+})
+// end form submit revisi fungsional
+
+function validateExpToken(expToken) {
+    const cekExp = (new Date()).valueOf() < (new Date(expToken)).valueOf()
+    return cekExp
+}
+
 async function pushUpload(file, nameInput) {
     return await uploadImgToFirebase(
         rootFolderPustakawan,
@@ -277,6 +611,189 @@ async function postFungsionalData(dataSubmit) {
     } catch (error) {
         return error
     }
+}
+
+function generateTokenClient() {
+    const token1 = Math.floor(Math.random() * 9)
+    const token2 = Math.floor(Math.random() * 9)
+    const token3 = Math.floor(Math.random() * 9)
+    const token4 = Math.floor(Math.random() * 9)
+
+    currentTokenClient = `${token1}${token2}${token3}${token4}`
+}
+
+function resultDataToken(jwtToken) {
+    const setTo1Hours = new Date()
+    const currentHours = new Date().getHours()
+    setTo1Hours.setHours(currentHours + 1)
+    return {
+        token: jwtToken,
+        tokenClient: currentTokenClient,
+        exp: `${setTo1Hours}`
+    }
+}
+
+function sendResultRevisiFungsionalToMail(){
+    const {
+        username,
+        nama_users,
+        Tempat_Lahir,
+        Tanggal_Lahir,
+        jenis_kelamin,
+        no_hp,
+        email,
+        pendidikan,
+        jurusan_bidangpendidikan,
+        pangkat,
+        tamat_pangkat,
+        jabatan_fungsional,
+        tamat_jabatan,
+        status_jabatan,
+        istansi,
+        lokasi_instansi,
+        jenis_instansi,
+        diklat,
+        data_diklat,
+        judul_kti,
+        organisasi,
+        catatan
+    } = dataFungsionalForPostAPI(resultFormData())
+
+    const sendData ={
+        username: prevDataPustakawan.username,
+        nama_users: prevDataPustakawan.nama_users,
+        email: prevDataPustakawan.email,
+        no_hp: prevDataPustakawan.no_hp,
+        gambar_users: updateFirebaseRevisiFS.gambar_users,
+        p_nip_or_nik: username.length === 18 ? 'NIP' : 'NIK',
+        username_to_change: username,
+        nama_users_to_change: nama_users,
+        Tempat_Lahir,
+        Tanggal_Lahir,
+        jenis_kelamin,
+        no_hp_to_change: no_hp,
+        email_to_change: email,
+        pendidikan,
+        jurusan_bidangpendidikan,
+        pangkat,
+        tamat_pangkat,
+        jabatan_fungsional,
+        tamat_jabatan,
+        status_jabatan,
+        istansi,
+        lokasi_instansi,
+        jenis_instansi,
+        diklat,
+        data_diklat,
+        judul_kti,
+        organisasi,
+        sk_pustakawan: updateFirebaseRevisiFS.sk_pustakawan,
+        sk_pangkat: updateFirebaseRevisiFS.sk_pangkat,
+        catatan,
+        nama_pengirim: dataInputPengirim.namaPengirim,
+        email_pengirim: dataInputPengirim.emailPengirim,
+        telp_pengirim: dataInputPengirim.telpPengirim
+    }
+
+    sendDataToEmail(
+        SERVICE_ID_EMAILJS,
+        TEMPLATE_ID_REVISI_FUNGSIONAL,
+        sendData,
+        PUBLIC_KEY_EMAILJS
+    )
+        .then(res => {
+            alert('Data telah berhasil dikirim.\nMohon untuk menunggu konfirmasi dari Kami melalui email Anda.')
+            loadingSubmitRevisiFs = false
+            spinnerGlobalLoading('none')
+            setTimeout(() => {
+                window.location.reload()
+            }, 0);
+        })
+        .catch(err => {
+            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+            console.log(err)
+            loadingSubmitRevisiFs = false
+            spinnerGlobalLoading('none')
+        })
+}
+
+function sendResultRevisiTenagaToMail() {
+    const {
+        gambar_users,
+        username,
+        nip,
+        nik,
+        nama_users,
+        Tempat_Lahir,
+        Tanggal_Lahir,
+        jenis_kelamin,
+        no_hp,
+        email,
+        pendidikan,
+        jurusan_bidangpendidikan,
+        pangkat,
+        status_dinas,
+        istansi,
+        lokasi_instansi,
+        jenis_instansi,
+        diklat,
+        data_diklat,
+        organisasi,
+        sk_pangkat,
+        catatan
+    } = dataRevisiTenagaForPost(resultFormDataRevisiTenaga())
+
+    const sendData = {
+        username: prevDataPustakawan.username,
+        nama_users: prevDataPustakawan.nama_users,
+        email: prevDataPustakawan.email,
+        no_hp: prevDataPustakawan.no_hp,
+        gambar_users: updateFirebaseRevisiTenaga.gambar_users,
+        p_nip_or_nik: username.length === 18 ? 'NIP' : 'NIK',
+        username_to_change: username,
+        nama_users_to_change: nama_users,
+        Tempat_Lahir,
+        Tanggal_Lahir,
+        jenis_kelamin,
+        no_hp_to_change: no_hp,
+        email_to_change: email,
+        pendidikan,
+        jurusan_bidangpendidikan,
+        pangkat,
+        status_dinas,
+        istansi,
+        lokasi_instansi,
+        jenis_instansi,
+        diklat,
+        data_diklat,
+        organisasi,
+        sk_pangkat: updateFirebaseRevisiTenaga.sk_pangkat,
+        catatan,
+        nama_pengirim: dataInputPengirim.namaPengirim,
+        email_pengirim: dataInputPengirim.emailPengirim,
+        telp_pengirim: dataInputPengirim.telpPengirim
+    }
+
+    sendDataToEmail(
+        SERVICE_ID_EMAILJS,
+        TEMPLATE_ID_REVISI_TENAGA,
+        sendData,
+        PUBLIC_KEY_EMAILJS
+    )
+        .then(res => {
+            alert('Data telah berhasil dikirim.\nMohon untuk menunggu konfirmasi dari Kami melalui email Anda.')
+            loadingSubmitRevisiTenaga = false
+            spinnerGlobalLoading('none')
+            setTimeout(() => {
+                window.location.reload()
+            }, 0);
+        })
+        .catch(err => {
+            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+            console.log(err)
+            loadingSubmitRevisiTenaga = false
+            spinnerGlobalLoading('none')
+        })
 }
 
 // function dataFungsionalForPostAPI(data) {
