@@ -255,6 +255,9 @@ function changeNIPORNIK() {
 const nipElement = document.getElementById('nip')
 const phoneElement = document.getElementById('telpPengirim')
 const nomorHPElement = document.getElementById('nomorHp')
+const namaDiklatElement = document.getElementById('namaDiklat')
+const jumlahJamPelatihanEl = document.getElementById('jumlahJamPelatihan')
+const namaOrganisasiEl = document.getElementById('namaOrganisasi')
 
 // Restricts input for the given textbox to the given inputFilter.
 function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
@@ -296,9 +299,17 @@ function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
     });
 }
 
+const errKarakterAddCard = 'Tidak dapat menggunakan karakter ; dan ,'
 setInputFilter(nipElement, (value) => phoneRegex.test(value), "Harus berupa angka", 'NIP');
 // setInputFilter(phoneElement, (value) => phoneRegex.test(value), "Harus berupa angka");
 setInputFilter(nomorHPElement, (value) => phoneRegex.test(value), "Harus berupa angka");
+setInputFilter(namaDiklatElement, (value) => validateTxtAddCard(value), errKarakterAddCard)
+setInputFilter(jumlahJamPelatihanEl, (value)=> validateTxtAddCard(value), errKarakterAddCard)
+setInputFilter(namaOrganisasiEl, (value)=> validateTxtAddCard(value), errKarakterAddCard)
+
+function validateTxtAddCard(value){
+    return !value.includes(',') && !value.includes(';')
+}
 
 const formControll = document.getElementsByClassName('form-control')
 
@@ -1618,7 +1629,7 @@ function submitForm() {
                 return 'success'
             })
             .then(res => {
-                if (res === 'success') {
+                if (res === 'success' && window.confirm('Ingin mendaftarkan sebagai Tenaga Perpustakaan?')) {
                     loadingSubmit = true
                     spinnerGlobalLoading('flex')
                     setLocalStorageForSubmit(SET_ITEM, nmStorageTenaga, defaultValueStgSubmit)

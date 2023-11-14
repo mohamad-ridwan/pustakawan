@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="form-tenaga.css">
     <link rel="stylesheet" href="../../utils/alert.css">
     <link rel="stylesheet" href="../../utils/navbar.css">
+    <link rel="stylesheet" href="../../utils/modal.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet"
         href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.3/css/bootstrap-select.min.css" />
@@ -106,6 +107,9 @@
                                     style="color: #555; background-color: #fff;">Dashboard</a></li>
                         </ul>
                     </li>
+                    <li><a href="#" data-toggle="modal" data-target="#modalRevisi"
+                            style="color: #fff; background-color: transparent;">Pengajuan Revisi Pustakawan</a>
+                    </li>
                     <!-- <div class="icon-profile">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"
                             style="color: #fff; background: transparent;">
@@ -130,8 +134,8 @@
     <div class="container wrap-form-fungsional">
         <div class="title">
             <h4><strong>Formulir Tenaga Perpustakaan</strong></h4>
-            <h5><strong>Pengajuan Data Baru</strong></h5>
-            <p>Data bersifat pengajuan, data dapat ditolak jika tidak melampirkan dokumen pendukung</p>
+            <h5><strong>Pendaftaran Data Baru</strong></h5>
+            <p>Data ini akan langsung terdaftar untuk Tenaga Perpustakaan. Jadi mohon untuk mengisi dengan teliti.</p>
             <span class="border-bottom"></span>
         </div>
 
@@ -679,6 +683,37 @@
         </div>
     </div>
 
+    <!-- modal search pengajuan revisi -->
+    <!-- Modal -->
+    <div class="modal fade" id="modalRevisi" tabindex="-1" role="dialog" aria-labelledby="modalRevisiPustakawan"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="modalRevisiPustakawan">Pengajuan Revisi Data Pustakawan</h4>
+                </div>
+                <div class="modal-body">
+                    <h4>Cari berdasarkan <strong>NIP / NIK</strong></h4>
+                    <p style="text-align: start;">Untuk melakukan pengajuan, silahkan cari data Anda.</p>
+                    <select id="selectSearchRevisi" class="" data-live-search="true" onchange="changeSelectOptRevisi()" style="width: 100%; padding: 5px 10px; cursor: pointer;">
+                        <option data-tokens="silahkan-pilih" value="Silahkan Pilih">Silahkan Pilih</option>
+                        <option data-tokens="NIP" value="NIP">NIP</option>
+                        <option data-tokens="NIK" value="NIK">NIK</option>
+                    </select>
+                    <input id="searchRevisi" type="tel" class="" style="margin-top: 1rem; width: 100%; padding: 3px 12px;" disabled>
+                    <p style="color: #ff0000; text-align: start;"><small id="errSearch"></small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                    <button id="submitSearch" type="button" class="btn btn-primary">Cari</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end modal search pengajuan revisi -->
+
     <div id="secGlobalLoading" style="display: flex; position: fixed; bottom: 2rem; right: 2rem; z-index: 1;">
         <div id="globalLoading" class="loading-grup">
             <span class="loading-spinner"></span>
@@ -696,6 +731,11 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <!-- dayjs -->
     <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <!-- cryptoJS -->
+    <script src="../../CryptoJS v3.1.2/rollups/aes.js"></script>
+    <script src="../../CryptoJS v3.1.2/rollups/hmac-sha256.js"></script>
+    <!-- end cryptoJS -->
+    <script src="/utils/jwt/createJWTToken.js"></script>
     <!-- local storage -->
     <script src="/utils/localStorage/localStorage.js"></script>
     <script src="/utils/format/createDateFormat.js"></script>
@@ -707,6 +747,7 @@
     <script src="/utils/navbar.js"></script>
     <script src="/utils/form-tenaga.js"></script>
     <script type="module" src="/utils/firebase.js"></script>
+    <script src="/utils/pengajuan-revisi.js"></script>
 </body>
 
 </html>

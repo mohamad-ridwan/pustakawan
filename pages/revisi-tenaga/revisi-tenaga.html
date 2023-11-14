@@ -107,6 +107,9 @@
                                     style="color: #555; background-color: #fff;">Dashboard</a></li>
                         </ul>
                     </li>
+                    <li><a href="#" data-toggle="modal" data-target="#modalRevisi"
+                            style="color: #fff; background-color: transparent;">Pengajuan Revisi Pustakawan</a>
+                    </li>
                     <!-- <div class="icon-profile">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"
                             style="color: #fff; background: transparent;">
@@ -697,7 +700,7 @@
                     <p id="deskVerifikasi" style="text-align: start;"></p>
                     <p style="text-align: start;">Silahkan masukkan kode verifikasi Anda.</p>
                     <input id="inputVerifikasi" type="tel" class="form-control" style="margin-top: 1rem;">
-                    <p style="color: #ff0000; text-align: start;"><small id="errSearch"></small></p>
+                    <p style="color: #ff0000; text-align: start;"><small id="errVerifikasiTenaga"></small></p>
                 </div>
                 <div class="modal-footer">
                     <button id="closeModal" type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
@@ -709,8 +712,41 @@
     <!-- end modal verifikasi -->
     <div style="display: none;">
         <button id="btnModalVerifikasi" data-toggle="modal" data-target="#modalVerifikasi"
-        style="color: #fff; background-color: transparent;">Pengajuan Revisi Pustakawan</button>
+            style="color: #fff; background-color: transparent;">Pengajuan Revisi Pustakawan</button>
     </div>
+
+    <!-- modal search pengajuan revisi -->
+    <!-- Modal -->
+    <div class="modal fade" id="modalRevisi" tabindex="-1" role="dialog" aria-labelledby="modalRevisiPustakawan"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="modalRevisiPustakawan">Pengajuan Revisi Data Pustakawan</h4>
+                </div>
+                <div class="modal-body">
+                    <h4>Cari berdasarkan <strong>NIP / NIK</strong></h4>
+                    <p style="text-align: start;">Untuk melakukan pengajuan, silahkan cari data Anda.</p>
+                    <select id="selectSearchRevisi" class="" data-live-search="true" onchange="changeSelectOptRevisi()"
+                        style="width: 100%; padding: 5px 10px; cursor: pointer;">
+                        <option data-tokens="silahkan-pilih" value="Silahkan Pilih">Silahkan Pilih</option>
+                        <option data-tokens="NIP" value="NIP">NIP</option>
+                        <option data-tokens="NIK" value="NIK">NIK</option>
+                    </select>
+                    <input id="searchRevisi" type="tel" class=""
+                        style="margin-top: 1rem; width: 100%; padding: 3px 12px;" disabled>
+                    <p style="color: #ff0000; text-align: start;"><small id="errSearch"></small></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                    <button id="submitSearch" type="button" class="btn btn-primary">Cari</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end modal search pengajuan revisi -->
 
     <div id="secGlobalLoading" style="display: flex; position: fixed; bottom: 2rem; right: 2rem; z-index: 1;">
         <div id="globalLoading" class="loading-grup">
@@ -751,6 +787,7 @@
     <script src="/utils/jwt/decodeJWT.js"></script>
     <script src="/utils/revisi-tenaga.js"></script>
     <script type="module" src="/utils/firebase.js"></script>
+    <script src="/utils/pengajuan-revisi.js"></script>
 </body>
 
 </html>

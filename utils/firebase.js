@@ -437,7 +437,6 @@ document.getElementById('submitRevisiFungsional')?.addEventListener('click', () 
                     loadingSubmitRevisiFs = true
                     spinnerGlobalLoading('flex')
                     prosesSubmitRevisiFS()
-                    // setLocalStorageForSubmit(SET_ITEM, nmStorageRevisiFungsional, defaultValueStgSubmit)
                 } else {
                     spinnerGlobalLoading('none')
                     loadingSubmitRevisiFs = false
@@ -450,7 +449,6 @@ document.getElementById('submitRevisiFungsional')?.addEventListener('click', () 
             })
     }
 })
-
 let updateFirebaseRevisiFS = {
     gambar_users: null,
     sk_pustakawan: null,

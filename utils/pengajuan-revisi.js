@@ -1,4 +1,4 @@
-const phoneRegex = /^\d*$/
+const phoneRegexRevisi = /^\d*$/
 
 let currentOption = 'Silahkan Pilih'
 let searchValue = ''
@@ -64,22 +64,22 @@ function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
     });
 }
 
-setInputFilter(searchInput, (value) => phoneRegex.test(value), "Harus berupa angka", 'NIP');
+setInputFilter(searchInput, (value) => phoneRegexRevisi.test(value), "Harus berupa angka", 'NIP');
 
-let loadingSubmit = false
+let loadingSubmitRevisi = false
 
 document.getElementById('submitSearch').addEventListener('click', () => {
-    if (loadingSubmit == false) {
+    if (loadingSubmitRevisi == false) {
         validateSubmit()
             .then(res => {
-                loadingSubmit = true
+                loadingSubmitRevisi = true
                 document.getElementById('submitSearch').setAttribute('disabled', 'true')
-                validateNIPRevisi(searchInput.value, currentOption == 'NIP' ? 'NIP' : 'NIK')
+                validateNIPSearchRevisi(searchInput.value, currentOption == 'NIP' ? 'NIP' : 'NIK')
                     .then(res => {
                         if (res?.message == 'success') {
                             setErr(`Data ${currentOption} tidak terdaftar. Silahkan daftar pada menu Form Fungsional/Tenaga untuk menjadi Pustakawan.`)
                             document.getElementById('submitSearch').removeAttribute('disabled')
-                            loadingSubmit = false
+                            loadingSubmitRevisi = false
                         } else if (res?.message == 'error') {
                             const setTo1Hours = new Date()
                             const currentHours = new Date().getHours()
@@ -128,12 +128,12 @@ function setErr(err) {
     document.getElementById('errSearch').innerText = err
 }
 
-async function validateNIPRevisi(value, actionTYPE) {
+async function validateNIPSearchRevisi(value, actionTYPE) {
     return await new Promise((resolve, reject) => {
         fetch(`http://localhost/pustakawanbogor/api/pustakawan.php`)
             .then(res => res.json())
             .then(res => {
-                const data = filtersNIPORNIK(res, actionTYPE, value)
+                const data = filtersNIPORNIKSearchRevisi(res, actionTYPE, value)
                 if (res.length > 0) {
                     if (data.type == 'NIP') {
                         if (data.value) {
@@ -159,7 +159,7 @@ async function validateNIPRevisi(value, actionTYPE) {
     })
 }
 
-function filtersNIPORNIK(data, actionTYPE, value) {
+function filtersNIPORNIKSearchRevisi(data, actionTYPE, value) {
     if (actionTYPE === 'NIP') {
         const cekNIP = data.find(item => item.nip === value)
         if (cekNIP) {

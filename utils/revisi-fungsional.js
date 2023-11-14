@@ -891,6 +891,10 @@ function changeNIPORNIK() {
 const nipElement = document.getElementById('nip')
 const phoneElement = document.getElementById('telpPengirim')
 const nomorHPElement = document.getElementById('nomorHp')
+const namaDiklatElement = document.getElementById('namaDiklat')
+const jumlahJamPelatihanEl = document.getElementById('jumlahJamPelatihan')
+const judulBukuEl = document.getElementById('judulBuku')
+const namaOrganisasiEl = document.getElementById('namaOrganisasi')
 
 // Restricts input for the given textbox to the given inputFilter.
 function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
@@ -932,9 +936,18 @@ function setInputFilter(textbox, inputFilter, errMsg, inputTYPE) {
     });
 }
 
+const errKarakterAddCard = 'Tidak dapat menggunakan karakter ; dan ,'
 setInputFilter(nipElement, (value) => phoneRegex.test(value), "Harus berupa angka", 'NIP');
 setInputFilter(phoneElement, (value) => phoneRegex.test(value), "Harus berupa angka");
 setInputFilter(nomorHPElement, (value) => phoneRegex.test(value), "Harus berupa angka");
+setInputFilter(namaDiklatElement, (value) => validateTxtAddCard(value), errKarakterAddCard)
+setInputFilter(jumlahJamPelatihanEl, (value)=> validateTxtAddCard(value), errKarakterAddCard)
+setInputFilter(judulBukuEl, (value)=> validateTxtAddCard(value), errKarakterAddCard)
+setInputFilter(namaOrganisasiEl, (value)=> validateTxtAddCard(value), errKarakterAddCard)
+
+function validateTxtAddCard(value){
+    return !value.includes(',') && !value.includes(';')
+}
 
 const formControll = document.getElementsByClassName('form-control')
 
@@ -2413,7 +2426,9 @@ function setUpdtToFormHTML() {
     setUpdtOptions(4, pangkat)
     setUpdtOptions(5, jabatanFungsional)
     setUpdtOptions(6, statusJabatan)
-    setUpdtOptions(7, instansi)
+    setTimeout(() => {
+        setUpdtOptions(7, instansi)
+    }, 1500);
     setUpdtOptions(8, lokasi_instansi)
     setUpdtOptions(9, jenis_instansi)
     setUpdtOptions(10, diklatFungsionalPustakawan)
@@ -2460,22 +2475,36 @@ function setUpdtOptions(idxElem, value) {
     const elem = document.getElementsByClassName('dropdown-menu inner selectpicker')[idxElem]
     const buttonName = document.getElementsByClassName('filter-option pull-left')[idxElem]
     const selectpicker = document.getElementsByClassName('selectpicker form-control')[idxElem]
+    let optInstansiActive = true
+    let currentIdxInstansi = null
     if (elem) {
         const childrens = elem.children
         childrens[0].removeAttribute('class')
         for (let i = 0; i < childrens.length; i++) {
             const thisValue = childrens[i].lastElementChild.firstElementChild.innerText
             if (thisValue == value) {
-                currentIdx = i
+                if(idxElem === 7){
+                    currentIdxInstansi = i
+                }
                 childrens[i].setAttribute('class', 'selected active')
+                optInstansiActive = true
             }
         }
 
-        if (buttonName) {
-            buttonName.innerText = value
+        if(idxElem === 7 && currentIdxInstansi === null){
+            document.getElementById('checkboxInstansi').click()
+            setUpdateInputForm('textInstansi', value)
+            optInstansiActive = false
+            dataInputNamaKolom.instansi = value
         }
-        if (selectpicker) {
-            selectpicker.value = value
+
+        if(optInstansiActive){
+            if (buttonName) {
+                buttonName.innerText = value
+            }
+            if (selectpicker) {
+                selectpicker.value = value
+            }
         }
     }
 }
