@@ -1710,40 +1710,40 @@ setLocalStorageForSubmit(REMOVE_ITEM, nmStorageFungsional)
 let loadingSubmit = false
 
 // submit form
-function submitForm() {
-    if (loadingSubmit === false) {
-        Promise.all([
-            validateFormNamaKolom(),
-            validateFormAddCard(),
-            validateFormLampiranData(),
-            // validateDataPengirim(),
-            // validateCaptcha()
-        ])
-            .then(res => {
-                const checkValidate = res.filter(validate => validate === undefined)
-                if (checkValidate.length > 0) {
-                    createAlert('Mohon lengkapi formulir Anda!.')
-                    return 'failed'
-                }
-                return 'success'
-            })
-            .then(res => {
-                if (res === 'success' && window.confirm('Ingin mendaftarkan sebagai Fungsional Pustakawan?')) {
-                    loadingSubmit = true
-                    spinnerGlobalLoading('flex')
-                    setLocalStorageForSubmit(SET_ITEM, nmStorageFungsional, defaultValueStgSubmit)
-                } else {
-                    spinnerGlobalLoading('none')
-                    loadingSubmit = false
-                    console.log(res)
-                }
-            })
-            .catch(err => {
-                console.log('err-submit-form', err)
-                loadingSubmit = false
-            })
-    }
-}
+// function submitForm() {
+//     if (loadingSubmit === false) {
+//         Promise.all([
+//             validateFormNamaKolom(),
+//             validateFormAddCard(),
+//             validateFormLampiranData(),
+//             // validateDataPengirim(),
+//             // validateCaptcha()
+//         ])
+//             .then(res => {
+//                 const checkValidate = res.filter(validate => validate === undefined)
+//                 if (checkValidate.length > 0) {
+//                     createAlert('Mohon lengkapi formulir Anda!.')
+//                     return 'failed'
+//                 }
+//                 return 'success'
+//             })
+//             .then(res => {
+//                 if (res === 'success' && window.confirm('Ingin mendaftarkan sebagai Fungsional Pustakawan?')) {
+//                     loadingSubmit = true
+//                     spinnerGlobalLoading('flex')
+//                     setLocalStorageForSubmit(SET_ITEM, nmStorageFungsional, defaultValueStgSubmit)
+//                 } else {
+//                     spinnerGlobalLoading('none')
+//                     loadingSubmit = false
+//                     console.log(res)
+//                 }
+//             })
+//             .catch(err => {
+//                 console.log('err-submit-form', err)
+//                 loadingSubmit = false
+//             })
+//     }
+// }
 
 function resultFormData() {
     const diklat = resultDataDiklat.map(item => `${item.namaDiklat},${item.tahunDiklat},${item.jumlahJamPelatihan}`)

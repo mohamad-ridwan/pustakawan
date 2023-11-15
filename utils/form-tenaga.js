@@ -1611,40 +1611,40 @@ setLocalStorageForSubmit(REMOVE_ITEM, nmStorageTenaga)
 let loadingSubmit = false
 
 // SUBMIT FORM
-function submitForm() {
-    if (loadingSubmit === false) {
-        Promise.all([
-            validateFormNamaKolom(),
-            validateFormAddCard(),
-            validateFormLampiranData(),
-            // validateDataPengirim(),
-            // validateCaptcha()
-        ])
-            .then(res => {
-                const checkValidate = res.filter(validate => validate === undefined)
-                if (checkValidate.length > 0) {
-                    createAlert('Mohon lengkapi formulir Anda!.')
-                    return 'failed'
-                }
-                return 'success'
-            })
-            .then(res => {
-                if (res === 'success' && window.confirm('Ingin mendaftarkan sebagai Tenaga Perpustakaan?')) {
-                    loadingSubmit = true
-                    spinnerGlobalLoading('flex')
-                    setLocalStorageForSubmit(SET_ITEM, nmStorageTenaga, defaultValueStgSubmit)
-                } else {
-                    spinnerGlobalLoading('none')
-                    loadingSubmit = false
-                    console.log(res)
-                }
-            })
-            .catch(err => {
-                console.log('err-submit-form', err)
-                loadingSubmit = false
-            })
-    }
-}
+// function submitForm() {
+//     if (loadingSubmit === false) {
+//         Promise.all([
+//             validateFormNamaKolom(),
+//             validateFormAddCard(),
+//             validateFormLampiranData(),
+//             // validateDataPengirim(),
+//             // validateCaptcha()
+//         ])
+//             .then(res => {
+//                 const checkValidate = res.filter(validate => validate === undefined)
+//                 if (checkValidate.length > 0) {
+//                     createAlert('Mohon lengkapi formulir Anda!.')
+//                     return 'failed'
+//                 }
+//                 return 'success'
+//             })
+//             .then(res => {
+//                 if (res === 'success' && window.confirm('Ingin mendaftarkan sebagai Tenaga Perpustakaan?')) {
+//                     loadingSubmit = true
+//                     spinnerGlobalLoading('flex')
+//                     setLocalStorageForSubmit(SET_ITEM, nmStorageTenaga, defaultValueStgSubmit)
+//                 } else {
+//                     spinnerGlobalLoading('none')
+//                     loadingSubmit = false
+//                     console.log(res)
+//                 }
+//             })
+//             .catch(err => {
+//                 console.log('err-submit-form', err)
+//                 loadingSubmit = false
+//             })
+//     }
+// }
 
 function resultFormDataTenaga() {
     const diklat = resultDataDiklat.map(item => `${item.namaDiklat},${item.tahunDiklat},${item.jumlahJamPelatihan}`)

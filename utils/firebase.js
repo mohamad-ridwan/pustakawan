@@ -49,223 +49,213 @@ let loadingSubmitFungsional = false
 
 // form submit fungsional
 document.getElementById('submitFormFungsional')?.addEventListener('click', () => {
-    setTimeout(() => {
-        const getLocalStorage = localStorage.getItem(nmStorageFungsional)
-        if (getLocalStorage == 'success' && loadingSubmitFungsional === false) {
-            loadingSubmitFungsional = true
-            const {
-                gambar_users,
-                nip,
-                nik,
-                sk_pustakawan,
-                sk_pangkat,
-                dokumen1,
-                dokumen2,
-                dokumen3
-            } = dataFungsionalForPostAPI(resultFormData())
+    if (loadingSubmitFungsional === false) {
+        Promise.all([
+            validateFormNamaKolom(),
+            validateFormAddCard(),
+            validateFormLampiranData(),
+        ])
+            .then(res => {
+                const checkValidate = res.filter(validate => validate === undefined)
+                if (checkValidate.length > 0) {
+                    createAlert('Mohon lengkapi formulir Anda!.')
+                    return 'failed'
+                }
+                return 'success'
+            })
+            .then(res => {
+                if (res === 'success' && window.confirm('Ingin mendaftarkan sebagai Fungsional Pustakawan?')) {
+                    spinnerGlobalLoading('flex')
+                    submitFungsional()
+                } else {
+                    spinnerGlobalLoading('none')
+                    loadingSubmitFungsional = false
+                    console.log(res)
+                }
+            })
+            .catch(err => {
+                console.log('err-submit-form', err)
+                loadingSubmitFungsional = false
+            })
+    }
 
-            validateNIPFungsional(nip !== 'null' && nip !== null ? nip : nik, nip !== 'null' && nip !== null ? 'NIP' : 'NIK')
-                .then(res => {
-                    if (res?.message == 'success') {
-                        // dataFungsionalForPostAPI(resultFormData())
+})
 
-                        // return postFormDataAPI(POST_API_PUSTAKAWAN, {
-                        //     method: 'POST',
-                        //     body: JSON.stringify(dataFungsionalForPostAPI(resultFormData()))
-                        // })
-                        if (sk_pangkat !== 'null') {
-                            Promise.all([
-                                pushUpload(gambar_users, 'gambar_users'),
-                                pushUpload(sk_pustakawan[0], 'sk_pustakawan'),
-                                pushUpload(sk_pangkat[0], 'sk_pangkat'),
-                                // pushUpload(dokumen1[0], 'dokumen1'),
-                                // pushUpload(dokumen2[0], 'dokumen2'),
-                                // pushUpload(dokumen3[0], 'dokumen3'),
-                            ])
+function submitFungsional() {
+    loadingSubmitFungsional = true
+    const {
+        gambar_users,
+        nip,
+        nik,
+        sk_pustakawan,
+        sk_pangkat,
+        dokumen1,
+        dokumen2,
+        dokumen3
+    } = dataFungsionalForPostAPI(resultFormData())
+
+    validateNIPFungsional(nip !== 'null' && nip !== null ? nip : nik, nip !== 'null' && nip !== null ? 'NIP' : 'NIK')
+        .then(res => {
+            if (res?.message == 'success') {
+                if (sk_pangkat !== 'null') {
+                    Promise.all([
+                        pushUpload(gambar_users, 'gambar_users'),
+                        pushUpload(sk_pustakawan[0], 'sk_pustakawan'),
+                        pushUpload(sk_pangkat[0], 'sk_pangkat'),
+                    ])
+                        .then(res => {
+                            let resultData = dataFungsionalForPostAPI(resultFormData())
+                            resultData.gambar_users = res[0].gambar_users
+                            resultData.sk_pustakawan = res[1].sk_pustakawan
+                            resultData.sk_pangkat = res[2].sk_pangkat
+                            delete resultData.imgURL
+                            postFungsionalData(resultData)
                                 .then(res => {
-                                    let resultData = dataFungsionalForPostAPI(resultFormData())
-                                    resultData.gambar_users = res[0].gambar_users
-                                    resultData.sk_pustakawan = res[1].sk_pustakawan
-                                    resultData.sk_pangkat = res[2].sk_pangkat
-                                    // resultData.dokumen1 = res[3].dokumen1
-                                    // resultData.dokumen2 = res[4].dokumen2
-                                    // resultData.dokumen3 = res[5].dokumen3
-                                    delete resultData.imgURL
-                                    postFungsionalData(resultData)
-                                        .then(res => {
-                                            setLocalStorageForSubmit(REMOVE_ITEM, nmStorageFungsional)
-                                            alert('Data berhasil ditambah.\nSilahkan Login dengan Ketentuan "password" adalah "tanggal lahir" (YYYY/MM/DD) yang anda cantumkan.')
-                                            window.location.replace('http://localhost/pustakawanbogor/page/login.php')
-                                            loadingSubmitFungsional = false
-                                        })
-                                        .catch(err => {
-                                            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
-                                            spinnerGlobalLoading('none')
-                                            loadingSubmitFungsional = false
-                                            console.log(err)
-                                        })
-                                })
-                        } else {
-                            Promise.all([
-                                pushUpload(gambar_users, 'gambar_users'),
-                                pushUpload(sk_pustakawan[0], 'sk_pustakawan'),
-                                // pushUpload(dokumen1[0], 'dokumen1'),
-                                // pushUpload(dokumen2[0], 'dokumen2'),
-                                // pushUpload(dokumen3[0], 'dokumen3'),
-                            ])
-                                .then(res => {
-                                    let resultData = dataFungsionalForPostAPI(resultFormData())
-                                    resultData.gambar_users = res[0].gambar_users
-                                    resultData.sk_pustakawan = res[1].sk_pustakawan
-                                    // resultData.dokumen1 = res[3].dokumen1
-                                    // resultData.dokumen2 = res[4].dokumen2
-                                    // resultData.dokumen3 = res[5].dokumen3
-                                    delete resultData.imgURL
-                                    postFungsionalData(resultData)
-                                        .then(res => {
-                                            setLocalStorageForSubmit(REMOVE_ITEM, nmStorageFungsional)
-                                            alert('Data berhasil ditambah.\nSilahkan Login dengan Ketentuan "password" adalah "tanggal lahir" (YYYY/MM/DD) yang anda cantumkan.')
-                                            window.location.replace('http://localhost/pustakawanbogor/page/login.php')
-                                            loadingSubmitFungsional = false
-                                        })
-                                        .catch(err => {
-                                            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
-                                            spinnerGlobalLoading('none')
-                                            loadingSubmitFungsional = false
-                                            console.log(err)
-                                        })
+                                    setLocalStorageForSubmit(REMOVE_ITEM, nmStorageFungsional)
+                                    alert('Data berhasil ditambah.\nSilahkan Login dengan Ketentuan "password" adalah "tanggal lahir" (YYYY/MM/DD) yang anda cantumkan.')
+                                    window.location.replace('http://localhost/pustakawanbogor/page/login.php')
+                                    loadingSubmitFungsional = false
                                 })
                                 .catch(err => {
                                     alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                                    spinnerGlobalLoading('none')
+                                    loadingSubmitFungsional = false
                                     console.log(err)
+                                })
+                        })
+                } else {
+                    Promise.all([
+                        pushUpload(gambar_users, 'gambar_users'),
+                        pushUpload(sk_pustakawan[0], 'sk_pustakawan'),
+                    ])
+                        .then(res => {
+                            let resultData = dataFungsionalForPostAPI(resultFormData())
+                            resultData.gambar_users = res[0].gambar_users
+                            resultData.sk_pustakawan = res[1].sk_pustakawan
+                            delete resultData.imgURL
+                            postFungsionalData(resultData)
+                                .then(res => {
+                                    setLocalStorageForSubmit(REMOVE_ITEM, nmStorageFungsional)
+                                    alert('Data berhasil ditambah.\nSilahkan Login dengan Ketentuan "password" adalah "tanggal lahir" (YYYY/MM/DD) yang anda cantumkan.')
+                                    window.location.replace('http://localhost/pustakawanbogor/page/login.php')
                                     loadingSubmitFungsional = false
                                 })
-                        }
-                    } else {
-                        spinnerGlobalLoading('none')
-                        loadingSubmitFungsional = false
-                        console.log(res)
-                    }
-                })
-                // .then(res => {
-                //     if (res?.message == 'error') {
-                //         alert(res.text)
-                //         spinnerGlobalLoading('none')
-                //         loadingSubmit = false
-                //     } else if (res?.message == 'Data yang diperlukan tidak lengkap.') {
-                //         alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
-                //         spinnerGlobalLoading('none')
-                //         loadingSubmit = false
-                //     } else {
-                //         alert('Data berhasil ditambah.\nSilahkan Login dengan Ketentuan "password" adalah "tanggal lahir" yang anda cantumkan.')
-                //         spinnerGlobalLoading('none')
-                //         loadingSubmit = false
-                //         window.location.reload()
-                //     }
-                // })
-                .catch(err => {
-                    alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
-                    console.log(err)
-                    loadingSubmitFungsional = false
-                    spinnerGlobalLoading('none')
-                })
-        }
-    }, 0)
-})
+                                .catch(err => {
+                                    alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                                    spinnerGlobalLoading('none')
+                                    loadingSubmitFungsional = false
+                                    console.log(err)
+                                })
+                        })
+                        .catch(err => {
+                            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                            console.log(err)
+                            loadingSubmitFungsional = false
+                        })
+                }
+            } else {
+                spinnerGlobalLoading('none')
+                loadingSubmitFungsional = false
+                console.log(res)
+            }
+        })
+        .catch(err => {
+            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+            console.log(err)
+            loadingSubmitFungsional = false
+            spinnerGlobalLoading('none')
+        })
+}
 
 let loadingSubmitTenaga = false
 
 // form submit tenaga
 document.getElementById('submitFormTenaga')?.addEventListener('click', () => {
-    setTimeout(() => {
-        const getLocalStorage = localStorage.getItem(nmStorageTenaga)
-        if (getLocalStorage == 'success' && loadingSubmitTenaga === false) {
-            loadingSubmitTenaga = true
-            const {
-                gambar_users,
-                sk_pangkat,
-                nip,
-                nik
-                // dokumen1,
-                // dokumen2,
-                // dokumen3
-            } = dataTenagaForPost(resultFormDataTenaga())
+    if (loadingSubmitTenaga === false) {
+        Promise.all([
+            validateFormNamaKolom(),
+            validateFormAddCard(),
+            validateFormLampiranData()
+        ])
+            .then(res => {
+                const checkValidate = res.filter(validate => validate === undefined)
+                if (checkValidate.length > 0) {
+                    createAlert('Mohon lengkapi formulir Anda!.')
+                    return 'failed'
+                }
+                return 'success'
+            })
+            .then(res => {
+                if (res === 'success' && window.confirm('Ingin mendaftarkan sebagai Tenaga Perpustakaan?')) {
+                    spinnerGlobalLoading('flex')
+                    submitTenaga()
+                } else {
+                    spinnerGlobalLoading('none')
+                    loadingSubmitTenaga = false
+                    console.log(res)
+                }
+            })
+            .catch(err => {
+                console.log('err-submit-form', err)
+                loadingSubmitTenaga = false
+            })
+    }
+})
 
-            validateNIPTenaga(nip !== 'null' && nip !== null ? nip : nik, nip !== 'null' && nip !== null ? 'NIP' : 'NIK')
-                .then(res => {
-                    if (res?.message == 'success') {
-                        // localStorage.setItem('result-data-fs', 'success')
-                        // return postFormDataAPI(POST_API_PUSTAKAWAN, {
-                        //     method: 'POST',
-                        //     body: JSON.stringify(dataTenagaForPost(resultFormDataTenaga()))
-                        // })
+function submitTenaga() {
+    loadingSubmitTenaga = true
+    const {
+        gambar_users,
+        sk_pangkat,
+        nip,
+        nik
+    } = dataTenagaForPost(resultFormDataTenaga())
 
-                        Promise.all([
-                            pushUpload(gambar_users, 'gambar_users'),
-                            pushUpload(sk_pangkat[0], 'sk_pangkat'),
-                            // pushUpload(dokumen1[0], 'dokumen1'),
-                            // pushUpload(dokumen2[0], 'dokumen2'),
-                            // pushUpload(dokumen3[0], 'dokumen3'),
-                        ])
+    validateNIPTenaga(nip !== 'null' && nip !== null ? nip : nik, nip !== 'null' && nip !== null ? 'NIP' : 'NIK')
+        .then(res => {
+            if (res?.message == 'success') {
+                Promise.all([
+                    pushUpload(gambar_users, 'gambar_users'),
+                    pushUpload(sk_pangkat[0], 'sk_pangkat'),
+                ])
+                    .then(res => {
+                        let resultData = dataTenagaForPost(resultFormDataTenaga())
+                        resultData.gambar_users = res[0].gambar_users
+                        resultData.sk_pangkat = res[1].sk_pangkat
+                        delete resultData.imgURL
+                        postFungsionalData(resultData)
                             .then(res => {
-                                let resultData = dataTenagaForPost(resultFormDataTenaga())
-                                resultData.gambar_users = res[0].gambar_users
-                                resultData.sk_pangkat = res[1].sk_pangkat
-                                // resultData.dokumen1 = res[2].dokumen1
-                                // resultData.dokumen2 = res[3].dokumen2
-                                // resultData.dokumen3 = res[4].dokumen3
-                                delete resultData.imgURL
-                                postFungsionalData(resultData)
-                                    .then(res => {
-                                        setLocalStorageForSubmit(REMOVE_ITEM, nmStorageTenaga)
-                                        loadingSubmitTenaga = false
-                                        alert('Data berhasil ditambah.\nSilahkan Login dengan Ketentuan "password" adalah "tanggal lahir" (YYYY/MM/DD) yang anda cantumkan.')
-                                        window.location.replace('http://localhost/pustakawanbogor/page/login.php')
-                                    })
-                                    .catch(err => {
-                                        spinnerGlobalLoading('none')
-                                        loadingSubmitTenaga = false
-                                        console.log(err)
-                                        alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
-                                    })
+                                setLocalStorageForSubmit(REMOVE_ITEM, nmStorageTenaga)
+                                loadingSubmitTenaga = false
+                                alert('Data berhasil ditambah.\nSilahkan Login dengan Ketentuan "password" adalah "tanggal lahir" (YYYY/MM/DD) yang anda cantumkan.')
+                                window.location.replace('http://localhost/pustakawanbogor/page/login.php')
                             })
                             .catch(err => {
-                                alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
-                                console.log(err)
+                                spinnerGlobalLoading('none')
                                 loadingSubmitTenaga = false
+                                console.log(err)
+                                alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
                             })
-                    } else {
-                        spinnerGlobalLoading('none')
+                    })
+                    .catch(err => {
+                        alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                        console.log(err)
                         loadingSubmitTenaga = false
-                        console.log(res)
-                        alert(res?.text)
-                    }
-                })
-                // .then(res => {
-                //     if (res?.message == 'error') {
-                //         alert(res.text)
-                //         spinnerGlobalLoading('none')
-                //         loadingSubmit = false
-                //     } else if (res?.message == 'Data yang diperlukan tidak lengkap.') {
-                //         alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
-                //         spinnerGlobalLoading('none')
-                //         loadingSubmit = false
-                //     } else {
-                //         alert('Data berhasil ditambah.\nSilahkan Login dengan Ketentuan "password" adalah "tanggal lahir" yang anda cantumkan.')
-                //         spinnerGlobalLoading('none')
-                //         loadingSubmit = false
-                //         window.location.reload()
-                //     }
-                // })
-                .catch(err => {
-                    alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
-                    console.log(err)
-                    loadingSubmitTenaga = false
-                    spinnerGlobalLoading('none')
-                })
-        }
-    }, 0)
-})
+                    })
+            } else {
+                spinnerGlobalLoading('none')
+                loadingSubmitTenaga = false
+                console.log(res)
+                alert(res?.text)
+            }
+        })
+        .catch(err => {
+            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+            console.log(err)
+            loadingSubmitTenaga = false
+            spinnerGlobalLoading('none')
+        })
+}
 
 let loadingSubmitRevisiTenaga = false
 
@@ -277,86 +267,122 @@ let updateFirebaseRevisiTenaga = {
     sk_pangkat: null
 }
 document.getElementById('submitFormRevisiTenaga')?.addEventListener('click', () => {
-    setTimeout(() => {
-        const getLocalStorage = localStorage.getItem(nmStorageRevisiTenaga)
-        if (getLocalStorage == 'success' && loadingSubmitRevisiTenaga === false) {
-            loadingSubmitRevisiTenaga = true
-            const {
-                nip,
-                nik,
-                gambar_users,
-                sk_pangkat
-            } = dataRevisiTenagaForPost(resultFormDataRevisiTenaga())
-
-            const {
-                namaPengirim,
-                emailPengirim,
-                telpPengirim
-            } = dataInputPengirim
-
-            generateTokenClient()
-            const resultJWTToken = createJWTToken(headerJWTToken, { tokenClient: currentTokenClient })
-            const dataToken = resultDataToken(resultJWTToken)
-            const dataFormBody = createReqBody(dataToken)
-            const {
-                token,
-                tokenClient,
-                exp
-            } = dataToken
-
-            validateNIPRevisiTenaga(nip !== 'null' ? nip : nik, optionNIPORNIK)
-                .then(res => {
-                    if (res?.message == 'success') {
-                        Promise.all([
-                            gambar_users?.name ? pushUpload(gambar_users, 'gambar_users') : { gambar_users },
-                            sk_pangkat?.length === 1 ? pushUpload(sk_pangkat[0], 'sk_pangkat') : { sk_pangkat }
-                        ])
-                            .then(res => {
-                                updateFirebaseRevisiTenaga.gambar_users = res[0].gambar_users
-                                updateFirebaseRevisiTenaga.sk_pangkat = res[1].sk_pangkat
-                                return postFormDataAPI(`${POST_VERIFIKASI}token=${tokenClient}&exp=${exp}&tokenClient=${token}`, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/x-www-form-urlencoded'
-                                    },
-                                    body: dataFormBody
-                                })
-                            })
-                            .then(res => sendDataToEmail(
-                                SERVICE_ID_PUSTAKAWAN_2,
-                                TEMPLATE_ID_PUSTAKAWAN_2,
-                                {
-                                    to_email: emailPengirim,
-                                    tokenClient
-                                },
-                                PUBLIC_KEY_PUSTAKAWAN_2
-                            ))
-                            .then(res => {
-                                document.getElementById('deskVerifikasi').innerHTML = `Kami mengirimkan kode verifikasi melalui "<strong>${emailPengirim}</strong>".`
-                                document.getElementById('btnModalVerifikasi').click()
-                            })
-                            .catch(err => {
-                                alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
-                                console.log(err)
-                                loadingSubmitRevisiTenaga = false
-                                spinnerGlobalLoading('none')
-                            })
-                    } else {
-                        spinnerGlobalLoading('none')
-                        loadingSubmitRevisiTenaga = false
-                        console.log(res)
-                        alert(res?.text)
-                    }
-                })
-                .catch(err => {
-                    alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
-                    console.log(err)
-                    loadingSubmitRevisiTenaga = false
+    if (currentExpQuery && !validateExpToken(currentExpQuery)) {
+        alert('Akses revisi Anda telah berakhir.\nSilahkan input kembali.')
+        window.location.replace(window.location.origin)
+        return
+    }
+    if (loadingSubmitRevisiTenaga === false) {
+        Promise.all([
+            validateFormNamaKolom(),
+            validateFormAddCard(),
+            // validateFormLampiranData(),
+            validateDataPengirim(),
+            // validateCaptcha()
+        ])
+            .then(res => {
+                const checkValidate = res.filter(validate => validate === undefined)
+                if (checkValidate.length > 0) {
+                    createAlert('Mohon lengkapi formulir Anda!.')
+                    return 'failed'
+                }
+                return 'success'
+            })
+            .then(res => {
+                if (res === 'success' && window.confirm('Ingin mengajukan revisi data?')) {
+                    spinnerGlobalLoading('flex')
+                    submitRevisiTenaga()
+                    // setLocalStorageForSubmit(SET_ITEM, nmStorageRevisiTenaga, defaultValueStgSubmit)
+                } else if (res == 'failed') {
                     spinnerGlobalLoading('none')
-                })
-        }
-    }, 0);
+                    loadingSubmitRevisiTenaga = false
+                    console.log(res)
+                }
+            })
+            .catch(err => {
+                console.log('err-submit-form', err)
+                loadingSubmitRevisiTenaga = false
+            })
+    }
+
 })
+
+function submitRevisiTenaga() {
+    loadingSubmitRevisiTenaga = true
+    const {
+        nip,
+        nik,
+        gambar_users,
+        sk_pangkat
+    } = dataRevisiTenagaForPost(resultFormDataRevisiTenaga())
+
+    const {
+        namaPengirim,
+        emailPengirim,
+        telpPengirim
+    } = dataInputPengirim
+
+    generateTokenClient()
+    const resultJWTToken = createJWTToken(headerJWTToken, { tokenClient: currentTokenClient })
+    const dataToken = resultDataToken(resultJWTToken)
+    const dataFormBody = createReqBody(dataToken)
+    const {
+        token,
+        tokenClient,
+        exp
+    } = dataToken
+
+    validateNIPRevisiTenaga(nip !== 'null' ? nip : nik, optionNIPORNIK)
+        .then(res => {
+            if (res?.message == 'success') {
+                Promise.all([
+                    gambar_users?.name ? pushUpload(gambar_users, 'gambar_users') : { gambar_users },
+                    sk_pangkat?.length === 1 ? pushUpload(sk_pangkat[0], 'sk_pangkat') : { sk_pangkat }
+                ])
+                    .then(res => {
+                        updateFirebaseRevisiTenaga.gambar_users = res[0].gambar_users
+                        updateFirebaseRevisiTenaga.sk_pangkat = res[1].sk_pangkat
+                        return postFormDataAPI(`${POST_VERIFIKASI}token=${tokenClient}&exp=${exp}&tokenClient=${token}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: dataFormBody
+                        })
+                    })
+                    .then(res => sendDataToEmail(
+                        SERVICE_ID_PUSTAKAWAN_2,
+                        TEMPLATE_ID_PUSTAKAWAN_2,
+                        {
+                            to_email: emailPengirim,
+                            tokenClient
+                        },
+                        PUBLIC_KEY_PUSTAKAWAN_2
+                    ))
+                    .then(res => {
+                        document.getElementById('deskVerifikasi').innerHTML = `Kami mengirimkan kode verifikasi melalui "<strong>${emailPengirim}</strong>".`
+                        document.getElementById('btnModalVerifikasi').click()
+                    })
+                    .catch(err => {
+                        alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+                        console.log(err)
+                        loadingSubmitRevisiTenaga = false
+                        spinnerGlobalLoading('none')
+                    })
+            } else {
+                spinnerGlobalLoading('none')
+                loadingSubmitRevisiTenaga = false
+                console.log(res)
+                alert(res?.text)
+            }
+        })
+        .catch(err => {
+            alert('Terjadi kesalahan server.\nMohon coba beberapa saat lagi')
+            console.log(err)
+            loadingSubmitRevisiTenaga = false
+            spinnerGlobalLoading('none')
+        })
+}
 
 // submit verifikasi tenaga
 document.getElementById('submitVerifikasi')?.addEventListener('click', () => {
@@ -631,7 +657,7 @@ function resultDataToken(jwtToken) {
     }
 }
 
-function sendResultRevisiFungsionalToMail(){
+function sendResultRevisiFungsionalToMail() {
     const {
         username,
         nama_users,
@@ -657,7 +683,7 @@ function sendResultRevisiFungsionalToMail(){
         catatan
     } = dataFungsionalForPostAPI(resultFormData())
 
-    const sendData ={
+    const sendData = {
         username: prevDataPustakawan.username,
         nama_users: prevDataPustakawan.nama_users,
         email: prevDataPustakawan.email,
@@ -700,7 +726,7 @@ function sendResultRevisiFungsionalToMail(){
         PUBLIC_KEY_EMAILJS
     )
         .then(res => {
-            alert('Data telah berhasil dikirim.\nMohon untuk menunggu konfirmasi dari Kami melalui email Anda.')
+            alert('Data telah berhasil dikirim.\n"Maksimal 1 minggu pengerjaan".\nMohon menunggu dan cek kembali apakah sudah diperbarui data Anda.')
             loadingSubmitRevisiFs = false
             spinnerGlobalLoading('none')
             setTimeout(() => {
@@ -779,7 +805,7 @@ function sendResultRevisiTenagaToMail() {
         PUBLIC_KEY_EMAILJS
     )
         .then(res => {
-            alert('Data telah berhasil dikirim.\nMohon untuk menunggu konfirmasi dari Kami melalui email Anda.')
+            alert('Data telah berhasil dikirim.\n"Maksimal 1 minggu pengerjaan".\nMohon menunggu dan cek kembali apakah sudah diperbarui data Anda.')
             loadingSubmitRevisiTenaga = false
             spinnerGlobalLoading('none')
             setTimeout(() => {
@@ -793,137 +819,3 @@ function sendResultRevisiTenagaToMail() {
             spinnerGlobalLoading('none')
         })
 }
-
-// function dataFungsionalForPostAPI(data) {
-//     const {
-//         files,
-//         nip,
-//         namaLengkap,
-//         tempatLahir,
-//         tanggalLahir,
-//         jenisKelamin,
-//         nomorHP,
-//         email,
-//         pendidikanTerakhir,
-//         jurusanBidangPendidikan,
-//         pangkat,
-//         tamatPangkat,
-//         jabatanFungsional,
-//         tamatJabatan,
-//         statusJabatan,
-//         instansi,
-//         diklatFungsionalPustakawan,
-//         dataDiklat,
-//         dataKaryaTulis,
-//         dataOrganisasi,
-//         skPustakawanTerakhir,
-//         skKenaikanPangkatTerakhir,
-//         dokumen1,
-//         dokumen2,
-//         dokumen3,
-//         lokasi_instansi,
-//         keteranganTambahan,
-//         namaPengirim,
-//         emailPengirim,
-//         telpPengirim
-//     } = data
-
-//     return {
-//         gambar_users: files,
-//         nip,
-//         nama_users: namaLengkap,
-//         username: namaLengkap,
-//         password: nomorHP,
-//         Tempat_Lahir: tempatLahir,
-//         Tanggal_Lahir: `${createDateFormat(new Date(tanggalLahir)).split('/').join('-')}`,
-//         jenis_kelamin: jenisKelamin,
-//         no_hp: nomorHP,
-//         email,
-//         pendidikan: pendidikanTerakhir,
-//         jurusan_bidangpendidikan: jurusanBidangPendidikan,
-//         pangkat,
-//         tamat_pangkat: `${createDateFormat(new Date(tamatPangkat)).split('/').join('-')}`,
-//         jabatan_fungsional: jabatanFungsional,
-//         tamat_jabatan: `${createDateFormat(new Date(tamatJabatan)).split('/').join('-')}`,
-//         status_jabatan: statusJabatan,
-//         istansi: instansi,
-//         diklat: diklatFungsionalPustakawan,
-//         catatan: keteranganTambahan,
-//         waktu_daftar: `${createDateFormat(new Date()).split('/').join('-')} ${createHourFormat(new Date())}`,
-//         status: 'tes',
-//         status_dinas: 'tes',
-//         dokumen_pendukung: dokumen1,
-//         dokumen_pendukung2: dokumen2,
-//         dokumen_pendukung3: dokumen3,
-//         role: 'fungsional',
-//         pekerjaan: 'tes',
-//         lokasi_instansi: lokasi_instansi,
-//         judul_kti: dataKaryaTulis,
-//         organisasi: dataOrganisasi,
-//         sk_pustakawan: skPustakawanTerakhir,
-//         sk_pangkat: skKenaikanPangkatTerakhir
-//     }
-// }
-
-// function dataTenagaForPostAPI(data) {
-//     const {
-//         files,
-//         nip,
-//         namaLengkap,
-//         tempatLahir,
-//         tanggalLahir,
-//         jenisKelamin,
-//         nomorHP,
-//         email,
-//         pendidikanTerakhir,
-//         jurusanBidangPendidikan,
-//         pangkat,
-//         statusDinas,
-//         instansi,
-//         lokasi_instansi,
-//         diklatFungsionalPustakawan,
-//         dataDiklat,
-//         dataOrganisasi,
-//         skKenaikanPangkatTerakhir,
-//         dokumen1,
-//         dokumen2,
-//         dokumen3,
-//         keteranganTambahan,
-//     } = data
-
-//     return {
-//         gambar_users: files,
-//         nip,
-//         nama_users: namaLengkap,
-//         username: namaLengkap,
-//         password: nomorHP,
-//         Tempat_Lahir: tempatLahir,
-//         Tanggal_Lahir: `${createDateFormat(new Date(tanggalLahir)).split('/').join('-')}`,
-//         jenis_kelamin: jenisKelamin,
-//         no_hp: nomorHP,
-//         email,
-//         pendidikan: pendidikanTerakhir,
-//         jurusan_bidangpendidikan: jurusanBidangPendidikan,
-//         pangkat,
-//         tamat_pangkat: '-',
-//         jabatan_fungsional: '-',
-//         tamat_jabatan: '-',
-//         status_jabatan: '-',
-//         istansi: instansi,
-//         diklat: diklatFungsionalPustakawan,
-//         catatan: keteranganTambahan,
-//         waktu_daftar: `${createDateFormat(new Date()).split('/').join('-')} ${createHourFormat(new Date())}`,
-//         status: 'tes',
-//         status_dinas: statusDinas,
-//         dokumen_pendukung: dokumen1,
-//         dokumen_pendukung2: dokumen2,
-//         dokumen_pendukung3: dokumen3,
-//         role: 'tenaga-perpus',
-//         pekerjaan: 'tes',
-//         lokasi_instansi: lokasi_instansi,
-//         judul_kti: '-',
-//         organisasi: dataOrganisasi,
-//         sk_pustakawan: '-',
-//         sk_pangkat: skKenaikanPangkatTerakhir
-//     }
-// }

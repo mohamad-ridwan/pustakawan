@@ -1696,45 +1696,45 @@ setLocalStorageForSubmit(REMOVE_ITEM, nmStorageRevisiTenaga)
 let loadingSubmit = false
 
 // SUBMIT FORM
-function submitFormRevisiTenaga() {
-    if(currentExpQuery && !validateExpToken(currentExpQuery)){
-        alert('Akses revisi Anda telah berakhir.\nSilahkan input kembali.')
-        window.location.replace(window.location.origin)
-        return
-    }
-    if (loadingSubmit === false) {
-        Promise.all([
-            validateFormNamaKolom(),
-            validateFormAddCard(),
-            // validateFormLampiranData(),
-            validateDataPengirim(),
-            // validateCaptcha()
-        ])
-            .then(res => {
-                const checkValidate = res.filter(validate => validate === undefined)
-                if (checkValidate.length > 0) {
-                    createAlert('Mohon lengkapi formulir Anda!.')
-                    return 'failed'
-                }
-                return 'success'
-            })
-            .then(res => {
-                if (res === 'success' && window.confirm('Ingin mengajukan revisi data?')) {
-                    loadingSubmit = true
-                    spinnerGlobalLoading('flex')
-                    setLocalStorageForSubmit(SET_ITEM, nmStorageRevisiTenaga, defaultValueStgSubmit)
-                } else if(res == 'failed') {
-                    spinnerGlobalLoading('none')
-                    loadingSubmit = false
-                    console.log(res)
-                }
-            })
-            .catch(err => {
-                console.log('err-submit-form', err)
-                loadingSubmit = false
-            })
-    }
-}
+// function submitFormRevisiTenaga() {
+//     if(currentExpQuery && !validateExpToken(currentExpQuery)){
+//         alert('Akses revisi Anda telah berakhir.\nSilahkan input kembali.')
+//         window.location.replace(window.location.origin)
+//         return
+//     }
+//     if (loadingSubmit === false) {
+//         Promise.all([
+//             validateFormNamaKolom(),
+//             validateFormAddCard(),
+//             // validateFormLampiranData(),
+//             validateDataPengirim(),
+//             // validateCaptcha()
+//         ])
+//             .then(res => {
+//                 const checkValidate = res.filter(validate => validate === undefined)
+//                 if (checkValidate.length > 0) {
+//                     createAlert('Mohon lengkapi formulir Anda!.')
+//                     return 'failed'
+//                 }
+//                 return 'success'
+//             })
+//             .then(res => {
+//                 if (res === 'success' && window.confirm('Ingin mengajukan revisi data?')) {
+//                     loadingSubmit = true
+//                     spinnerGlobalLoading('flex')
+//                     setLocalStorageForSubmit(SET_ITEM, nmStorageRevisiTenaga, defaultValueStgSubmit)
+//                 } else if(res == 'failed') {
+//                     spinnerGlobalLoading('none')
+//                     loadingSubmit = false
+//                     console.log(res)
+//                 }
+//             })
+//             .catch(err => {
+//                 console.log('err-submit-form', err)
+//                 loadingSubmit = false
+//             })
+//     }
+// }
 
 function validateExpToken(expToken) {
     const cekExp = (new Date()).valueOf() < (new Date(expToken)).valueOf()
