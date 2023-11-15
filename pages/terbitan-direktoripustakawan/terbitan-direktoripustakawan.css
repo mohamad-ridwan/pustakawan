@@ -55,3 +55,10 @@ p {
 .caption h3, p{
     text-align: start;
 }
+
+.not-empty{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

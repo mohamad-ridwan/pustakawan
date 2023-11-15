@@ -64,321 +64,334 @@ if (params?.get('dataDaerah')) {
                         docDefinition.content.push(newDataTable)
                         // end tabel statistik
 
-                        google.charts.load('current', { 'packages': ['corechart'] });
-                        google.charts.setOnLoadCallback(drawChart)
-                        function drawChart() {
-                            // Create the data table.
-                            var data = new google.visualization.DataTable();
-                            data.addColumn('string', 'Topping');
-                            data.addColumn('number', 'Slices');
-                            data.addRows(getPustakawanBerdasarkanJabatan(daerahKota));
+                        // async function loadDrawChart() {
+                        //     return await new Promise((resolve, reject) => {
+                        //         google.charts.load('current', { 'packages': ['corechart'] });
+                        //         google.charts.setOnLoadCallback(drawChart)
+                        //         function drawChart() {
+                        //             // Create the data table.
+                        //             var data = new google.visualization.DataTable();
+                        //             data.addColumn('string', 'Topping');
+                        //             data.addColumn('number', 'Slices');
+                        //             data.addRows(getPustakawanBerdasarkanJabatan(daerahKota));
 
-                            // Set chart options
-                            var options = {
-                                'title': '',
-                                legend: 'none',
-                                fontSize: 9,
-                            };
+                        //             // Set chart options
+                        //             var options = {
+                        //                 'title': '',
+                        //                 legend: 'none',
+                        //                 fontSize: 9,
+                        //             };
 
-                            // Instantiate and draw our chart, passing in some options.
-                            var chart = new google.visualization.BarChart(document.getElementById('myChart'))
-                            chart.draw(data, options)
-                        }
-
-                        await makeHTML2Canvas('myChart')
-                            .then(async res => {
-                                let imageURL = ''
-                                imageURL = res.toDataURL('image/jpeg')
-                                // GRAFIK
-                                // TENAGA PERPUS BERDASARKAN JABATAN
-                                docDefinition.content.push(createTextPDF('Tenaga Perpustakaan Berdasarkan Jabatan', true, 12, undefined, 'before', undefined, undefined, 'center', undefined))
-                                docDefinition.content.push({
-                                    image: imageURL,
-                                    width: 550,
-                                })
-
-                                const calculation = calculationDataTenagaPerpus([...getData_FUNGSIONAL_PUSTAKAWAN, ...getData_TENAGA_PUSTAKAWAN], daerahKota.length)
-
-                                const terbanyak = calculation.terbanyak.map(jabatan => `${jabatan.text}`).join(', ')
-                                const sedikit = calculation.sedikit.map(jabatan => `${jabatan.text}`).join(', ')
-
-                                docDefinition.content.push(createTextPDF(`Tenaga perpustakaan berdasarkan jenis jabatan atau status kedinasan pada Kota ${params.get('dataDaerah')} didominasi oleh ${terbanyak}, dan yang paling sedikit adalah ${sedikit}.`, false, 11, undefined, undefined, undefined, undefined, 'justify', undefined, 1.5))
-
-                                // docDefinition.content.push(createTextPDF(`
-                                // Tenaga perpustakaan berdasarkan jenis jabatan atau status kedinasan pada Kota ${params.get('dataDaerah')} didominasi oleh ${calculation[0].jabatan} sebanyak ${calculation[0].total} orang (${((calculation[0].total / daerahKota.length * 100).toFixed(2))}%), ${calculation[1] ? `sedangkan yang paling sedikit adalah ${calculation[1].jabatan} sebanyak ${calculation[1].total} orang (${((calculation[1].total / daerahKota.length) * 100).toFixed(2)})%` : '.'}
-                                // `, false, 11, undefined, undefined, undefined, undefined, undefined, undefined))
-
-                                // GRAFIK
-                                // TENAGA PERPUS BERDASARKAN PENDIDIKAN
-                                const getDataGrafikPendidikan = PENDIDIKAN.map(pendidikan => {
-                                    const findUser = daerahKota.filter(user => user.pendidikan == pendidikan)
-                                    return [pendidikan, findUser.length]
-                                })
-
-                                google.charts.load('current', { 'packages': ['corechart'] });
-                                google.charts.setOnLoadCallback(chartPendidikan)
-                                function chartPendidikan() {
-                                    // Create the data table.
-                                    var data = new google.visualization.DataTable();
-                                    data.addColumn('string', 'Topping');
-                                    data.addColumn('number', 'Slices');
-                                    data.addRows(getDataGrafikPendidikan);
-
-                                    // Set chart options
-                                    var options = {
-                                        'title': '',
-                                        legend: 'none',
-                                        fontSize: 9,
-                                    };
-
-                                    // Instantiate and draw our chart, passing in some options.
-                                    var chart = new google.visualization.BarChart(document.getElementById('chartEducation'))
-                                    chart.draw(data, options)
-                                }
-
-                                return await makeHTML2Canvas('chartEducation')
-                            })
-                            .then(async res => {
-                                let imageURL = ''
-                                imageURL = res.toDataURL('image/jpeg')
-                                docDefinition.content.push(createTextPDF('Tenaga Perpustakaan Berdasarkan Pendidikan', true, 12, undefined, 'before', undefined, undefined, 'center', undefined, undefined))
-                                docDefinition.content.push({
-                                    image: imageURL,
-                                    width: 550,
-                                })
-
-                                const calculation = calculationGrafikPendidikan(daerahKota)
-                                const terbanyak = calculation.terbanyak.map(pendidikan => `${pendidikan.text}`).join(', ')
-                                const sedikit = calculation.sedikit.map(pendidikan => `${pendidikan.text}`).join(', ')
-
-                                docDefinition.content.push(createTextPDF(`Tenaga perpustakaan berdasarkan latar belakang pendidikan pada Kota ${params.get('dataDaerah')} didominasi oleh ${terbanyak}, dan yang paling sedikit adalah ${sedikit}.`, false, 11, undefined, undefined, undefined, undefined, 'justify', undefined, 1.5))
-
-                                // TENAGA PERPUSTAKAAN BERDASARKAN JENIS KELAMIN
-                                const getDataGrafikJenisKelamin = JENIS_KELAMIN.map(jenisKelamin => {
-                                    const findUser = daerahKota.filter(user => user.jenis_kelamin == jenisKelamin)
-                                    return [jenisKelamin, findUser.length]
-                                })
-                                google.charts.load('current', { 'packages': ['corechart'] });
-                                google.charts.setOnLoadCallback(chartJenisKelamin)
-                                function chartJenisKelamin() {
-                                    // Create the data table.
-                                    var data = new google.visualization.DataTable();
-                                    data.addColumn('string', 'Topping');
-                                    data.addColumn('number', 'Slices');
-                                    data.addRows(getDataGrafikJenisKelamin);
-
-                                    // Set chart options
-                                    var options = {
-                                        'title': '',
-                                        legend: 'none',
-                                        fontSize: 9,
-                                    };
-
-                                    // Instantiate and draw our chart, passing in some options.
-                                    var chart = new google.visualization.BarChart(document.getElementById('chartGender'))
-                                    chart.draw(data, options)
-                                }
-
-                                return await makeHTML2Canvas('chartGender')
-                            })
-                            .then(async res => {
-                                let imageURL = ''
-                                imageURL = res.toDataURL('image/jpeg')
-                                docDefinition.content.push(createTextPDF('Tenaga Perpustakaan Berdasarkan Jenis Kelamin', true, 12, undefined, undefined, undefined, undefined, 'center', [0, 20, 0, 0], undefined))
-
-                                docDefinition.content.push({
-                                    image: imageURL,
-                                    width: 550,
-                                })
-
-                                const calculation = calculationGrafikGender(daerahKota)
-                                const terbanyak = calculation.terbanyak.map(jenis_kelamin => `${jenis_kelamin.text}`).join(', ')
-                                const sedikit = calculation.sedikit.map(jenis_kelamin => `${jenis_kelamin.text}`).join(', ')
-
-                                docDefinition.content.push(createTextPDF(`Tenaga perpustakaan berdasarkan jenis kelamin pada Kota ${params.get('dataDaerah')} didominasi oleh ${terbanyak}, kemudian ${sedikit}.`, false, 11, undefined, undefined, undefined, undefined, 'justify', undefined, 1.5))
-
-                                // GRAFIK TENAGA PERPUS BERDASARKAN USIA
-                                const dataAge = []
-                                let useDataAge = []
-                                daerahKota.forEach(user => {
-                                    let years = ''
-                                    const findAge = daerahKota.filter(userAge => {
-                                        years = userAge.Tanggal_Lahir.split('-')[0]
-                                        return userAge.Tanggal_Lahir.split('-')[0] === user.Tanggal_Lahir.split('-')[0]
-                                    })
-                                    const currentUser = findAge.map(user => {
-                                        const years = user.Tanggal_Lahir.split('-')[0]
-                                        return {
-                                            age: years,
-                                            total: findAge.length
-                                        }
-                                    })
-                                    const checkAge = dataAge?.filter(age => age.age === currentUser[0].age)
-                                    if (checkAge.length === 0) {
-                                        dataAge.push(currentUser[0])
-                                    }
-                                })
-                                dataAge.sort((a, b) => Number(a?.age) - Number(b?.age))
-                                useDataAge = dataAge.map(data => [data?.age, data?.total])
-
-                                google.charts.load('current', { 'packages': ['corechart'] });
-                                google.charts.setOnLoadCallback(chartAge)
-                                function chartAge() {
-                                    // Create the data table.
-                                    var data = new google.visualization.DataTable();
-                                    data.addColumn('string', 'Topping');
-                                    data.addColumn('number', 'Slices');
-                                    data.addRows(useDataAge);
-
-                                    // Set chart options
-                                    var options = {
-                                        'title': '',
-                                        legend: 'none',
-                                        fontSize: 9,
-                                    };
-
-                                    // Instantiate and draw our chart, passing in some options.
-                                    var chart = new google.visualization.BarChart(document.getElementById('chartAge'))
-                                    chart.draw(data, options)
-                                }
-
-                                return await makeHTML2Canvas('chartAge')
-                            })
+                        //             // Instantiate and draw our chart, passing in some options.
+                        //             var chart = new google.visualization.BarChart(document.getElementById('myChart'))
+                        //             chart.draw(data, options)
+                        //             resolve(chart?.container)
+                        //         }
+                        //     })
+                        // }
+                        loadGoogleBarChart('myChart', getPustakawanBerdasarkanJabatan(daerahKota))
                             .then(res => {
-                                let imageURL = ''
-                                imageURL = res.toDataURL('image/jpeg')
-                                docDefinition.content.push(createTextPDF('Tenaga Perpustakaan Berdasarkan Usia', true, 12, undefined, 'before', undefined, undefined, 'center', undefined, undefined))
-                                docDefinition.content.push({
-                                    image: imageURL,
-                                    width: 550,
-                                })
+                                makeHTML2Canvas('myChart')
+                                    .then(async res => {
+                                        let imageURL = ''
+                                        imageURL = res.toDataURL('image/jpeg')
+                                        // GRAFIK
+                                        // TENAGA PERPUS BERDASARKAN JABATAN
+                                        docDefinition.content.push(createTextPDF('Tenaga Perpustakaan Berdasarkan Jabatan', true, 12, undefined, 'before', undefined, undefined, 'center', undefined))
+                                        docDefinition.content.push({
+                                            image: imageURL,
+                                            width: 550,
+                                        })
 
-                                const dataAge = []
-                                daerahKota.forEach(user => {
-                                    let years = ''
-                                    const findAge = daerahKota.filter(userAge => {
-                                        years = userAge.Tanggal_Lahir.split('-')[0]
-                                        return userAge.Tanggal_Lahir.split('-')[0] === user.Tanggal_Lahir.split('-')[0]
+                                        const calculation = calculationDataTenagaPerpus([...getData_FUNGSIONAL_PUSTAKAWAN, ...getData_TENAGA_PUSTAKAWAN], daerahKota.length)
+
+                                        const terbanyak = calculation.terbanyak.map(jabatan => `${jabatan.text}`).join(', ')
+                                        const sedikit = calculation.sedikit.map(jabatan => `${jabatan.text}`).join(', ')
+
+                                        docDefinition.content.push(createTextPDF(`Tenaga perpustakaan berdasarkan jenis jabatan atau status kedinasan pada Kota ${params.get('dataDaerah')} didominasi oleh ${terbanyak}, dan yang paling sedikit adalah ${sedikit}.`, false, 11, undefined, undefined, undefined, undefined, 'justify', undefined, 1.5))
+
+                                        // docDefinition.content.push(createTextPDF(`
+                                        // Tenaga perpustakaan berdasarkan jenis jabatan atau status kedinasan pada Kota ${params.get('dataDaerah')} didominasi oleh ${calculation[0].jabatan} sebanyak ${calculation[0].total} orang (${((calculation[0].total / daerahKota.length * 100).toFixed(2))}%), ${calculation[1] ? `sedangkan yang paling sedikit adalah ${calculation[1].jabatan} sebanyak ${calculation[1].total} orang (${((calculation[1].total / daerahKota.length) * 100).toFixed(2)})%` : '.'}
+                                        // `, false, 11, undefined, undefined, undefined, undefined, undefined, undefined))
+
+                                        // GRAFIK
+                                        // TENAGA PERPUS BERDASARKAN PENDIDIKAN
+                                        const getDataGrafikPendidikan = PENDIDIKAN.map(pendidikan => {
+                                            const findUser = daerahKota.filter(user => user.pendidikan == pendidikan)
+                                            return [pendidikan, findUser.length]
+                                        })
+
+                                       return loadGoogleBarChart('chartEducation', getDataGrafikPendidikan)
+                                        // google.charts.load('current', { 'packages': ['corechart'] });
+                                        // google.charts.setOnLoadCallback(chartPendidikan)
+                                        // function chartPendidikan() {
+                                        //     // Create the data table.
+                                        //     var data = new google.visualization.DataTable();
+                                        //     data.addColumn('string', 'Topping');
+                                        //     data.addColumn('number', 'Slices');
+                                        //     data.addRows(getDataGrafikPendidikan);
+
+                                        //     // Set chart options
+                                        //     var options = {
+                                        //         'title': '',
+                                        //         legend: 'none',
+                                        //         fontSize: 9,
+                                        //     };
+
+                                        //     // Instantiate and draw our chart, passing in some options.
+                                        //     var chart = new google.visualization.BarChart(document.getElementById('chartEducation'))
+                                        //     chart.draw(data, options)
+                                        // }
+
+                                        // return await makeHTML2Canvas('chartEducation')
                                     })
-                                    const currentUser = findAge.map(user => {
-                                        const years = user.Tanggal_Lahir.split('-')[0]
-                                        return {
-                                            age: years,
-                                            total: findAge.length
+                                    .then(res=>makeHTML2Canvas('chartEducation'))
+                                    .then(async res => {
+                                        let imageURL = ''
+                                        imageURL = res.toDataURL('image/jpeg')
+                                        docDefinition.content.push(createTextPDF('Tenaga Perpustakaan Berdasarkan Pendidikan', true, 12, undefined, 'before', undefined, undefined, 'center', undefined, undefined))
+                                        docDefinition.content.push({
+                                            image: imageURL,
+                                            width: 550,
+                                        })
+
+                                        const calculation = calculationGrafikPendidikan(daerahKota)
+                                        const terbanyak = calculation.terbanyak.map(pendidikan => `${pendidikan.text}`).join(', ')
+                                        const sedikit = calculation.sedikit.map(pendidikan => `${pendidikan.text}`).join(', ')
+
+                                        docDefinition.content.push(createTextPDF(`Tenaga perpustakaan berdasarkan latar belakang pendidikan pada Kota ${params.get('dataDaerah')} didominasi oleh ${terbanyak}, dan yang paling sedikit adalah ${sedikit}.`, false, 11, undefined, undefined, undefined, undefined, 'justify', undefined, 1.5))
+
+                                        // TENAGA PERPUSTAKAAN BERDASARKAN JENIS KELAMIN
+                                        const getDataGrafikJenisKelamin = JENIS_KELAMIN.map(jenisKelamin => {
+                                            const findUser = daerahKota.filter(user => user.jenis_kelamin == jenisKelamin)
+                                            return [jenisKelamin, findUser.length]
+                                        })
+                                        return loadGoogleBarChart('chartGender', getDataGrafikJenisKelamin)
+                                        // google.charts.load('current', { 'packages': ['corechart'] });
+                                        // google.charts.setOnLoadCallback(chartJenisKelamin)
+                                        // function chartJenisKelamin() {
+                                        //     // Create the data table.
+                                        //     var data = new google.visualization.DataTable();
+                                        //     data.addColumn('string', 'Topping');
+                                        //     data.addColumn('number', 'Slices');
+                                        //     data.addRows(getDataGrafikJenisKelamin);
+
+                                        //     // Set chart options
+                                        //     var options = {
+                                        //         'title': '',
+                                        //         legend: 'none',
+                                        //         fontSize: 9,
+                                        //     };
+
+                                        //     // Instantiate and draw our chart, passing in some options.
+                                        //     var chart = new google.visualization.BarChart(document.getElementById('chartGender'))
+                                        //     chart.draw(data, options)
+                                        // }
+
+                                        // return await makeHTML2Canvas('chartGender')
+                                    })
+                                    .then(res=>makeHTML2Canvas('chartGender'))
+                                    .then(async res => {
+                                        let imageURL = ''
+                                        imageURL = res.toDataURL('image/jpeg')
+                                        docDefinition.content.push(createTextPDF('Tenaga Perpustakaan Berdasarkan Jenis Kelamin', true, 12, undefined, undefined, undefined, undefined, 'center', [0, 20, 0, 0], undefined))
+
+                                        docDefinition.content.push({
+                                            image: imageURL,
+                                            width: 550,
+                                        })
+
+                                        const calculation = calculationGrafikGender(daerahKota)
+                                        const terbanyak = calculation.terbanyak.map(jenis_kelamin => `${jenis_kelamin.text}`).join(', ')
+                                        const sedikit = calculation.sedikit.map(jenis_kelamin => `${jenis_kelamin.text}`).join(', ')
+
+                                        docDefinition.content.push(createTextPDF(`Tenaga perpustakaan berdasarkan jenis kelamin pada Kota ${params.get('dataDaerah')} didominasi oleh ${terbanyak}, kemudian ${sedikit}.`, false, 11, undefined, undefined, undefined, undefined, 'justify', undefined, 1.5))
+
+                                        // GRAFIK TENAGA PERPUS BERDASARKAN USIA
+                                        const dataAge = []
+                                        let useDataAge = []
+                                        daerahKota.forEach(user => {
+                                            let years = ''
+                                            const findAge = daerahKota.filter(userAge => {
+                                                years = userAge.Tanggal_Lahir.split('-')[0]
+                                                return userAge.Tanggal_Lahir.split('-')[0] === user.Tanggal_Lahir.split('-')[0]
+                                            })
+                                            const currentUser = findAge.map(user => {
+                                                const years = user.Tanggal_Lahir.split('-')[0]
+                                                return {
+                                                    age: years,
+                                                    total: findAge.length
+                                                }
+                                            })
+                                            const checkAge = dataAge?.filter(age => age.age === currentUser[0].age)
+                                            if (checkAge.length === 0) {
+                                                dataAge.push(currentUser[0])
+                                            }
+                                        })
+                                        dataAge.sort((a, b) => Number(a?.age) - Number(b?.age))
+                                        useDataAge = dataAge.map(data => [data?.age, data?.total])
+
+                                        return loadGoogleBarChart('chartAge', useDataAge)
+                                        // google.charts.load('current', { 'packages': ['corechart'] });
+                                        // google.charts.setOnLoadCallback(chartAge)
+                                        // function chartAge() {
+                                        //     // Create the data table.
+                                        //     var data = new google.visualization.DataTable();
+                                        //     data.addColumn('string', 'Topping');
+                                        //     data.addColumn('number', 'Slices');
+                                        //     data.addRows(useDataAge);
+
+                                        //     // Set chart options
+                                        //     var options = {
+                                        //         'title': '',
+                                        //         legend: 'none',
+                                        //         fontSize: 9,
+                                        //     };
+
+                                        //     // Instantiate and draw our chart, passing in some options.
+                                        //     var chart = new google.visualization.BarChart(document.getElementById('chartAge'))
+                                        //     chart.draw(data, options)
+                                        // }
+
+                                        // return await makeHTML2Canvas('chartAge')
+                                    })
+                                    .then(res=>makeHTML2Canvas('chartAge'))
+                                    .then(res => {
+                                        let imageURL = ''
+                                        imageURL = res.toDataURL('image/jpeg')
+                                        docDefinition.content.push(createTextPDF('Tenaga Perpustakaan Berdasarkan Usia', true, 12, undefined, 'before', undefined, undefined, 'center', undefined, undefined))
+                                        docDefinition.content.push({
+                                            image: imageURL,
+                                            width: 550,
+                                        })
+
+                                        const dataAge = []
+                                        daerahKota.forEach(user => {
+                                            let years = ''
+                                            const findAge = daerahKota.filter(userAge => {
+                                                years = userAge.Tanggal_Lahir.split('-')[0]
+                                                return userAge.Tanggal_Lahir.split('-')[0] === user.Tanggal_Lahir.split('-')[0]
+                                            })
+                                            const currentUser = findAge.map(user => {
+                                                const years = user.Tanggal_Lahir.split('-')[0]
+                                                return {
+                                                    age: years,
+                                                    total: findAge.length
+                                                }
+                                            })
+                                            const checkAge = dataAge?.filter(age => age.age === currentUser[0].age)
+                                            if (checkAge.length === 0) {
+                                                dataAge.push(currentUser[0])
+                                            }
+                                        })
+                                        dataAge.sort((a, b) => Number(a?.age) - Number(b?.age))
+
+                                        const calculation = calculationGrafikAge(dataAge, daerahKota)
+                                        const terbanyak = calculation.terbanyak.map(age => `${age.text}`).join(', ')
+                                        const sedikit = calculation.sedikit.map(age => `${age.text}`).join(', ')
+                                        docDefinition.content.push(createTextPDF(`Tenaga perpustakaan berdasarkan usia pada Kota ${params.get('dataDaerah')} didominasi oleh usia ${terbanyak}, dan paling sedikit usia ${sedikit} (usia dihitung per tahun ${new Date().getFullYear()}).`, false, 11, undefined, undefined, undefined, undefined, 'justify', undefined, 1.5))
+
+                                        // tabel data tenaga pustakawan
+                                        const dataTableTenagaPustakawan = createTableTenagaPustakawan()
+                                        docDefinition.content.push(createTextPDF('TABEL DATA TENAGA PERPUSTAKAAN', true, 10, undefined, 'before'))
+                                        dataTableTenagaPustakawan.table.body.push(H_DaerahKota)
+                                        dataTableTenagaPustakawan.table.body.push([createTextPDF('FUNGSIONAL PUSTAKAWAN', true, fontTable, green_header, undefined, undefined, 5, undefined), {}, {}, {}, {}])
+                                        getData_FUNGSIONAL_PUSTAKAWAN.forEach(user => {
+                                            dataTableTenagaPustakawan.table.body.push(user)
+                                        })
+                                        if (getData_TENAGA_PUSTAKAWAN.length > 0) {
+                                            dataTableTenagaPustakawan.table.body.push([createTextPDF('TENAGA PUSTAKAWAN', true, fontTable, green_header, undefined, undefined, 5, undefined), {}, {}, {}, {}])
+                                            getData_TENAGA_PUSTAKAWAN.forEach(user => {
+                                                dataTableTenagaPustakawan.table.body.push(user)
+                                            })
                                         }
+                                        docDefinition.content.push(dataTableTenagaPustakawan)
+
+                                        const profilePustakawan = createTableTenagaPustakawan()
+                                        docDefinition.content.push(createTextPDF('DIREKTORI TENAGA PERPUSTAKAAN', true, 12, undefined, 'before', undefined, undefined, 'center', [0, 0, 0, 20], undefined))
+                                        profilePustakawan.layout = 'noBorders'
+                                        let indexPer3 = 0
+                                        loopGetImgProfile(daerahKota, () => {
+                                            daerahKota.forEach((user, index) => {
+                                                if (indexPer3 === 3) {
+                                                    indexPer3 = 0
+                                                }
+                                                indexPer3 = indexPer3 + 1
+                                                profilePustakawan.table.body.push(
+                                                    [
+                                                        createTextPDF(index + 1, true, fontTable, undefined, undefined, undefined, 1, undefined, undefined, 0.9),
+                                                        {}
+                                                    ],
+                                                    [
+                                                        {
+                                                            image: document.getElementById(`profileImg${index + 1}`).getAttribute('src'),
+                                                            width: 60,
+                                                            height: 60,
+                                                            fit: [70, 70]
+                                                        },
+                                                        {}
+                                                        // createTextPDF(`: `, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                                    ],
+                                                    [
+                                                        createTextPDF('Nama', true, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                        createTextPDF(`: ${user.nama_users}`, true, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                                    ],
+                                                    [
+                                                        createTextPDF('Tahun Lahir', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                        createTextPDF(`: ${user.Tanggal_Lahir.split('-')[0]}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                                    ],
+                                                    [
+                                                        createTextPDF('Jenis Kelamin', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                        createTextPDF(`: ${user.jenis_kelamin}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                                    ],
+                                                    [
+                                                        createTextPDF('Pendidikan', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                        createTextPDF(`: ${user.pendidikan}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                                    ],
+                                                    [
+                                                        createTextPDF('Bidang', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                        createTextPDF(`: ${user.jurusan_bidangpendidikan
+                                                            }`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                                    ],
+                                                    [
+                                                        createTextPDF('Pangkat', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                        createTextPDF(`: ${user.jurusan_bidangpendidikan
+                                                            }`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                                    ],
+                                                    [
+                                                        createTextPDF('Jabatan/Status Kedinasan', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                        createTextPDF(`: ${user.jabatan_fungsional !== 'null' ? user.jabatan_fungsional : user.status_dinas}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                                    ],
+                                                    [
+                                                        createTextPDF('Nama Instansi', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                        createTextPDF(`: ${user.istansi}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                                    ],
+                                                    [
+                                                        createTextPDF('Jenis Instansi', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                        createTextPDF(`: ${user.jenis_instansi}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                                    ],
+                                                    [
+                                                        createTextPDF('Email', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
+                                                        createTextPDF(`: ${user.email}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
+                                                    ],
+                                                    [
+                                                        { text: '' },
+                                                        { text: '', margin: [0, 0, 0, 20], pageBreak: indexPer3 === 3 && (index + 1) !== daerahKota.length ? 'before' : undefined }
+                                                    ]
+                                                )
+                                            })
+
+                                            setTimeout(() => {
+                                                docDefinition.content.push(profilePustakawan)
+                                            }, 0);
+
+                                            setTimeout(() => {
+                                                openTabPDF(docDefinition)
+                                            }, 50);
+                                        })
                                     })
-                                    const checkAge = dataAge?.filter(age => age.age === currentUser[0].age)
-                                    if (checkAge.length === 0) {
-                                        dataAge.push(currentUser[0])
-                                    }
-                                })
-                                dataAge.sort((a, b) => Number(a?.age) - Number(b?.age))
-
-                                const calculation = calculationGrafikAge(dataAge, daerahKota)
-                                const terbanyak = calculation.terbanyak.map(age => `${age.text}`).join(', ')
-                                const sedikit = calculation.sedikit.map(age => `${age.text}`).join(', ')
-                                docDefinition.content.push(createTextPDF(`Tenaga perpustakaan berdasarkan usia pada Kota ${params.get('dataDaerah')} didominasi oleh usia ${terbanyak}, dan paling sedikit usia ${sedikit} (usia dihitung per tahun ${new Date().getFullYear()}).`, false, 11, undefined, undefined, undefined, undefined, 'justify', undefined, 1.5))
-
-                                // tabel data tenaga pustakawan
-                                const dataTableTenagaPustakawan = createTableTenagaPustakawan()
-                                docDefinition.content.push(createTextPDF('TABEL DATA TENAGA PERPUSTAKAAN', true, 10, undefined, 'before'))
-                                dataTableTenagaPustakawan.table.body.push(H_DaerahKota)
-                                dataTableTenagaPustakawan.table.body.push([createTextPDF('FUNGSIONAL PUSTAKAWAN', true, fontTable, green_header, undefined, undefined, 5, undefined), {}, {}, {}, {}])
-                                getData_FUNGSIONAL_PUSTAKAWAN.forEach(user => {
-                                    dataTableTenagaPustakawan.table.body.push(user)
-                                })
-                                if (getData_TENAGA_PUSTAKAWAN.length > 0) {
-                                    dataTableTenagaPustakawan.table.body.push([createTextPDF('TENAGA PUSTAKAWAN', true, fontTable, green_header, undefined, undefined, 5, undefined), {}, {}, {}, {}])
-                                    getData_TENAGA_PUSTAKAWAN.forEach(user => {
-                                        dataTableTenagaPustakawan.table.body.push(user)
-                                    })
-                                }
-                                docDefinition.content.push(dataTableTenagaPustakawan)
-
-                                const profilePustakawan = createTableTenagaPustakawan()
-                                docDefinition.content.push(createTextPDF('DIREKTORI TENAGA PERPUSTAKAAN', true, 12, undefined, 'before', undefined, undefined, 'center', [0, 0, 0, 20], undefined))
-                                profilePustakawan.layout = 'noBorders'
-                                let indexPer3 = 0
-                                loopGetImgProfile(daerahKota, () => {
-                                    daerahKota.forEach((user, index) => {
-                                        if (indexPer3 === 3) {
-                                            indexPer3 = 0
-                                        }
-                                        indexPer3 = indexPer3 + 1
-                                        profilePustakawan.table.body.push(
-                                            [
-                                                createTextPDF(index + 1, true, fontTable, undefined, undefined, undefined, 1, undefined, undefined, 0.9),
-                                                {}
-                                            ],
-                                            [
-                                                {
-                                                    image: document.getElementById(`profileImg${index + 1}`).getAttribute('src'),
-                                                    width: 60,
-                                                    height: 60,
-                                                    fit: [70, 70]
-                                                },
-                                                {}
-                                                // createTextPDF(`: `, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                            ],
-                                            [
-                                                createTextPDF('Nama', true, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                                createTextPDF(`: ${user.nama_users}`, true, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                            ],
-                                            [
-                                                createTextPDF('Tahun Lahir', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                                createTextPDF(`: ${user.Tanggal_Lahir.split('-')[0]}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                            ],
-                                            [
-                                                createTextPDF('Jenis Kelamin', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                                createTextPDF(`: ${user.jenis_kelamin}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                            ],
-                                            [
-                                                createTextPDF('Pendidikan', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                                createTextPDF(`: ${user.pendidikan}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                            ],
-                                            [
-                                                createTextPDF('Bidang', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                                createTextPDF(`: ${user.jurusan_bidangpendidikan
-                                                    }`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                            ],
-                                            [
-                                                createTextPDF('Pangkat', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                                createTextPDF(`: ${user.jurusan_bidangpendidikan
-                                                    }`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                            ],
-                                            [
-                                                createTextPDF('Jabatan/Status Kedinasan', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                                createTextPDF(`: ${user.jabatan_fungsional !== 'null' ? user.jabatan_fungsional : user.status_dinas}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                            ],
-                                            [
-                                                createTextPDF('Nama Instansi', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                                createTextPDF(`: ${user.istansi}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                            ],
-                                            [
-                                                createTextPDF('Jenis Instansi', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                                createTextPDF(`: ${user.jenis_instansi}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                            ],
-                                            [
-                                                createTextPDF('Email', false, fontTable, undefined, undefined, undefined, undefined, undefined, undefined, 0.9),
-                                                createTextPDF(`: ${user.email}`, false, fontTable, undefined, undefined, undefined, undefined, undefined, [40, 0, 0, 0], 0.9)
-                                            ],
-                                            [
-                                                { text: '' },
-                                                { text: '', margin: [0, 0, 0, 20], pageBreak: indexPer3 === 3 && (index + 1) !== daerahKota.length ? 'before' : undefined }
-                                            ]
-                                        )
-                                    })
-
-                                    setTimeout(() => {
-                                        docDefinition.content.push(profilePustakawan)
-                                    }, 0);
-
-                                    setTimeout(() => {
-                                        openTabPDF(docDefinition)
-                                    }, 50);
-                                })
+                                // end tabel data tenaga pustakawan
                             })
-                        // end tabel data tenaga pustakawan
                     } else {
                         alert(`Data pustakawan tidak ditemukan dari "${params.get('dataDaerah')}"`)
                     }
@@ -743,3 +756,29 @@ async function makeHTML2Canvas(elementId) {
     })
 }
 // end pustakawan Daerah Kota
+
+async function loadGoogleBarChart(elementId, dataRows) {
+    return await new Promise((resolve, reject) => {
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(charts)
+        function charts() {
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Topping');
+            data.addColumn('number', 'Slices');
+            data.addRows(dataRows);
+
+            // Set chart options
+            var options = {
+                'title': '',
+                legend: 'none',
+                fontSize: 9,
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.BarChart(document.getElementById(elementId))
+            chart.draw(data, options)
+            resolve(chart?.container)
+        }
+    })
+}

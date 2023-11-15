@@ -33,6 +33,9 @@ let docDefinition = {
 
 function openTabPDF(docDefinition) {
     pdfMake.createPdf(docDefinition).download(`Direktori ${paramsURL.get('dataDaerah')}-${new Date().getFullYear()}`, (res)=>{
-        window.close()
+        document.getElementById('txtLoad').innerText = 'Unduhan telah selesai'
+        setTimeout(() => {
+            window.close()
+        }, 1000)
     })
 }

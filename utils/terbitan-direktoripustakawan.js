@@ -7,6 +7,7 @@ postFormDataAPI(POST_API_PUSTAKAWAN, {
         if (res?.length > 0) {
             const usersData = res.filter(data => data.role == 'Users')
             if (usersData.length > 0) {
+                document.getElementById('notEmpty').style.display = 'none'
                 const removeDuplicateKota = usersData.filter((v, i, s) =>
                     i === s.findIndex((t) => (
                         t.lokasi_instansi === v.lokasi_instansi
@@ -36,13 +37,15 @@ postFormDataAPI(POST_API_PUSTAKAWAN, {
                     wrapCard.appendChild(createDiv)
                 })
             } else {
-                alert('tidak ada data pustakawan yang tersedia')
+                // alert('tidak ada data pustakawan yang tersedia')
+                return
             }
         } else {
-            alert('tidak ada data pustakawan yang tersedia')
+            // alert('tidak ada data pustakawan yang tersedia')
+            return
         }
     })
     .catch(err => {
-        alert('terjadi kesalahan server.\nmohon coba beberapa saat lagi')
+        alert('terjadi kesalahan server.\nMohon coba beberapa saat lagi')
         console.log(err)
     })
